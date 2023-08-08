@@ -18,7 +18,7 @@ type: reference
 
 对于复杂的修改，请考虑进行测试：
 
-- 准备运行环境，请参考[torchpipe的安装](torchpipe.github.io/docs/installation)
+- 准备运行环境，请参考[torchpipe的安装](../installation)
 - 运行已有测试：
 ```bash
 cd test

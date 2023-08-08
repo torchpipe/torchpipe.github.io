@@ -156,7 +156,7 @@ wrap_val_loader.reset()
 
 这个方案适合项目相对简单（比如只有1、2个模型），或者对torchpipe具有一定掌握，可以利用torchpipe实现复杂逻辑的同学
 
-##### step 1: 将pytorch模型转换为onnx模型，这里可以参考文档：[pytorch模型转onnx](torchpipe.github.io/docs/faq/onnx?_highlight=onnx)
+##### step 1: 将pytorch模型转换为onnx模型，这里可以参考文档：[pytorch模型转onnx](../faq/onnx?_highlight=onnx)
 
 * 这一步需要注意的是：要不要将**减均值、除方差**放到模型中，这里做了，后面就不需要这个预处理了。
 
