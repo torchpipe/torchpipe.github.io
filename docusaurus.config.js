@@ -56,12 +56,12 @@ const config = {
           // editUrl: "https://g.hz.netease.com/deploy/torchpipe-docs/-/tree/master/website/",
           editUrl: ({locale, versionDocsDirPath, docPath}) => {
                   // Link to Crowdin for French docs
-                  if (locale == DefaultLocale) {
-                    return `https://g.hz.netease.com/deploy/torchpipe-docs/-/tree/master/website/docs/${docPath}`;
+                  if (locale == DefaultLocale) { 
+                    return `https://github.com/torchpipe/torchpipe.github.io/edit/main/docs/${docPath}`;
                   }
                   // Link to GitHub for English docs
-                  
-                  return `https://g.hz.netease.com/deploy/torchpipe-docs/-/tree/master/website/i18n/zh/docusaurus-plugin-content-docs/current/${docPath}`;
+
+                  return `https://github.com/torchpipe/torchpipe.github.io/edit/main/i18n/zh/docusaurus-plugin-content-docs/current/${docPath}`;
                 },
           sidebarCollapsed: true,
           showLastUpdateTime:true,
