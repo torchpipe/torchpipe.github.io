@@ -1,0 +1,38 @@
+<svg width="200" height="200" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+
+  <defs>
+    <filter id="shadow">
+      <feDropShadow dx="0.5" dy="1" stdDeviation="1.5" flood-color="#333" flood-opacity="0.5" />
+    </filter>
+    <filter id="highlight">
+      <feComponentTransfer in="SourceGraphic">
+        <feFuncR type="linear" slope="1.2" />
+        <feFuncG type="linear" slope="1.2" />
+        <feFuncB type="linear" slope="1.2" />
+      </feComponentTransfer>
+    </filter>
+    <radialGradient id="gradientEllipse" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#2F88FF" />
+      <stop offset="100%" stop-color="#1F5ACC" />
+    </radialGradient>
+    <radialGradient id="gradientCircle" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#7FBFFF" />
+      <stop offset="100%" stop-color="#3F8FD3" />
+    </radialGradient>
+  </defs>
+
+  <ellipse cx="22" cy="30" rx="16" ry="14" fill="url(#gradientEllipse)" stroke="#333" stroke-width="2" filter="url(#shadow)" />
+
+  <ellipse cx="22" cy="30" rx="16" ry="14" fill="url(#gradientEllipse)" stroke="#FFF" stroke-width="1" filter="url(#highlight)" />
+
+  <path d="M26 24C27.3333 24.1667 30 25 31 29" stroke="#FFF" stroke-width="3" filter="url(#highlight)" />
+
+  <circle cx="8" cy="8" r="4" fill="url(#gradientCircle)" stroke="#333" stroke-width="1" filter="url(#shadow)" />
+
+  <circle cx="8" cy="8" r="4" fill="url(#gradientCircle)" stroke="#FFF" stroke-width="1" filter="url(#highlight)" />
+
+  <circle cx="41" cy="13" r="3" fill="url(#gradientCircle)" stroke="#333" stroke-width="1" filter="url(#shadow)" />
+
+  <circle cx="41" cy="13" r="3" fill="url(#gradientCircle)" stroke="#FFF" stroke-width="1" filter="url(#highlight)" />
+
+</svg>

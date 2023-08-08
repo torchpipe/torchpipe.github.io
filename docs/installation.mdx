@@ -1,0 +1,268 @@
+---
+id: installation
+title: Installation
+type: explainer
+---
+
+
+# Installation
+<!-- Installation and Quick Start -->
+
+## Using NGC base image
+The easiest way is to choose NGC mirror for source code compilation (official mirror may still be able to run low version drivers through Forward Compatibility or Minor Version Compatibility). 
+First, clone the code:
+
+```bash
+git clone -b master ssh://git@g.hz.netease.com:22222/deploy/torchpipe.git
+# git clone -b master https://g.hz.netease.com/deploy/torchpipe.git
+cd torchpipe/ && git submodule update --init --recursive
+```
+
+Then start the container and if your machine supports [a higher version of the image](https://catalog.ngc.nvidia.com/orgs/nvidia/containers/pytorch/tags), you can use the updated version of the Pytorch image.
+
+```bash
+img_name=nvcr.io/nvidia/pytorch:22.12-py3 #  for cuda11
+# img_name=nvcr.io/nvidia/pytorch:23.05-py3 #  for tensort8.6.1, LayerNorm
+docker run --rm --gpus=all  --network=host   --ulimit memlock=-1 --ulimit stack=67108864 -v `pwd`:/workspace  --privileged=true -it $img_name /bin/bash
+```
+
+:::note
+If you are using a transformer-like model, it is strongly recommended to use TensorRT >= 8.6.1 (`nvcr.io/nvidia/pytorch:23.05-py3`) for supporting opset 17 for LayerNormalization and opset 18 GroupNormalization, as well as deeper support for such models. However, the NGC image has certain requirements for the GPU driver version [as mentioned here](https://docs.nvidia.com/deeplearning/frameworks/pytorch-release-notes/rel-23-05.html#rel-23-05):
+```
+*Release 23.05 is based on CUDA 12.1.1, which requires NVIDIA Driver release 530 or later. However, if you are running on a data center GPU (for example, T4 or any other data center GPU), you can use NVIDIA driver release 450.51 (or later R450), 470.57 (or later R470), 510.47 (or later R510), 515.65 (or later R515), 525.85 (or later R525), or 530.30 (or later R530)*
+```
+This can be overcome by:
+- Using the custom image described in the [next section](#selfdocker)
+- For online deployment, only considering support for data center cards such as Tesla T4 for the time being.
+:::
+
+Next, you can compile the source code:
+
+
+
+
+<Tabs groupId="pip" className="unique-tabs">
+<TabItem value="sys" label="Install to System">
+
+```bash
+python setup.py install
+```
+</TabItem>
+
+<TabItem value="editable" label="Editable Mode">
+
+```bash
+pip install -e .
+```
+
+</TabItem>
+<TabItem value="whl" label="Packaging">
+
+```bash
+python setup.py bdist_wheel
+# The generated .whl file can be used in different containers of the same image
+pip install --upgrade dist/*.whl
+```
+</TabItem>
+</Tabs>
+
+
+
+
+Then you can run all the example code:
+
+
+```bash
+cd examples/resnet18 && python resnet18.py
+# or 
+cd examples/yolox && python yolox.py 
+```
+
+<details><summary>Parallel inference of resnet18.</summary>
+
+> Obtain the appropriate model file (currently supporting ONNX, TRT engine, etc.).
+
+```python
+import torchvision.models as models
+resnet18 = models.resnet18(pretrained=True).eval().cuda()
+
+import tempfile, os, torch
+model_path =  os.path.join(tempfile.gettempdir(), "./resnet18.onnx") 
+resnet18 = models.resnet18(pretrained=True).eval().cuda()
+data_bchw = torch.rand((1, 3, 224, 224)).cuda()
+print("export: ", model_path)
+torch.onnx.export(resnet18, data_bchw, model_path,
+                  opset_version=17,
+                  do_constant_folding=True,
+                  input_names=["in"], output_names=["out"],dynamic_axes={"in": {0: "x"},"out": {0: "x"}})
+
+# os.system(f"onnxsim {model_path} {model_path}")
+```
+ 
+> Now you can make concurrent calls to a single model.
+
+```python
+import torch, torchpipe
+model = torchpipe.pipe({'model': model_path,
+                        'backend': "Sequential[cvtColorTensor,TensorrtTensor,SyncTensor]", # Back-end engine, as explained in the "Overview" section.
+                        'instance_num': 2, 'batching_timeout': '5', # Number of instances and timeout duration.
+                        'max': 4, # Maximum value for model optimization scope, can also be '4x3x224x224'.
+                        'mean': '123.675, 116.28, 103.53',#255*"0.485, 0.456, 0.406"，
+                        'std': '58.395, 57.120, 57.375', # Merge into TensorRT network.
+                        'color': 'rgb'}) # cvtColorTensor backend parameter: target color space order
+data = torch.zeros((1, 3, 224, 224)) # or torch.from_numpy(...)
+input = {"data": data, 'color': 'bgr'}
+model(input)  # Concurrency can be utilized
+# Use "result" as the data output identifier, although other key values can be customized as well.
+print(input["result"].shape)  # If the inference fails, the "result" key will not exist, even if it was present in the input.
+```
+
+</details>
+
+
+For more examples, see [Showcase](./showcase/showcase.mdx).
+
+
+## Customizing Dockerfile {#selfdocker}
+:::tip
+If you are within the Netease intranet, you can use the pre-compiled image (Pascal driver >= 510):
+```bash
+docker pull hub.c.163.com/neteaseis/ai/torchpipe:base_trt-8.6
+```
+:::
+Refer to the [example Dockerfile](https://g.hz.netease.com/deploy/torchpipe/-/blob/master/docker/torchpipe.base). After downloading TensorRT and OpenCV in advance, you can compile the corresponding base image.
+```
+# put TensorRT-8.6.1.6.Linux.x86_64-gnu.cuda-11.8.tar.gz into thirdparty/
+wget https://codeload.github.com/opencv/opencv/zip/refs/tags/4.5.4 -O thirdparty/opencv-4.5.4.zip
+# docker build --network=host -f docker/torchpipe.base -t hub.c.163.com/neteaseis/ai/torchpipe:base_trt-8.6 .
+
+# docker run --rm   --network=host --gpus=all --ulimit memlock=-1 --ulimit stack=67108864 --privileged=true  -v `pwd`:/workspace -it hub.c.163.com/neteaseis/ai/torchpipe:base_trt-8.6  /bin/bash 
+
+```
+Base images compiled in this way have smaller sizes than NGC PyTorch images. Please note that `_GLIBCXX_USE_CXX11_ABI==0`.
+
+## Description
+
+### Compilation Options
+
+| Option 	| Default 	| Description	|
+|---	|:---:	|:---:	|
+| DEBUG 	|  	0|  Whether to compile in debug mode	|
+| WITH_OPENCV 	| 1 	|  Whether to compile the C++ backend that depends on OpenCV	|
+| WITH_TENSORRT 	|  	1|  Whether to compile the C++ backend that depends on TensorRT	|
+| IPIPE_KEY(optinal) 	|  None|  str(length>=8). If using encryption and decryption functions, this key needs to be set.	| 
+
+
+
+## Dependencies
+The basic environment is as follows:
+
+| Dependency | Version | Remarks |
+|---	|:---	|---	|
+|  `cuda`	|  >= 11.0	|  - The CUDA version must be consistent with the version that PyTorch depends on (for the convenience of `torch.utils.cpp_extension` to compile code on the fly). <br />- Compatibility testing with CUDA 10.2 is no longer performed.	|
+|  `pytorch`	|  >= 1.13.0	|  - Compatibility testing is no longer performed for `c++14/cuda-10.2/pytorch==1.10.2`, but you may still be able to run it with simple modifications.	|
+|  `opencv`(optional)	| 3.x, 4.x 	|  At least the core, imgproc, imgcodecs, and highgui modules are included.	|
+|  `tensorrt`(optional)	|>= 7.2<br /><= 8.6.1.5| - There is a [memory leak](https://github.com/NVIDIA/TensorRT/issues/351) in TensorRT 7.0 with dynamic inputs.<br />- TensorRT 7.1 and earlier cannot directly INT8-quantize models with dynamic inputs.
+
+
+:::note 
+All dependencies mentioned above come from a specific default backend. The construction of C++ core does not rely on any of the above dependencies.
+:::
+
+### ABI
+The compiler used for both compiling the code and the dependent libraries needs to be ABI-compatible with the compiler used by the installed PyTorch. In PyTorch, you can check the compatibility as follows:
+```bash
+python -c "import torch; print(torch._C._GLIBCXX_USE_CXX11_ABI)"
+```
+
+| Installation Source | _GLIBCXX_USE_CXX11_ABI |
+| :------------------ | :---------------------: |
+| [PyPI-PyTorch](https://pytorch.org/get-started/locally/) | 0 |
+| [NGC-PyTorch](https://catalog.ngc.nvidia.com/orgs/nvidia/containers/pytorch) | 1 |
+| [libtorch](https://pytorch.org/cppdocs/installing.html) | 1 |
+
+
+### Compiling with integrated third-party libraries (using Ubuntu-OpenCV as an example)
+
+By default, installing OpenCV using `apt-get install libopencv-dev` satisfies `_GLIBCXX_USE_CXX11_ABI=1`, which is not compatible with PyTorch from PyPI. However, you can compile PyTorch-compatible OpenCV by adding the `-D_GLIBCXX_USE_CXX11_ABI=0` configuration to CMake.
+<details><summary>Compilation Command</summary>
+
+
+```bash
+wget https://codeload.github.com/opencv/opencv/zip/refs/tags/4.5.4 -O opencv-4.5.4.zip
+
+unzip opencv-4.5.4.zip && pip3 install cmake
+
+cd opencv-4.5.4/ && \
+sed -i '1a add_definitions(-D_GLIBCXX_USE_CXX11_ABI=0)' CMakeLists.txt  && \
+      mkdir build && cd build && \
+      cmake -D CMAKE_BUILD_TYPE=Release \
+            -D BUILD_WITH_DEBUG_INFO=OFF \
+            -D CMAKE_INSTALL_PREFIX=/usr/local/ \
+            -D INSTALL_C_EXAMPLES=OFF \
+            -D INSTALL_PYTHON_EXAMPLES=OFF \
+            -DENABLE_NEON=OFF  \
+            -D WITH_TBB=ON \
+            -DBUILD_TBB=ON  \
+            -DBUILD_WEBP=OFF \
+            -D BUILD_ITT=OFF -D WITH_IPP=ON  \
+            -D WITH_V4L=OFF \
+            -D WITH_QT=OFF \
+            -D WITH_OPENGL=OFF \
+            -D BUILD_opencv_dnn=OFF \
+            -DBUILD_opencv_java=OFF \
+            -DBUILD_opencv_python2=OFF \
+            -DBUILD_opencv_python3=ON \
+            -D BUILD_NEW_PYTHON_SUPPORT=ON \
+            -D BUILD_PYTHON_SUPPORT=ON \
+            -D PYTHON_DEFAULT_EXECUTABLE=/usr/bin/python3 \
+            -DBUILD_opencv_java_bindings_generator=OFF \
+            -DBUILD_opencv_python_bindings_generator=ON \
+            -D BUILD_EXAMPLES=OFF \
+            -D WITH_OPENEXR=OFF \
+            -DWITH_JPEG=ON  \
+            -DBUILD_JPEG=ON\
+            -D BUILD_JPEG_TURBO_DISABLE=OFF \
+            -D BUILD_DOCS=OFF \
+            -D BUILD_PERF_TESTS=OFF \
+            -D BUILD_TESTS=OFF \
+            -D BUILD_opencv_apps=OFF \
+            -D BUILD_opencv_calib3d=OFF \
+            -D BUILD_opencv_contrib=OFF \
+            -D BUILD_opencv_features2d=OFF \
+            -D BUILD_opencv_flann=OFF \
+            -DBUILD_opencv_gapi=OFF \
+            -D WITH_CUDA=OFF \
+            -D WITH_CUDNN=OFF \
+            -D OPENCV_DNN_CUDA=OFF \
+            -D ENABLE_FAST_MATH=1 \
+            -D WITH_CUBLAS=0 \
+            -D BUILD_opencv_gpu=OFF \
+            -D BUILD_opencv_ml=OFF \
+            -D BUILD_opencv_nonfree=OFF \
+            -D BUILD_opencv_objdetect=OFF \
+            -D BUILD_opencv_photo=OFF \
+            -D BUILD_opencv_stitching=OFF \
+            -D BUILD_opencv_superres=OFF \
+            -D BUILD_opencv_ts=OFF \
+            -D BUILD_opencv_video=OFF \
+            -D BUILD_videoio_plugins=OFF \
+            -D BUILD_opencv_videostab=OFF \
+            -DBUILD_EXAMPLES=OFF \
+            -DBUILD_opencv_calib3d=OFF \
+            -DBUILD_opencv_features2d=OFF\
+            -DBUILD_opencv_flann=OFF\
+            -DBUILD_opencv_ml=OFF\
+            -DBUILD_opencv_videoio=OFF\
+                .. && make -j4 && make install
+```
+
+</details>
+
+
+
+
+
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';

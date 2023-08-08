@@ -1,0 +1,164 @@
+---
+id: pipe
+title: 推理
+type: reference
+displayed_sidebar: api
+---
+
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# 推理
+
+## *torchpipe.pipe* {#pipe}
+
+### 初始化
+:::tip torchpipe.pipe 的初始化接口为
+```python
+import torchpipe as tp
+models = tp.pipe(config: Union[Dict[str, str] |  Dict[str, Dict[str, str]] | str])
+```
+:::
+
+
+<Tabs groupId="pipe_init"  className="pipe_init-tabs">
+<TabItem value="str" label="从字典">
+
+
+```python
+class torchpipe.pipe(config: Dict[str, str])
+```
+:::info **参数**
+- `config: Dict[str, str]`: 配置参数会传入途径的后端进行解析。特定的后端可能会对配置进行[参数展开](../backend-reference/basic#backend-spread).
+:::
+
+:::info **示例**
+
+```python
+config = {"backend":"DecodeMat"};
+```
+:::
+
+</TabItem>
+<TabItem value="double_str" label="从双层字典">
+
+```python
+class torchpipe.pipe(config: Dict[str, Dict[str, str]])
+```
+> 用于多个节点配置: `{节点名: Dict[str, str]}`. 节点名不可为`global`或者空。
+
+:::info **参数**
+- `config: Dict[str, Dict[str, str]]`: 配置参数会传入途径的后端进行解析。特定的后端可能会对配置进行[参数展开](../backend-reference/basic#backend-spread). 可通过`global`设置全局默认参数。
+:::
+
+:::info **示例**
+
+```python
+config = {"decoder":{"backend":"DecodeMat"},
+          "decoder_gpu":{"backend":"SyncTensor[DecodeTensor]"},
+          "global":{"instance_num":"2"}};
+```
+:::
+
+</TabItem>
+
+<TabItem value="from_toml" label="从toml文件">
+
+```python
+class torchpipe.pipe(config: str)
+```
+
+> 从文件解析参数。
+
+
+:::info **参数**
+- `config: str`: 以`.toml`为后缀的[toml](https://toml.io/en/)格式文件。
+:::
+
+:::info **示例**
+
+```toml
+# 值为str，或者可以转化为str，如 int, float. 不接受布尔值。
+instance_num=2
+[decoder]
+backend="DecodeMat"
+
+[decoder_gpu]
+backend="SyncTensor[DecodeTensor]"
+```
+:::
+
+</TabItem>
+
+</Tabs>
+
+### 前向
+
+:::tip torchpipe.pipe 的前向接口为
+```python
+class torchpipe.pipe
+  def __call__(self, data: Dict[str, Any] | List[Dict[str, Any]]) -> None
+```
+:::
+
+
+> 线程安全的前向计算
+
+
+
+<Tabs groupId="pipe_call"  className="pipe_call-tabs">
+<TabItem value="dict" label="单个数据">
+
+
+```python
+def __call__(self, data: Dict[str, Any]) -> None
+```
+
+
+:::info **参数**
+- `"data": Any`: 必须存在的输入，计算后端需要从此键值获取数据, 然后进行[解析](../Intra-node/extensible_backend#py2any)。
+- `"result": Any`: 用于输出，不存在时代表没有计算结果。
+- `"node_name": str`: 当有多个根节点时，用于指定节点名称。
+- 其他键值（[*系统保留键值*](#system-keep)除外）即可作为输入，也可作为输出，由后端决定。
+:::
+
+</TabItem>
+<TabItem value="list" label="多个数据">
+
+```python
+def __call__(self, data: List[Dict[str, Any]]) -> None
+```
+
+当其中一个数据计算过程抛出异常时，所有结果都不可用。当部分结果没有'result'时，其他结果仍然可用。
+
+一般来讲，这个接口不建议用在除了在python中一次性处理超大量数据以外的其他场景。
+
+:::info 批量处理数据的替代方式
+
+  - 计算流水线保持简单，通过线程池的方式去处理多输入：
+  ```python
+  self.executor =ThreadPoolExecutor(max_workers=15) 
+  # forward pass
+  future_tasks = self.executor.map(self.forward_for_single_input, data)
+  ```
+  每一个`forward_for_single_input`函数定义了数据从输入到最终结果的多个计算步骤。
+  - 对于涉及到检测等上下文分裂的情景，可以通过[MapReduce](../Inter-node/graphtraversal.mdx#mapreduce)进行调度。
+:::
+
+</TabItem>
+</Tabs>
+
+### 系统保留键值 {#system-keep}
+
+||定义|备注|
+|---|---|---|
+|TASK_DATA_KEY|`data`|用于输入之一键值|
+|TASK_RESULT_KEY|`result`|用于输出之一键值|
+|TASK_CONTEXT_KEY|`context`|用于全局共享上下文语法糖|
+|TASK_EVENT_KEY|`event`||
+|"_*"||所有以下划线开始的字符串|
+|TASK_NODE_NAME_KEY|`node_name`||
+|"global"||目前用于表示全局设置|
+|"default"|||
+|"TASK_*_KEY"||以`TASK_`开头以`_KEY`结束的字符串|

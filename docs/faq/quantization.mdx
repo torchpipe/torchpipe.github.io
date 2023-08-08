@@ -1,0 +1,45 @@
+---
+id: quantization
+title: "量化与部署"
+type: explainer
+---
+
+本文从业务角度介绍量化集成步骤。
+
+|量化方式|原理|优缺点|适用场景|
+|:---:|:---:|:---:|:---:|
+|PTQ|训练后量化|流程简单，精度降低|对难例不敏感，输出分数不在阈值附近的场景|
+|QAT|量化感知训练|流程复杂，耗时长，精度更高|精度敏感|
+
+参考链接：
+[PTQ && QAT](https://deci.ai/quantization-and-quantization-aware-training/)
+[QAT](https://zhuanlan.zhihu.com/p/548174416)
+[tensorrt-qat](https://developer.nvidia.com/blog/accelerating-quantized-networks-with-qat-toolkit-and-tensorrt/)
+[pytorch-TensorRT](https://pytorch.org/TensorRT/_notebooks/vgg-qat.html#1)
+
+## 基础工具
+
+|名称|类型|优缺点|全链路示例|
+|:---:|:---:|:---:|:---:|
+|pytorch_quantization|PTQ/QAT|nvidia官方工具，成熟全链路支持|[resnet50],[ppl-resnet50]|
+|ppq|量化感知训练|流程复杂，耗时长，精度更高||
+|TensorRT's native PTQ|PTQ|操作简单，降低更多精度，但结合[Partial Quantization]可能降低精度并不多||
+[resnet50]: https://docs.nvidia.com/deeplearning/tensorrt/pytorch-quantization-toolkit/docs/tutorials/quant_resnet50.html#further-optimization
+[ppl-resnet50]: https://github.com/openppl-public/ppq/blob/master/ppq/samples/TensorRT/Example_QAT.py
+[Partial Quantization]: https://github.com/maggiez0138/yolov5_quant_sample/blob/236613d87bfc6d5f73bb39e73ccd217adfe7bce1/trt/onnx_to_trt_partialquant.py#LL193C12-L193C12
+
+
+## 通用工具
+
+[torch.fx](https://zhuanlan.zhihu.com/p/554633773),
+[PPL 量化工具](https://github.com/openppl-public/ppq#%E9%87%8F%E5%8C%96%E9%83%A8%E7%BD%B2%E6%95%99%E7%A8%8B,)
+[INT8 USING Torch-TensorRT](https://pytorch.org/TensorRT/_notebooks/vgg-qat.html),
+[sony MCT](https://github.com/sony/model_optimization)
+
+
+## 案例
+
+[YOLOv6-QAT](https://github.com/meituan/YOLOv6/blob/main/docs/Tutorial%20of%20Quantization.md): yolov6因为大量用了重参数化块构建结构，需要特殊的量化步骤去实现高精度QAT,过于复杂
+
+
+[NVIDIA-AI-IOT/yolov7](https://github.com/NVIDIA-AI-IOT/yolo_deepstream/blob/main/yolov7_qat/doc/Guidance_of_QAT_performance_optimization.md) 推荐，使用yolov7，最完整
