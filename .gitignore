@@ -33,9 +33,9 @@ coverage/
 
 dist
 
-website/build
-website/.docusaurus
-website/.cache-loader
+build
+.docusaurus
+.cache-loader
 
 build/
 
@@ -52,12 +52,12 @@ __fixtures__/
 .prettierrc.yml
 .verdaccio/
 libs/
-website/yarn.lock
+yarn.lock
 
-website/netlifyDeployPreview/*
-website/changelog
-!website/netlifyDeployPreview/index.html
-!website/netlifyDeployPreview/_redirects
+netlifyDeployPreview/*
+changelog
+!netlifyDeployPreview/index.html
+!netlifyDeployPreview/_redirects
 
-website/_dogfooding/_swizzle_theme_tests
+_dogfooding/_swizzle_theme_tests
 package-lock.json
