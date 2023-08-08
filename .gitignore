@@ -54,7 +54,6 @@ __fixtures__/
 .prettierrc.yml
 .verdaccio/
 libs/
-yarn.lock
 
 netlifyDeployPreview/*
 changelog
