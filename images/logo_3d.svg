@@ -1,0 +1,45 @@
+
+<svg width="96" height="96" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+
+<defs>
+  <filter id="shadow">
+  <feGaussianBlur in="SourceAlpha" stdDeviation="3" result="blur"/>
+  <!-- <feOffset in="blur" dx="1" dy="1" result="offsetBlur"/>
+  <feMerge>
+    <feMergeNode in="offsetBlur"/>
+    <feMergeNode in="SourceGraphic"/>
+  </feMerge> -->
+  </filter>
+  <filter id="highlight">
+    <feComponentTransfer in="SourceGraphic">
+      <feFuncR type="linear" slope="1.2" />
+      <feFuncG type="linear" slope="1.2" />
+      <feFuncB type="linear" slope="1.2" />
+    </feComponentTransfer>
+  </filter>
+</defs>
+
+
+<ellipse cx="22" cy="30" rx="16" ry="14" fill="#2F88FF" stroke="#333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" filter="url(#shadow)" />
+
+
+<ellipse cx="22" cy="30" rx="16" ry="14" fill="#2F88FF" stroke="#FFF" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" filter="url(#highlight)" />
+
+
+<path d="M26 24C27.3333 24.1667 30 25 31 29" stroke="#FFF" stroke-width="3" stroke-linecap="round" filter="url(#highlight)" />
+
+
+<circle cx="8" cy="8" r="4" fill="#7FBFFF" stroke="#333" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"  />
+
+
+<circle cx="8" cy="8" r="4" fill="#7FBFFF" stroke="#FFF" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"  />
+
+
+<circle cx="41" cy="13" r="3" fill="#7FBFFF" stroke="#333" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"  />
+
+
+<circle cx="41" cy="13" r="3" fill="#7FBFFF" stroke="#FFF" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"  />
+
+
+</svg>
