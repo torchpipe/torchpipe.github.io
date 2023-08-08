@@ -13,9 +13,8 @@ torchpipe的文档站点
 ```bash
 # remove image if needed
 docker stop docu2 && docker rm docu2
-# 修改对外ip和端口（ip:port:3000 ）：
+# 修改对外ip和端口（your_ip:port:3000 ）：
 docker run  -p <your_ip>:3000:3000 --privileged=true  -v `pwd`:/workspace  --name="docu2"  --cap-add=SYS_PTRACE  -itd   node     
-
 docker exec -it -w/workspace/ docu2 bash
 ```
 
@@ -24,7 +23,6 @@ docker exec -it -w/workspace/ docu2 bash
 ```bash
 yarn add @docusaurus/theme-mermaid
 yarn add @easyops-cn/docusaurus-search-local
-
 yarn upgrade @docusaurus/core@latest @docusaurus/preset-classic@latest
 ```
 
@@ -57,8 +55,6 @@ yarn run write-translations -- --locale zh
 - 使用chatgpt：
 ```
 你充当我的翻译官，我将不断给你中文markdown格式的文本(带docusaurus扩展语法)，你翻译为地道而极其精简短小的英文版， 直接给出以```作为开始和结束的mdx源码，让我可以直接替换掉中文版，准备好了么
-
-
 ```
 ```
 给你一段代码，你把其中文注释一一对应翻译为英语注释
