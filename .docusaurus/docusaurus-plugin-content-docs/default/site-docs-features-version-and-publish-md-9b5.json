@@ -1,0 +1,28 @@
+{
+  "unversionedId": "features/version-and-publish",
+  "id": "features/version-and-publish",
+  "title": "Version and Publish",
+  "description": "Lerna can increment your package's versions as well as publish your packages to NPM, and it provides a variety of options to make sure any workflow can be accommodated.",
+  "source": "@site/docs/features/version-and-publish.md",
+  "sourceDirName": "features",
+  "slug": "/features/version-and-publish",
+  "permalink": "/zh/docs/features/version-and-publish",
+  "draft": false,
+  "editUrl": "https://github.com/lerna/lerna/tree/main/website/docs/features/version-and-publish.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "id": "version-and-publish",
+    "title": "Version and Publish",
+    "type": "explainer"
+  },
+  "sidebar": "main",
+  "previous": {
+    "title": "Distribute Task Execution",
+    "permalink": "/zh/docs/features/distribute-tasks"
+  },
+  "next": {
+    "title": "Editor Integrations",
+    "permalink": "/zh/docs/features/editor-integrations"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "unversionedId": "backend/alternate-bootstrapping-methods",
+  "id": "backend/alternate-bootstrapping-methods",
+  "title": "Legacy: Alternate Bootstrapping Methods",
+  "description": "There are several ways Torchpipe can set up your monorepo such that an app (remixapp) can find libraries in the same repo (header and footer), and one of them is to make it such that the header and footer end up in the node_modules folder of remixapp (or a different folder at the root)--that's what lerna bootstrap (without --use-workspaces) does.",
+  "source": "@site/docs/backend/alternate-bootstrapping-methods.md",
+  "sourceDirName": "backend",
+  "slug": "/backend/alternate-bootstrapping-methods",
+  "permalink": "/docs/backend/alternate-bootstrapping-methods",
+  "draft": false,
+  "editUrl": "https://g.hz.netease.com/deploy/torchpipe-docs/-/tree/master/website/docs/backend/alternate-bootstrapping-methods.md",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "张仕洋",
+  "lastUpdatedAt": 1681465291,
+  "formattedLastUpdatedAt": "2023年4月14日",
+  "frontMatter": {
+    "id": "alternate-bootstrapping-methods",
+    "title": "Legacy: Alternate Bootstrapping Methods",
+    "type": "explainer"
+  },
+  "sidebar": "main",
+  "previous": {
+    "title": "Distributed Task Execution Guide",
+    "permalink": "/docs/backend/dte-guide"
+  },
+  "next": {
+    "title": "Legacy: Hoisting",
+    "permalink": "/docs/backend/hoisting"
+  }
+}

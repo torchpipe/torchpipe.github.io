@@ -1,0 +1,32 @@
+{
+  "unversionedId": "backend-reference/log",
+  "id": "backend-reference/log",
+  "title": "日志",
+  "description": "本节文档验证中。",
+  "source": "@site/i18n/zh/docusaurus-plugin-content-docs/current/backend-reference/log.mdx",
+  "sourceDirName": "backend-reference",
+  "slug": "/backend-reference/log",
+  "permalink": "/zh/docs/backend-reference/log",
+  "draft": false,
+  "editUrl": "https://g.hz.netease.com/deploy/torchpipe-docs/-/tree/master/website/i18n/zh/docusaurus-plugin-content-docs/current/backend-reference/log.mdx",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "zhangshiyang",
+  "lastUpdatedAt": 1691136398,
+  "formattedLastUpdatedAt": "2023年8月4日",
+  "frontMatter": {
+    "id": "log",
+    "title": "日志",
+    "type": "reference",
+    "displayed_sidebar": "api"
+  },
+  "sidebar": "api",
+  "previous": {
+    "title": "torch相关后端",
+    "permalink": "/zh/docs/backend-reference/torch"
+  },
+  "next": {
+    "title": "单节点调度系统",
+    "permalink": "/zh/docs/Intra-node/schedule"
+  }
+}

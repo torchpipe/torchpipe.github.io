@@ -1,0 +1,31 @@
+{
+  "unversionedId": "Intra-node/extensible_backend",
+  "id": "Intra-node/extensible_backend",
+  "title": "自定义后端",
+  "description": "我们发现业务中的一大麻烦是，预置的后端（计算后端/调度后端/RPC后端/跨进程后端...）无法覆盖需求。通常来说，后端的扩展并非使用者的任务，而是库开发者的任务。torchpipe秉持着不同的思路，认为后端本身也与前端同为面向使用者的API. 为此，后端必须设计的足够简单。参照gstreamer，ffmpeg等框架的设计，面向现代化的c++和python， torchpipe 希望后端：",
+  "source": "@site/i18n/zh/docusaurus-plugin-content-docs/current/Intra-node/extensible_backend.mdx",
+  "sourceDirName": "Intra-node",
+  "slug": "/Intra-node/extensible_backend",
+  "permalink": "/zh/docs/Intra-node/extensible_backend",
+  "draft": false,
+  "editUrl": "https://g.hz.netease.com/deploy/torchpipe-docs/-/tree/master/website/i18n/zh/docusaurus-plugin-content-docs/current/Intra-node/extensible_backend.mdx",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "zhangshiyang",
+  "lastUpdatedAt": 1691136398,
+  "formattedLastUpdatedAt": "2023年8月4日",
+  "frontMatter": {
+    "id": "extensible_backend",
+    "title": "自定义后端",
+    "type": "explainer"
+  },
+  "sidebar": "main",
+  "previous": {
+    "title": "Sequential",
+    "permalink": "/zh/docs/Intra-node/Sequential"
+  },
+  "next": {
+    "title": "单节点调度系统",
+    "permalink": "/zh/docs/Intra-node/schedule"
+  }
+}

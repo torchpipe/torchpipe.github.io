@@ -1,0 +1,28 @@
+{
+  "unversionedId": "python/pipe",
+  "id": "python/pipe",
+  "title": "推理",
+  "description": "torchpipe.pipe",
+  "source": "@site/i18n/zh/docusaurus-plugin-content-docs/current/python/pipe.mdx",
+  "sourceDirName": "python",
+  "slug": "/python/pipe",
+  "permalink": "/zh/docs/python/pipe",
+  "draft": false,
+  "editUrl": "https://g.hz.netease.com/deploy/torchpipe-docs/-/tree/master/website/i18n/zh/docusaurus-plugin-content-docs/current/python/pipe.mdx",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "zhangshiyang",
+  "lastUpdatedAt": 1691136398,
+  "formattedLastUpdatedAt": "2023年8月4日",
+  "frontMatter": {
+    "id": "pipe",
+    "title": "推理",
+    "type": "reference",
+    "displayed_sidebar": "api"
+  },
+  "sidebar": "api",
+  "next": {
+    "title": "编译",
+    "permalink": "/zh/docs/python/compile"
+  }
+}

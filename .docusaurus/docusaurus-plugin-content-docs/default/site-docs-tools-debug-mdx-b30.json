@@ -1,0 +1,31 @@
+{
+  "unversionedId": "tools/debug",
+  "id": "tools/debug",
+  "title": "流水线调度系统的调试",
+  "description": "这部分功能有待实现。",
+  "source": "@site/docs/tools/debug.mdx",
+  "sourceDirName": "tools",
+  "slug": "/tools/debug",
+  "permalink": "/docs/tools/debug",
+  "draft": false,
+  "editUrl": "https://g.hz.netease.com/deploy/torchpipe-docs/-/tree/master/website/docs/tools/debug.mdx",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "张仕洋",
+  "lastUpdatedAt": 1681977947,
+  "formattedLastUpdatedAt": "Apr 20, 2023",
+  "frontMatter": {
+    "id": "debug",
+    "title": "流水线调度系统的调试",
+    "type": "explainer"
+  },
+  "sidebar": "main",
+  "previous": {
+    "title": "训练的集成",
+    "permalink": "/docs/tools/training"
+  },
+  "next": {
+    "title": "配置文件可视化",
+    "permalink": "/docs/tools/vis"
+  }
+}

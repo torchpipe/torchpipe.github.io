@@ -1,0 +1,52 @@
+---
+id: pytorch_libtorch
+title: PyTorch CUDA 语义
+type: explainer
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+
+# PyTorch CUDA 语义
+
+PyTorch 以易用性为核心，按照一致的原则组织了对GPU资源的访问。
+
+## 当前流
+
+在PyTorch内，`当前流(current stream)`指的是当前线程绑定的CUDA流。PyTorch通过以下API提供了绑定CUDA流到当前线程，以及获取当前线程绑定的CUDA流的功能：
+
+
+<Tabs groupId="language"  className="unique-tabs">
+<TabItem value="python" label="Python">
+
+```py
+torch.cuda.set_stream(stream)
+torch.cuda.current_stream(device=None)
+```
+
+</TabItem>
+<TabItem value="cpp" label="C++">
+
+```cpp
+c10::cuda::setCurrentCUDAStream(CUDAStream stream);
+c10::cuda::getCurrentCUDAStream(DeviceIndex device_index = -1) ;
+```
+
+</TabItem>
+</Tabs>
+
+默认情况下，所有线程都绑定到默认流(stream 0)上.
+
+PyTorch的GPU运算均提交到当前线程绑定的`当前流`上。PyTorch尽量让用户感知不到这点：
+- 通常来说，`当前流`是都是默认流，而在同一个流上提交的任务会按提交时间串行执行；
+- 对于涉及到将GPU数据拷贝到CPU或者另外一块GPU设备的操作， PyTorch默认地在操作中插入[`当前流`的同步操作](https://github.com/pytorch/pytorch/blob/v1.13.0/aten/src/ATen/native/cuda/Copy.cu#L252)
+
+为了在多线程环境使得PyTorch充分利用GPU资源，我们需要打破以上惯例：
+- 计算后端线程绑定到独立的CUDA流；
+- 在线程转换时进行流同步
+   
+
+
+### 参考资料
+- [asynchronous execution](https://pytorch.org/docs/stable/notes/cuda.html#asynchronous-execution)

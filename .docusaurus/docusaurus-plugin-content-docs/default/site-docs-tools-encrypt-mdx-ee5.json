@@ -1,0 +1,31 @@
+{
+  "unversionedId": "tools/encrypt",
+  "id": "tools/encrypt",
+  "title": "加密",
+  "description": "内部自带了简单的加密相关功能.",
+  "source": "@site/docs/tools/encrypt.mdx",
+  "sourceDirName": "tools",
+  "slug": "/tools/encrypt",
+  "permalink": "/docs/tools/encrypt",
+  "draft": false,
+  "editUrl": "https://g.hz.netease.com/deploy/torchpipe-docs/-/tree/master/website/docs/tools/encrypt.mdx",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "张仕洋",
+  "lastUpdatedAt": 1686795447,
+  "formattedLastUpdatedAt": "Jun 15, 2023",
+  "frontMatter": {
+    "id": "encrypt",
+    "title": "加密",
+    "type": "explainer"
+  },
+  "sidebar": "main",
+  "previous": {
+    "title": "5. tools",
+    "permalink": "/docs/tools"
+  },
+  "next": {
+    "title": "量化",
+    "permalink": "/docs/tools/quantization"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "unversionedId": "python/test",
+  "id": "python/test",
+  "title": "测试",
+  "description": "性能测试API暂不稳定。需要收集更多意见。",
+  "source": "@site/i18n/zh/docusaurus-plugin-content-docs/current/python/test.mdx",
+  "sourceDirName": "python",
+  "slug": "/python/test",
+  "permalink": "/zh/docs/python/test",
+  "draft": false,
+  "editUrl": "https://g.hz.netease.com/deploy/torchpipe-docs/-/tree/master/website/i18n/zh/docusaurus-plugin-content-docs/current/python/test.mdx",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "zhangshiyang",
+  "lastUpdatedAt": 1691136398,
+  "formattedLastUpdatedAt": "2023年8月4日",
+  "frontMatter": {
+    "id": "test",
+    "title": "测试",
+    "type": "reference",
+    "displayed_sidebar": "api"
+  },
+  "sidebar": "api",
+  "previous": {
+    "title": "编译",
+    "permalink": "/zh/docs/python/compile"
+  },
+  "next": {
+    "title": "基础性后端",
+    "permalink": "/zh/docs/backend-reference/basic"
+  }
+}

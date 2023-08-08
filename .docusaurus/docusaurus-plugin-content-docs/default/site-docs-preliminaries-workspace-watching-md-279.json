@@ -1,0 +1,22 @@
+{
+  "unversionedId": "preliminaries/workspace-watching",
+  "id": "preliminaries/workspace-watching",
+  "title": "Workspace Watching",
+  "description": "Workspace Watching is available as of Torchpipe 6.4.0.",
+  "source": "@site/docs/preliminaries/workspace-watching.md",
+  "sourceDirName": "preliminaries",
+  "slug": "/preliminaries/workspace-watching",
+  "permalink": "/docs/preliminaries/workspace-watching",
+  "draft": false,
+  "editUrl": "https://g.hz.netease.com/deploy/torchpipe-docs/-/tree/master/website/docs/preliminaries/workspace-watching.md",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "张仕洋",
+  "lastUpdatedAt": 1681122653,
+  "formattedLastUpdatedAt": "Apr 10, 2023",
+  "frontMatter": {
+    "id": "workspace-watching",
+    "title": "Workspace Watching",
+    "type": "recipe"
+  }
+}

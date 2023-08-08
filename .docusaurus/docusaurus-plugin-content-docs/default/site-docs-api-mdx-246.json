@@ -1,0 +1,22 @@
+{
+  "unversionedId": "api",
+  "id": "api",
+  "title": "API Reference",
+  "description": "<!-- import { useActiveVersion } from '@docusaurus/plugin-content-docs/client';",
+  "source": "@site/docs/api.mdx",
+  "sourceDirName": ".",
+  "slug": "/api",
+  "permalink": "/docs/api",
+  "draft": false,
+  "editUrl": "https://g.hz.netease.com/deploy/torchpipe-docs/-/tree/master/website/docs/api.mdx",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "张仕洋",
+  "lastUpdatedAt": 1678420651,
+  "formattedLastUpdatedAt": "2023年3月10日",
+  "sidebarPosition": 99,
+  "frontMatter": {
+    "title": "API Reference",
+    "sidebar_position": 99
+  }
+}

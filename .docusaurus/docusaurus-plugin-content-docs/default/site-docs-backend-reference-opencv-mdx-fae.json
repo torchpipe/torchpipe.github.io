@@ -1,0 +1,32 @@
+{
+  "unversionedId": "backend-reference/opencv",
+  "id": "backend-reference/opencv",
+  "title": "opencv相关后端",
+  "description": "速览",
+  "source": "@site/docs/backend-reference/opencv.mdx",
+  "sourceDirName": "backend-reference",
+  "slug": "/backend-reference/opencv",
+  "permalink": "/docs/backend-reference/opencv",
+  "draft": false,
+  "editUrl": "https://g.hz.netease.com/deploy/torchpipe-docs/-/tree/master/website/docs/backend-reference/opencv.mdx",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "zhangshiyang",
+  "lastUpdatedAt": 1690372787,
+  "formattedLastUpdatedAt": "Jul 26, 2023",
+  "frontMatter": {
+    "id": "opencv",
+    "title": "opencv相关后端",
+    "type": "reference",
+    "displayed_sidebar": "api"
+  },
+  "sidebar": "api",
+  "previous": {
+    "title": "基础性后端",
+    "permalink": "/docs/backend-reference/basic"
+  },
+  "next": {
+    "title": "torch相关后端",
+    "permalink": "/docs/backend-reference/torch"
+  }
+}

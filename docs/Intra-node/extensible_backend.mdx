@@ -1,0 +1,139 @@
+---
+id: extensible_backend
+title: 自定义后端
+type: explainer
+---
+
+<!-- # 自定义后端 -->
+我们发现业务中的一大麻烦是，预置的后端（计算后端/调度后端/RPC后端/跨进程后端...）无法覆盖需求。通常来说，后端的扩展并非`使用者`的任务，而是`库开发者`的任务。`torchpipe`秉持着不同的思路，认为后端本身也与前端同为面向`使用者`的API. 为此，后端必须设计的足够简单。参照gstreamer，ffmpeg等框架的设计，面向现代化的c++和python， `torchpipe` 希望后端：
+- 足够细粒度
+- 对输入输出数据类型不做特殊要求，由后端作者负责类型的校验和管理
+- 作为API，`使用者`只需额外关注**基础类型(dict)**的使用规则，以及**可选的日志组件**即可，并且这两者亦可重新实现而全局覆盖。对其他任何c++要素不做要求。这种方式虽然容易导致代码的混乱，却极大的给予了使用者扩展自由度。
+- 即时编译，尤其是在python环境内提供编译能力
+
+## 基础类型
+### any
+类似于c++17中的`std::any`，我们定义了一个接口几乎一致的类型擦除的容器，`ipipe::any`，可以接收除`char*`和`unsigned char*`之外的任意类型数据。
+any类型的数据可用any_cast获取真正数据。
+
+```cpp
+T data = any_cast<T>(any_data);
+// or
+auto* pdata = any_cast<T>(&any_data);
+```
+
+### dict
+作为数据的载体，类似于python中的dict，我们也在c++中定义了如下dict:
+```cpp
+#ifndef CUSTOM_DICT
+using dict = std::shared_ptr<std::unordered_map<std::string, ipipe::any>>;
+#else
+// todo :  custom dict with bidirectional binding between C++ and Python
+#endif
+```
+
+
+
+
+### Backend
+torchpipe将后端基础要素限制为：
+- 初始化：参数配置
+- 前向：输入输出接口
+- 前向：数据的batch范围
+
+后端接口定义为：
+
+```cpp
+class Backend {
+ public:
+  // 配置会层层透传到`init`的第一个参数中
+  virtual bool init(const std::unordered_map<std::string, std::string>& config, dict dict_config) {
+    return true;
+  };
+
+  virtual void forward(const std::vector<dict>& input_dicts) = 0;
+
+  virtual uint32_t max() const { return 1; };
+  virtual uint32_t min() const { return 1; };
+  ... //Irrelevant Functions
+};
+```
+ 
+您可自定义后端，比如，内部的`Identity` 可在如下`CustomIdentity.cpp`文件被等价定义为：
+```cpp
+#include "torchpipe/extension.h"
+
+namespace ipipe {
+class CustomIdentity : public Backend {
+ public:
+  void forward(const std::vector<dict>& input_dicts) override {
+    (*input_dicts[0])[TASK_RESULT_KEY] = input_dicts[0]->at(TASK_DATA_KEY);
+  }
+  uint32_t max() const override final { return 1; }; // or directly inherit from SingleBackend
+};
+
+// 注册到系统
+IPIPE_REGISTER(Backend, CustomIdentity, "CustomIdentity");
+}  // namespace ipipe
+```
+
+与 [triton inference server](https://github.com/triton-inference-server/backend)相比，这里的后端要素要少很多。用户一般只需扩展 `init/forward` 即可。如果需要实现batching功能，则需要更改`max/min`. 在我们的实践中，满足[基本假设](./model_parallel#assumption)情况下，后端提供这些要素已经足够。torchpipe通过后端的复合实现了全部功能。事实上，`torchpipe`本身就是后端和后端的复合。
+
+
+## 编译 {#compile}
+为了方便编译，我们引用[`torch.utils.cpp_extension`](../python/compile) AOT编译设施， 以便在python环境中完成后端的快速自定义扩展。
+
+```python
+from torchpipe.utils.cpp_extension import load
+from torchpipe import pipe
+
+## 加载c++
+load(sources=["CustomIdentity.cpp"])
+## 初始化
+model = pipe({"backend":"CustomIdentity", "instance_num":"2"})
+
+## 前向
+input = {"data":"123"}
+model(input)
+## 检查结果
+assert(input["result"] == b"123")
+```
+
+## 与python的绑定
+以python为前端语言时，会从python中调用后端，并且将结果返回到python中，需要进行类型转换。
+### 从python类型到any {#py2any}
+假设输入数据为
+```python
+input = {"data":py_object}
+```
+框架以[一定规则](../cpp-python/basic#py2cpp)把python对象`py_object`转换为c++对象;
+
+
+
+
+对于python端的dict: `input`， 到c++中为：
+```cpp
+dict input_cpp = std::make_shared<std::unordered_map<std::string, ipipe::any>>();
+(*input_cpp)["data"] = PY2CPP(py_object);
+```
+
+转换完成后数据会以`dict`类型送入到`后端`中处理。用户可以在`后端`中指定数据类型`T`，通过以下API获取真实数据：
+```cpp
+T data = any_cast<T>((*input_cpp)["data"]);
+// or
+auto* pdata = any_cast<T>(&(*input_cpp)["data"]);
+```
+如果`T`与真实的`c++`类型不一致, 将抛出异常或者返回空指针。
+
+
+###  从any到python类型
+当`后端`将结果写入`input_cpp`的`result`和其他键值时，如果需要使用python接口，框架会自动将除`data`之外所有键值对应的数据以[一定规则](../cpp-python/basic#cpp2py)传输到python端：
+ 
+ 
+
+## 小结
+<!-- API of Extensible Backend -->
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+

@@ -1,0 +1,20 @@
+{
+  "title": "FAQ",
+  "description": "",
+  "keywords": [
+    "onnx",
+    "faq"
+  ],
+  "slug": "/faq",
+  "permalink": "/zh/docs/faq",
+  "navigation": {
+    "previous": {
+      "title": "性能报告",
+      "permalink": "/zh/docs/benchmark"
+    },
+    "next": {
+      "title": "如何将转换模型到onnx",
+      "permalink": "/zh/docs/faq/onnx"
+    }
+  }
+}

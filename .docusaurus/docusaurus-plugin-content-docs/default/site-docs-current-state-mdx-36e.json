@@ -1,0 +1,18 @@
+{
+  "unversionedId": "current_state",
+  "id": "current_state",
+  "title": "项目进度",
+  "description": "开源目标",
+  "source": "@site/docs/current_state.mdx",
+  "sourceDirName": ".",
+  "slug": "/current_state",
+  "permalink": "/docs/current_state",
+  "draft": false,
+  "editUrl": "https://g.hz.netease.com/deploy/torchpipe-docs/-/tree/master/website/docs/current_state.mdx",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "zhangshiyang",
+  "lastUpdatedAt": 1690790579,
+  "formattedLastUpdatedAt": "Jul 31, 2023",
+  "frontMatter": {}
+}

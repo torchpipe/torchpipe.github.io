@@ -1,0 +1,31 @@
+{
+  "unversionedId": "contribution_guide/statement",
+  "id": "contribution_guide/statement",
+  "title": "权利说明",
+  "description": "请确保提交的代码符合版权要求。",
+  "source": "@site/i18n/zh/docusaurus-plugin-content-docs/current/contribution_guide/statement.md",
+  "sourceDirName": "contribution_guide",
+  "slug": "/contribution_guide/statement",
+  "permalink": "/zh/docs/contribution_guide/statement",
+  "draft": false,
+  "editUrl": "https://g.hz.netease.com/deploy/torchpipe-docs/-/tree/master/website/i18n/zh/docusaurus-plugin-content-docs/current/contribution_guide/statement.md",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "zhangshiyang",
+  "lastUpdatedAt": 1691136398,
+  "formattedLastUpdatedAt": "2023年8月4日",
+  "frontMatter": {
+    "id": "statement",
+    "title": "权利说明",
+    "type": "reference"
+  },
+  "sidebar": "main",
+  "previous": {
+    "title": "修改文档",
+    "permalink": "/zh/docs/contribution_guide/modify_the_doc"
+  },
+  "next": {
+    "title": "交流提问",
+    "permalink": "/zh/docs/contribution_guide/communicate"
+  }
+}

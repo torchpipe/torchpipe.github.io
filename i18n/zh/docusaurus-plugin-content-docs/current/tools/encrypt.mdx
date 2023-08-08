@@ -1,0 +1,36 @@
+---
+id: encrypt
+title: 加密
+type: explainer
+---
+
+内部自带了简单的加密相关功能.
+
+:::tip
+请在编译`torchpipe`时指定密钥`IPIPE_KEY`（(大于8位，16位最佳)）以便启动相关功能：
+```bash
+# 以下密钥只是举例，请勿使用该密钥
+IPIPE_KEY=9876tfyghyughyuihjk python setup.py bdist_wheel
+# or IPIPE_KEY=9876tfyugkjhyuihjk pip instal -e .
+```
+:::
+
+## 示例
+```bash
+python -m torchpipe.utils.encrypt a.onnx a.onnx.encrypted
+```
+
+## 使用方法 {#encrypt-parameter}
+
+ `usage: encrypt.py [-h] input output`
+
+
+
+
+
+
+输出的以`.encrypted`为后缀的文件可用于[TensorrtTensor](../backend-reference/torch#tensorrttensor).
+
+## 加密安全性
+我们在源码中使用了对称加密，以及一些选帧策略，混淆策略进行加密。随着版本等因素变化，加密策略会相应变化。请在编译`torchpipe`时指定密钥`IPIPE_KEY`(大于8位，16位最佳)。 我们只提供基础的加密功能。可以自行重新实现整个加解密部分，实现更安全的保护。
+

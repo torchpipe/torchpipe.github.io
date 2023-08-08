@@ -1,0 +1,22 @@
+{
+  "unversionedId": "preliminaries/editor-integrations",
+  "id": "preliminaries/editor-integrations",
+  "title": "Editor Integrations",
+  "description": "Nx Console displays the npm scripts for all your projects in the VS Code sidebar and allows you to run them with a single click or open the script definition in your editor.",
+  "source": "@site/docs/preliminaries/editor-integrations.md",
+  "sourceDirName": "preliminaries",
+  "slug": "/preliminaries/editor-integrations",
+  "permalink": "/docs/preliminaries/editor-integrations",
+  "draft": false,
+  "editUrl": "https://g.hz.netease.com/deploy/torchpipe-docs/-/tree/master/website/docs/preliminaries/editor-integrations.md",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "张仕洋",
+  "lastUpdatedAt": 1678420651,
+  "formattedLastUpdatedAt": "Mar 10, 2023",
+  "frontMatter": {
+    "id": "editor-integrations",
+    "title": "Editor Integrations",
+    "type": "recipe"
+  }
+}

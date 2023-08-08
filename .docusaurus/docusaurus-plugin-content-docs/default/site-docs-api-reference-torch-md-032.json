@@ -1,0 +1,28 @@
+{
+  "unversionedId": "api-reference/torch",
+  "id": "api-reference/torch",
+  "title": "torch相关后端",
+  "description": "速览",
+  "source": "@site/docs/api-reference/torch.md",
+  "sourceDirName": "api-reference",
+  "slug": "/api-reference/torch",
+  "permalink": "/zh/docs/api-reference/torch",
+  "draft": false,
+  "editUrl": "https://g.hz.netease.com/deploy/torchpipe-docs/-/tree/master/website/docs/api-reference/torch.md",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "张仕洋",
+  "lastUpdatedAt": 1681465291,
+  "formattedLastUpdatedAt": "2023年4月14日",
+  "frontMatter": {
+    "id": "torch",
+    "title": "torch相关后端",
+    "type": "reference",
+    "displayed_sidebar": "api"
+  },
+  "sidebar": "api",
+  "previous": {
+    "title": "opencv相关后端",
+    "permalink": "/zh/docs/api-reference/opencv"
+  }
+}

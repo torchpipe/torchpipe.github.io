@@ -1,0 +1,16 @@
+{
+  "title": "How To Guides",
+  "description": "Get Started",
+  "slug": "/features",
+  "permalink": "/docs/introduction/docs/features",
+  "navigation": {
+    "previous": {
+      "title": "Lerna and Nx",
+      "permalink": "/docs/introduction/docs/lerna-and-nx"
+    },
+    "next": {
+      "title": "Run Tasks",
+      "permalink": "/docs/introduction/docs/features/pytorch_libtorch"
+    }
+  }
+}

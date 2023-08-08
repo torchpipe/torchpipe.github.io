@@ -1,0 +1,31 @@
+{
+  "unversionedId": "preliminaries/thread_process_gil",
+  "id": "preliminaries/thread_process_gil",
+  "title": "线程，进程，GIL",
+  "description": "在python环境下使用多线程部署深度学习服务时一大难以克服的问题就是GIL锁。",
+  "source": "@site/i18n/zh/docusaurus-plugin-content-docs/current/preliminaries/thread_process_gil.md",
+  "sourceDirName": "preliminaries",
+  "slug": "/preliminaries/thread_process_gil",
+  "permalink": "/zh/docs/preliminaries/thread_process_gil",
+  "draft": false,
+  "editUrl": "https://g.hz.netease.com/deploy/torchpipe-docs/-/tree/master/website/i18n/zh/docusaurus-plugin-content-docs/current/preliminaries/thread_process_gil.md",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "zhangshiyang",
+  "lastUpdatedAt": 1691136398,
+  "formattedLastUpdatedAt": "2023年8月4日",
+  "frontMatter": {
+    "id": "thread_process_gil",
+    "title": "线程，进程，GIL",
+    "type": "recipe"
+  },
+  "sidebar": "main",
+  "previous": {
+    "title": "PyTorch CUDA 语义",
+    "permalink": "/zh/docs/preliminaries/pytorch_libtorch"
+  },
+  "next": {
+    "title": "服务性能的关键评价指标",
+    "permalink": "/zh/docs/preliminaries/rpc"
+  }
+}

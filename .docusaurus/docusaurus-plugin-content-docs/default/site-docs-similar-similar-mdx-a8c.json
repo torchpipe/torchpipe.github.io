@@ -1,0 +1,22 @@
+{
+  "unversionedId": "similar/similar",
+  "id": "similar/similar",
+  "title": "相似工作一览",
+  "description": "- [triton ensemble] && [Business Logic Scripting] && [triton examples]",
+  "source": "@site/docs/similar/similar.mdx",
+  "sourceDirName": "similar",
+  "slug": "/similar/",
+  "permalink": "/docs/similar/",
+  "draft": false,
+  "editUrl": "https://g.hz.netease.com/deploy/torchpipe-docs/-/tree/master/website/docs/similar/similar.mdx",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "张仕洋",
+  "lastUpdatedAt": 1682490162,
+  "formattedLastUpdatedAt": "Apr 26, 2023",
+  "frontMatter": {
+    "id": "similar",
+    "title": "相似工作一览",
+    "type": "explainer"
+  }
+}

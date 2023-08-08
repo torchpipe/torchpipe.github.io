@@ -1,0 +1,21 @@
+{
+  "title": "工具",
+  "description": "torchpipe相关的扩展工具",
+  "keywords": [
+    "training",
+    "vis",
+    "debug"
+  ],
+  "slug": "/tools",
+  "permalink": "/zh/docs/tools",
+  "navigation": {
+    "previous": {
+      "title": "逻辑节点",
+      "permalink": "/zh/docs/Inter-node/logical_nodes"
+    },
+    "next": {
+      "title": "加密",
+      "permalink": "/zh/docs/tools/encrypt"
+    }
+  }
+}

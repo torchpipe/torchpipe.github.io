@@ -1,0 +1,21 @@
+{
+  "title": "",
+  "description": "torchpipe相关的扩展工具",
+  "keywords": [
+    "training",
+    "vis",
+    "debug"
+  ],
+  "slug": "/tools",
+  "permalink": "/docs/tools",
+  "navigation": {
+    "previous": {
+      "title": "图的跳转",
+      "permalink": "/docs/Inter-node/graphtraversal"
+    },
+    "next": {
+      "title": "训练的集成",
+      "permalink": "/docs/tools/training"
+    }
+  }
+}

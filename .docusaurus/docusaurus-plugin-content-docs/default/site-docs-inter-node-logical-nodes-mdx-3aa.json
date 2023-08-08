@@ -1,0 +1,31 @@
+{
+  "unversionedId": "Inter-node/logical_nodes",
+  "id": "Inter-node/logical_nodes",
+  "title": "逻辑节点",
+  "description": "在一些场景中，有时需要在不同分支或者不同逻辑控制流条件下进入某些节点，但不希望共享其后端。",
+  "source": "@site/docs/Inter-node/logical_nodes.mdx",
+  "sourceDirName": "Inter-node",
+  "slug": "/Inter-node/logical_nodes",
+  "permalink": "/docs/Inter-node/logical_nodes",
+  "draft": false,
+  "editUrl": "https://g.hz.netease.com/deploy/torchpipe-docs/-/tree/master/website/docs/Inter-node/logical_nodes.mdx",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "张仕洋",
+  "lastUpdatedAt": 1682495434,
+  "formattedLastUpdatedAt": "Apr 26, 2023",
+  "frontMatter": {
+    "id": "logical_nodes",
+    "title": "逻辑节点",
+    "type": "explainer"
+  },
+  "sidebar": "main",
+  "previous": {
+    "title": "图的跳转",
+    "permalink": "/docs/Inter-node/graphtraversal"
+  },
+  "next": {
+    "title": "5. tools",
+    "permalink": "/docs/tools"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "unversionedId": "Inter-node/context",
+  "id": "Inter-node/context",
+  "title": "context: 自动map语法糖",
+  "description": "在上节的多分支示例中，两个分支都可能被跳过。为了记录每个分支的状态，以及将结果都汇总到最终的结果，需要很多的键值和复杂的map配置。",
+  "source": "@site/docs/Inter-node/context.mdx",
+  "sourceDirName": "Inter-node",
+  "slug": "/Inter-node/context",
+  "permalink": "/docs/Inter-node/context",
+  "draft": false,
+  "editUrl": "https://g.hz.netease.com/deploy/torchpipe-docs/-/tree/master/website/docs/Inter-node/context.mdx",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "张仕洋",
+  "lastUpdatedAt": 1681971009,
+  "formattedLastUpdatedAt": "Apr 20, 2023",
+  "frontMatter": {
+    "id": "context",
+    "title": "context: 自动map语法糖",
+    "type": "explainer"
+  },
+  "sidebar": "main",
+  "previous": {
+    "title": "filter: 有向无环图中的条件控制流",
+    "permalink": "/docs/Inter-node/filter"
+  },
+  "next": {
+    "title": "图的跳转",
+    "permalink": "/docs/Inter-node/graphtraversal"
+  }
+}

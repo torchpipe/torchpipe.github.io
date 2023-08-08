@@ -1,0 +1,31 @@
+{
+  "unversionedId": "Intra-node/Sequential",
+  "id": "Intra-node/Sequential",
+  "title": "Sequential",
+  "description": "Sequential 能串联多个后端。 也就是说，Sequential[DecodeTensor,ResizeTensor,cvtColorTensor,SyncTensor] 和 Sequential[DecodeMat,ResizeMat] 是有效后端。",
+  "source": "@site/i18n/zh/docusaurus-plugin-content-docs/current/Intra-node/Sequential.mdx",
+  "sourceDirName": "Intra-node",
+  "slug": "/Intra-node/Sequential",
+  "permalink": "/zh/docs/Intra-node/Sequential",
+  "draft": false,
+  "editUrl": "https://g.hz.netease.com/deploy/torchpipe-docs/-/tree/master/website/i18n/zh/docusaurus-plugin-content-docs/current/Intra-node/Sequential.mdx",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "zhangshiyang",
+  "lastUpdatedAt": 1691136398,
+  "formattedLastUpdatedAt": "2023年8月4日",
+  "frontMatter": {
+    "id": "Sequential",
+    "title": "Sequential",
+    "type": "explainer"
+  },
+  "sidebar": "main",
+  "previous": {
+    "title": "计算后端",
+    "permalink": "/zh/docs/Intra-node/computational_backend"
+  },
+  "next": {
+    "title": "自定义后端",
+    "permalink": "/zh/docs/Intra-node/extensible_backend"
+  }
+}

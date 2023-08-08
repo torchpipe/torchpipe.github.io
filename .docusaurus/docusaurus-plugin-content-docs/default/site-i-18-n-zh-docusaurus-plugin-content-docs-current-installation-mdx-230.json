@@ -1,0 +1,31 @@
+{
+  "unversionedId": "installation",
+  "id": "installation",
+  "title": "安装",
+  "description": "使用NGC基础镜像",
+  "source": "@site/i18n/zh/docusaurus-plugin-content-docs/current/installation.mdx",
+  "sourceDirName": ".",
+  "slug": "/installation",
+  "permalink": "/zh/docs/installation",
+  "draft": false,
+  "editUrl": "https://g.hz.netease.com/deploy/torchpipe-docs/-/tree/master/website/i18n/zh/docusaurus-plugin-content-docs/current/installation.mdx",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "zhangshiyang",
+  "lastUpdatedAt": 1691141806,
+  "formattedLastUpdatedAt": "2023年8月4日",
+  "frontMatter": {
+    "id": "installation",
+    "title": "安装",
+    "type": "explainer"
+  },
+  "sidebar": "main",
+  "previous": {
+    "title": "快速上手",
+    "permalink": "/zh/docs/"
+  },
+  "next": {
+    "title": "初阶版--小试牛刀",
+    "permalink": "/zh/docs/quick_start_new_user"
+  }
+}

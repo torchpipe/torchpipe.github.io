@@ -1,0 +1,31 @@
+{
+  "unversionedId": "preliminaries/cuda_stream",
+  "id": "preliminaries/cuda_stream",
+  "title": "CUDA: 流和并发",
+  "description": "CUDA提供了一致的抽象，来控制并发访问，以便用户最大化、完整地利用单块GPU设备的资源能力。",
+  "source": "@site/docs/preliminaries/cuda_stream.mdx",
+  "sourceDirName": "preliminaries",
+  "slug": "/preliminaries/cuda_stream",
+  "permalink": "/docs/preliminaries/cuda_stream",
+  "draft": false,
+  "editUrl": "https://g.hz.netease.com/deploy/torchpipe-docs/-/tree/master/website/docs/preliminaries/cuda_stream.mdx",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "张仕洋",
+  "lastUpdatedAt": 1680249814,
+  "formattedLastUpdatedAt": "Mar 31, 2023",
+  "frontMatter": {
+    "id": "cuda_stream",
+    "title": "CUDA: 流和并发",
+    "type": "recipe"
+  },
+  "sidebar": "main",
+  "previous": {
+    "title": "2. Preliminaries",
+    "permalink": "/docs/preliminaries"
+  },
+  "next": {
+    "title": "PyTorch CUDA 语义",
+    "permalink": "/docs/preliminaries/pytorch_libtorch"
+  }
+}

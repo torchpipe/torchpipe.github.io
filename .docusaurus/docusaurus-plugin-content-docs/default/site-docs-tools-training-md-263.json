@@ -1,0 +1,31 @@
+{
+  "unversionedId": "tools/training",
+  "id": "tools/training",
+  "title": "训练的集成",
+  "description": "这部分功能迭代中。",
+  "source": "@site/docs/tools/training.md",
+  "sourceDirName": "tools",
+  "slug": "/tools/training",
+  "permalink": "/docs/tools/training",
+  "draft": false,
+  "editUrl": "https://g.hz.netease.com/deploy/torchpipe-docs/-/tree/master/website/docs/tools/training.md",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "zhangshiyang",
+  "lastUpdatedAt": 1690372787,
+  "formattedLastUpdatedAt": "Jul 26, 2023",
+  "frontMatter": {
+    "id": "training",
+    "title": "训练的集成",
+    "type": "explainer"
+  },
+  "sidebar": "main",
+  "previous": {
+    "title": "量化",
+    "permalink": "/docs/tools/quantization"
+  },
+  "next": {
+    "title": "流水线调度系统的调试",
+    "permalink": "/docs/tools/debug"
+  }
+}

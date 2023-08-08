@@ -1,0 +1,31 @@
+{
+  "unversionedId": "tools/debug",
+  "id": "tools/debug",
+  "title": "流水线调度系统的调试",
+  "description": "这部分功能有待实现。",
+  "source": "@site/i18n/zh/docusaurus-plugin-content-docs/current/tools/debug.mdx",
+  "sourceDirName": "tools",
+  "slug": "/tools/debug",
+  "permalink": "/zh/docs/tools/debug",
+  "draft": false,
+  "editUrl": "https://g.hz.netease.com/deploy/torchpipe-docs/-/tree/master/website/i18n/zh/docusaurus-plugin-content-docs/current/tools/debug.mdx",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "zhangshiyang",
+  "lastUpdatedAt": 1691136398,
+  "formattedLastUpdatedAt": "2023年8月4日",
+  "frontMatter": {
+    "id": "debug",
+    "title": "流水线调度系统的调试",
+    "type": "explainer"
+  },
+  "sidebar": "main",
+  "previous": {
+    "title": "训练的集成",
+    "permalink": "/zh/docs/tools/training"
+  },
+  "next": {
+    "title": "配置文件可视化",
+    "permalink": "/zh/docs/tools/vis"
+  }
+}

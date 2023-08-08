@@ -1,0 +1,32 @@
+{
+  "unversionedId": "Intra-node/schedule",
+  "id": "Intra-node/schedule",
+  "title": "单节点调度系统",
+  "description": "输入数据经由默认的单节点调度系统BaselineSchedule分发给计算后端执行。在此过程中主要经历了凑batch和多实例的调度。",
+  "source": "@site/i18n/zh/docusaurus-plugin-content-docs/current/Intra-node/schedule.mdx",
+  "sourceDirName": "Intra-node",
+  "slug": "/Intra-node/schedule",
+  "permalink": "/zh/docs/Intra-node/schedule",
+  "draft": false,
+  "editUrl": "https://g.hz.netease.com/deploy/torchpipe-docs/-/tree/master/website/i18n/zh/docusaurus-plugin-content-docs/current/Intra-node/schedule.mdx",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "zhangshiyang",
+  "lastUpdatedAt": 1691136398,
+  "formattedLastUpdatedAt": "2023年8月4日",
+  "frontMatter": {
+    "id": "schedule",
+    "title": "单节点调度系统",
+    "type": "explainer",
+    "displayed_sidebar": "main"
+  },
+  "sidebar": "main",
+  "previous": {
+    "title": "自定义后端",
+    "permalink": "/zh/docs/Intra-node/extensible_backend"
+  },
+  "next": {
+    "title": "4. Inter-node Scheduling",
+    "permalink": "/zh/docs/Inter-node"
+  }
+}

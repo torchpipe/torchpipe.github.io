@@ -1,0 +1,16 @@
+{
+  "title": "预备知识",
+  "description": "您可以快速浏览或跳过本部分，在需要时再回头查看。",
+  "slug": "/preliminaries",
+  "permalink": "/zh/docs/preliminaries",
+  "navigation": {
+    "previous": {
+      "title": "1. 介绍",
+      "permalink": "/zh/docs/introduction"
+    },
+    "next": {
+      "title": "CUDA: 流和并发",
+      "permalink": "/zh/docs/preliminaries/cuda_stream"
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "unversionedId": "Intra-node/computational_backend",
+  "id": "Intra-node/computational_backend",
+  "title": "计算后端",
+  "description": "在深度学习的服务中，如果仅支持模型加速远远不够。为此，我们内置了一些常用的细粒度后端。",
+  "source": "@site/i18n/zh/docusaurus-plugin-content-docs/current/Intra-node/computational_backend.mdx",
+  "sourceDirName": "Intra-node",
+  "slug": "/Intra-node/computational_backend",
+  "permalink": "/zh/docs/Intra-node/computational_backend",
+  "draft": false,
+  "editUrl": "https://g.hz.netease.com/deploy/torchpipe-docs/-/tree/master/website/i18n/zh/docusaurus-plugin-content-docs/current/Intra-node/computational_backend.mdx",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "zhangshiyang",
+  "lastUpdatedAt": 1691136398,
+  "formattedLastUpdatedAt": "2023年8月4日",
+  "frontMatter": {
+    "id": "computational_backend",
+    "title": "计算后端",
+    "type": "explainer"
+  },
+  "sidebar": "main",
+  "previous": {
+    "title": "resnet18 计算加速",
+    "permalink": "/zh/docs/Intra-node/model_parallel"
+  },
+  "next": {
+    "title": "Sequential",
+    "permalink": "/zh/docs/Intra-node/Sequential"
+  }
+}

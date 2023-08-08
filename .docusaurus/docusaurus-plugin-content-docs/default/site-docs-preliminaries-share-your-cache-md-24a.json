@@ -1,0 +1,28 @@
+{
+  "unversionedId": "preliminaries/share-your-cache",
+  "id": "preliminaries/share-your-cache",
+  "title": "Share Your Cache",
+  "description": "The computation cache provided by Torchpipe can be distributed across multiple machines. You can either build an implementation",
+  "source": "@site/docs/preliminaries/share-your-cache.md",
+  "sourceDirName": "preliminaries",
+  "slug": "/preliminaries/share-your-cache",
+  "permalink": "/zh/docs/preliminaries/share-your-cache",
+  "draft": false,
+  "editUrl": "https://g.hz.netease.com/deploy/torchpipe-docs/-/tree/master/website/docs/preliminaries/share-your-cache.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "id": "share-your-cache",
+    "title": "Share Your Cache",
+    "type": "recipe"
+  },
+  "sidebar": "main",
+  "previous": {
+    "title": "PyTorch CUDA 语义",
+    "permalink": "/zh/docs/preliminaries/pytorch_libtorch"
+  },
+  "next": {
+    "title": "3. single_node",
+    "permalink": "/zh/docs/single_node"
+  }
+}

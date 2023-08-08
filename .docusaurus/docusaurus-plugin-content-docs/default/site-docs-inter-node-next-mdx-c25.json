@@ -1,0 +1,31 @@
+{
+  "unversionedId": "Inter-node/next",
+  "id": "Inter-node/next",
+  "title": "多个节点的链接",
+  "description": "采用Sequential的方式串行起多个后端面临着一些问题：",
+  "source": "@site/docs/Inter-node/next.mdx",
+  "sourceDirName": "Inter-node",
+  "slug": "/Inter-node/next",
+  "permalink": "/docs/Inter-node/next",
+  "draft": false,
+  "editUrl": "https://g.hz.netease.com/deploy/torchpipe-docs/-/tree/master/website/docs/Inter-node/next.mdx",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "zhangshiyang",
+  "lastUpdatedAt": 1690965717,
+  "formattedLastUpdatedAt": "Aug 2, 2023",
+  "frontMatter": {
+    "id": "next",
+    "title": "多个节点的链接",
+    "type": "explainer"
+  },
+  "sidebar": "main",
+  "previous": {
+    "title": "4. Inter-node Scheduling",
+    "permalink": "/docs/Inter-node"
+  },
+  "next": {
+    "title": "filter: 有向无环图中的条件控制流",
+    "permalink": "/docs/Inter-node/filter"
+  }
+}

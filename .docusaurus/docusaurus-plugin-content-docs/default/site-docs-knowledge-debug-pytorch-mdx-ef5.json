@@ -1,0 +1,22 @@
+{
+  "unversionedId": "knowledge/debug_pytorch",
+  "id": "knowledge/debug_pytorch",
+  "title": "如何查看PyTorch源码并Debug Pytorch",
+  "description": "下载PyTorch源码",
+  "source": "@site/docs/knowledge/debug_pytorch.mdx",
+  "sourceDirName": "knowledge",
+  "slug": "/knowledge/debug_pytorch",
+  "permalink": "/docs/knowledge/debug_pytorch",
+  "draft": false,
+  "editUrl": "https://g.hz.netease.com/deploy/torchpipe-docs/-/tree/master/website/docs/knowledge/debug_pytorch.mdx",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "张仕洋",
+  "lastUpdatedAt": 1684399523,
+  "formattedLastUpdatedAt": "May 18, 2023",
+  "frontMatter": {
+    "id": "debug_pytorch",
+    "title": "如何查看PyTorch源码并Debug Pytorch",
+    "type": "explainer"
+  }
+}

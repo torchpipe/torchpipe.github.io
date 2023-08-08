@@ -1,0 +1,31 @@
+{
+  "unversionedId": "preliminaries/rpc",
+  "id": "preliminaries/rpc",
+  "title": "服务性能的关键评价指标",
+  "description": "在评估一个服务的性能时，有几个关键的指标需要考虑。这些指标可以帮助我们了解服务的延迟、吞吐量、错误率等方面的表现。下面是一些常用的关键评价指标。",
+  "source": "@site/i18n/zh/docusaurus-plugin-content-docs/current/preliminaries/rpc.md",
+  "sourceDirName": "preliminaries",
+  "slug": "/preliminaries/rpc",
+  "permalink": "/zh/docs/preliminaries/rpc",
+  "draft": false,
+  "editUrl": "https://g.hz.netease.com/deploy/torchpipe-docs/-/tree/master/website/i18n/zh/docusaurus-plugin-content-docs/current/preliminaries/rpc.md",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "zhangshiyang",
+  "lastUpdatedAt": 1691136398,
+  "formattedLastUpdatedAt": "2023年8月4日",
+  "frontMatter": {
+    "id": "rpc",
+    "title": "服务性能的关键评价指标",
+    "type": "explainer"
+  },
+  "sidebar": "main",
+  "previous": {
+    "title": "线程，进程，GIL",
+    "permalink": "/zh/docs/preliminaries/thread_process_gil"
+  },
+  "next": {
+    "title": "3. Intra-node Parallelism",
+    "permalink": "/zh/docs/Intra-node"
+  }
+}

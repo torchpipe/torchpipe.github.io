@@ -1,0 +1,31 @@
+{
+  "unversionedId": "quick_start_new_user",
+  "id": "quick_start_new_user",
+  "title": "初阶版--小试牛刀",
+  "description": "torchpipe是为工业界所准备的一个加速任务的工具集，助力使用者能在部署阶段节约更多的硬件资源，帮助产品应用落地。此教程主要针对初级用户，即对于加速相关的理论知识处于入门阶段，具有一定的 Python基础，能够阅读简单代码的用户。此内容主要包括使用torchpipe进行服务部署加速的使用方法、性能和效果差异对比等。",
+  "source": "@site/i18n/zh/docusaurus-plugin-content-docs/current/quick_start_new_user.md",
+  "sourceDirName": ".",
+  "slug": "/quick_start_new_user",
+  "permalink": "/zh/docs/quick_start_new_user",
+  "draft": false,
+  "editUrl": "https://g.hz.netease.com/deploy/torchpipe-docs/-/tree/master/website/i18n/zh/docusaurus-plugin-content-docs/current/quick_start_new_user.md",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "zhangshiyang",
+  "lastUpdatedAt": 1691136398,
+  "formattedLastUpdatedAt": "2023年8月4日",
+  "frontMatter": {
+    "id": "quick_start_new_user",
+    "title": "初阶版--小试牛刀",
+    "type": "explainer"
+  },
+  "sidebar": "main",
+  "previous": {
+    "title": "安装",
+    "permalink": "/zh/docs/installation"
+  },
+  "next": {
+    "title": "进阶版--升级打怪",
+    "permalink": "/zh/docs/quick_start_professional"
+  }
+}

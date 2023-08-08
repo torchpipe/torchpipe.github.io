@@ -1,0 +1,16 @@
+{
+  "title": "快速上手",
+  "description": "本章节在为刚接触 Torchpipe 项目的用户提供快速上手的方法。从安装到初阶版单模型加速案例再到多模型级联加速案例，看完本教程后，新用户应该能够快速上手使用 Torchpipe 来优化加速模型部署方案。",
+  "slug": "/",
+  "permalink": "/zh/docs/",
+  "navigation": {
+    "previous": {
+      "title": "欢迎",
+      "permalink": "/zh/docs/welcome"
+    },
+    "next": {
+      "title": "安装",
+      "permalink": "/zh/docs/installation"
+    }
+  }
+}

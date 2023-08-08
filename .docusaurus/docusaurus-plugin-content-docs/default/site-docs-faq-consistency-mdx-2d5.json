@@ -1,0 +1,31 @@
+{
+  "unversionedId": "faq/consistency",
+  "id": "faq/consistency",
+  "title": "如何处理训练推理的一致性",
+  "description": "本节介绍如何保证部署结果与训练结果的一致性以及调试方面的经验。",
+  "source": "@site/docs/faq/consistency.mdx",
+  "sourceDirName": "faq",
+  "slug": "/faq/consistency",
+  "permalink": "/docs/faq/consistency",
+  "draft": false,
+  "editUrl": "https://g.hz.netease.com/deploy/torchpipe-docs/-/tree/master/website/docs/faq/consistency.mdx",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "张仕洋",
+  "lastUpdatedAt": 1682330436,
+  "formattedLastUpdatedAt": "Apr 24, 2023",
+  "frontMatter": {
+    "id": "consistency",
+    "title": "如何处理训练推理的一致性",
+    "type": "explainer"
+  },
+  "sidebar": "main",
+  "previous": {
+    "title": "如何将转换模型到onnx",
+    "permalink": "/docs/faq/onnx"
+  },
+  "next": {
+    "title": "如何进行远程调试",
+    "permalink": "/docs/faq/remote-gdb"
+  }
+}

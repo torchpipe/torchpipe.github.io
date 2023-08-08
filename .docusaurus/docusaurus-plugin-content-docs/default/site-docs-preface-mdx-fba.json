@@ -1,0 +1,22 @@
+{
+  "unversionedId": "preface",
+  "id": "preface",
+  "title": "前言",
+  "description": "pytorch 中并发调用resnet18模型",
+  "source": "@site/docs/preface.mdx",
+  "sourceDirName": ".",
+  "slug": "/preface",
+  "permalink": "/docs/preface",
+  "draft": false,
+  "editUrl": "https://g.hz.netease.com/deploy/torchpipe-docs/-/tree/master/website/docs/preface.mdx",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "张仕洋",
+  "lastUpdatedAt": 1684222913,
+  "formattedLastUpdatedAt": "May 16, 2023",
+  "frontMatter": {
+    "id": "preface",
+    "title": "前言",
+    "type": "explainer"
+  }
+}

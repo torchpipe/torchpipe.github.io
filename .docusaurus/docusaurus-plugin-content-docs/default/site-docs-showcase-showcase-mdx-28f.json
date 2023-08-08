@@ -1,0 +1,24 @@
+{
+  "unversionedId": "showcase/showcase",
+  "id": "showcase/showcase",
+  "title": "",
+  "description": "🙏 请添加你的用例",
+  "source": "@site/docs/showcase/showcase.mdx",
+  "sourceDirName": "showcase",
+  "slug": "/showcase",
+  "permalink": "/docs/showcase",
+  "draft": false,
+  "editUrl": "https://g.hz.netease.com/deploy/torchpipe-docs/-/tree/master/website/docs/showcase/showcase.mdx",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "zhangshiyang",
+  "lastUpdatedAt": 1685674531,
+  "formattedLastUpdatedAt": "Jun 2, 2023",
+  "frontMatter": {
+    "id": "showcase",
+    "title": "",
+    "type": "tutorial",
+    "hide_title": true,
+    "slug": "/showcase"
+  }
+}

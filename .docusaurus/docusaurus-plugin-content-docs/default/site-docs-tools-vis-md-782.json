@@ -1,0 +1,28 @@
+{
+  "unversionedId": "tools/vis",
+  "id": "tools/vis",
+  "title": "可视化工具",
+  "description": "",
+  "source": "@site/docs/tools/vis.md",
+  "sourceDirName": "tools",
+  "slug": "/tools/vis",
+  "permalink": "/docs/tools/vis",
+  "draft": false,
+  "editUrl": "https://g.hz.netease.com/deploy/torchpipe-docs/-/tree/master/website/docs/tools/vis.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "id": "vis",
+    "title": "可视化工具",
+    "type": "explainer"
+  },
+  "sidebar": "main",
+  "previous": {
+    "title": "训练的集成",
+    "permalink": "/docs/tools/training"
+  },
+  "next": {
+    "title": "流水线调度系统调试",
+    "permalink": "/docs/tools/debug"
+  }
+}

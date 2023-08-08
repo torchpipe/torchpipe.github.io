@@ -1,0 +1,28 @@
+{
+  "unversionedId": "concepts/task-pipeline-configuration",
+  "id": "concepts/task-pipeline-configuration",
+  "title": "Task Pipeline Configuration",
+  "description": "Torchpipe delegates the running of npm scripts (forking processes etc) to Nx. The nx.json file is the place where you can",
+  "source": "@site/docs/concepts/task-pipeline-configuration.md",
+  "sourceDirName": "concepts",
+  "slug": "/concepts/task-pipeline-configuration",
+  "permalink": "/zh/docs/concepts/task-pipeline-configuration",
+  "draft": false,
+  "editUrl": "https://g.hz.netease.com/deploy/torchpipe/tree/main/website/docs/concepts/task-pipeline-configuration.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "id": "task-pipeline-configuration",
+    "title": "Task Pipeline Configuration",
+    "type": "explainer"
+  },
+  "sidebar": "main",
+  "previous": {
+    "title": "3. ---",
+    "permalink": "/zh/docs/concepts"
+  },
+  "next": {
+    "title": "How Caching Works",
+    "permalink": "/zh/docs/concepts/how-caching-works"
+  }
+}

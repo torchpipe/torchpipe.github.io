@@ -1,0 +1,27 @@
+{
+  "unversionedId": "welcome",
+  "id": "welcome",
+  "title": "欢迎",
+  "description": "torchpipe 是一个开源的深度学习服务端部署的加速框架，适用于主要硬件平台（如 NVIDIA GPU）以及主要通用加速引擎（如 TensorRT），旨在使机器学习工程师能够在任意端到端业务逻辑部署时高效地运行并优化服务性能。",
+  "source": "@site/i18n/zh/docusaurus-plugin-content-docs/current/welcome.md",
+  "sourceDirName": ".",
+  "slug": "/welcome",
+  "permalink": "/zh/docs/welcome",
+  "draft": false,
+  "editUrl": "https://g.hz.netease.com/deploy/torchpipe-docs/-/tree/master/website/i18n/zh/docusaurus-plugin-content-docs/current/welcome.md",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "zhangshiyang",
+  "lastUpdatedAt": 1691136398,
+  "formattedLastUpdatedAt": "2023年8月4日",
+  "frontMatter": {
+    "id": "welcome",
+    "title": "欢迎",
+    "type": "explainer"
+  },
+  "sidebar": "main",
+  "next": {
+    "title": "快速上手",
+    "permalink": "/zh/docs/"
+  }
+}

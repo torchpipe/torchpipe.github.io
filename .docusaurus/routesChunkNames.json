@@ -1,0 +1,264 @@
+{
+  "/zh/markdown-page-a1d": {
+    "__comp": "1f391b9e",
+    "__context": {
+      "plugin": "3df6537a"
+    },
+    "content": "393be207"
+  },
+  "/zh/members-674": {
+    "__comp": "63b5b195",
+    "__context": {
+      "plugin": "3df6537a"
+    },
+    "config": "5e9f5e1a"
+  },
+  "/zh/search-ed9": {
+    "__comp": "1a4e3797",
+    "__context": {
+      "plugin": "6a8a5e0a"
+    }
+  },
+  "/zh/docs-80f": {
+    "__comp": "1be78505",
+    "__context": {
+      "plugin": "47928e51"
+    },
+    "versionMetadata": "935f2afb"
+  },
+  "/zh/docs-988": {
+    "__comp": "14eb3368",
+    "categoryGeneratedIndex": "be3f74d8"
+  },
+  "/zh/docs/backend-reference/basic-e7b": {
+    "__comp": "17896441",
+    "content": "aa670f45"
+  },
+  "/zh/docs/backend-reference/log-4a9": {
+    "__comp": "17896441",
+    "content": "6ab6316c"
+  },
+  "/zh/docs/backend-reference/opencv-77d": {
+    "__comp": "17896441",
+    "content": "287826c7"
+  },
+  "/zh/docs/backend-reference/torch-3e7": {
+    "__comp": "17896441",
+    "content": "dfbbec3d"
+  },
+  "/zh/docs/benchmark-4fa": {
+    "__comp": "17896441",
+    "content": "4a3c5c13"
+  },
+  "/zh/docs/contribution-880": {
+    "__comp": "17896441",
+    "content": "7de7f39c"
+  },
+  "/zh/docs/contribution_guide/communicate-37c": {
+    "__comp": "17896441",
+    "content": "9a557c82"
+  },
+  "/zh/docs/contribution_guide/modify_the_code-921": {
+    "__comp": "17896441",
+    "content": "e954d650"
+  },
+  "/zh/docs/contribution_guide/modify_the_doc-074": {
+    "__comp": "17896441",
+    "content": "42192b4d"
+  },
+  "/zh/docs/contribution_guide/statement-a42": {
+    "__comp": "17896441",
+    "content": "6a136f22"
+  },
+  "/zh/docs/cpp-python/basic-dfc": {
+    "__comp": "17896441",
+    "content": "c3265a18"
+  },
+  "/zh/docs/current_state-450": {
+    "__comp": "17896441",
+    "content": "c0ecb1f1"
+  },
+  "/zh/docs/faq-688": {
+    "__comp": "14eb3368",
+    "categoryGeneratedIndex": "c0c72610"
+  },
+  "/zh/docs/faq/consistency-602": {
+    "__comp": "17896441",
+    "content": "62bf6cc4"
+  },
+  "/zh/docs/faq/onnx-992": {
+    "__comp": "17896441",
+    "content": "87a62e2a"
+  },
+  "/zh/docs/faq/quantization-5a4": {
+    "__comp": "17896441",
+    "content": "e36f01aa"
+  },
+  "/zh/docs/faq/remote-gdb-63d": {
+    "__comp": "17896441",
+    "content": "608ddc8a"
+  },
+  "/zh/docs/getting-started-2cc": {
+    "__comp": "17896441",
+    "content": "1ee201aa"
+  },
+  "/zh/docs/installation-24d": {
+    "__comp": "17896441",
+    "content": "230e0071"
+  },
+  "/zh/docs/Inter-node-f3b": {
+    "__comp": "14eb3368",
+    "categoryGeneratedIndex": "46c0c49a"
+  },
+  "/zh/docs/Inter-node/context-931": {
+    "__comp": "17896441",
+    "content": "53b0f3e7"
+  },
+  "/zh/docs/Inter-node/filter-2d5": {
+    "__comp": "17896441",
+    "content": "fa95c414"
+  },
+  "/zh/docs/Inter-node/graphtraversal-aae": {
+    "__comp": "17896441",
+    "content": "d6aea6f8"
+  },
+  "/zh/docs/Inter-node/logical_nodes-4b3": {
+    "__comp": "17896441",
+    "content": "5a21b8e5"
+  },
+  "/zh/docs/Inter-node/next-b11": {
+    "__comp": "17896441",
+    "content": "9b07fb6b"
+  },
+  "/zh/docs/Intra-node-370": {
+    "__comp": "14eb3368",
+    "categoryGeneratedIndex": "8a52c817"
+  },
+  "/zh/docs/Intra-node/batching-968": {
+    "__comp": "17896441",
+    "content": "6aeb99ae"
+  },
+  "/zh/docs/Intra-node/computational_backend-1dd": {
+    "__comp": "17896441",
+    "content": "ac42a52c"
+  },
+  "/zh/docs/Intra-node/extensible_backend-d8a": {
+    "__comp": "17896441",
+    "content": "0271ae91"
+  },
+  "/zh/docs/Intra-node/model_parallel-4e7": {
+    "__comp": "17896441",
+    "content": "11e5f9fe"
+  },
+  "/zh/docs/Intra-node/schedule-9af": {
+    "__comp": "17896441",
+    "content": "3e8db8c6"
+  },
+  "/zh/docs/Intra-node/Sequential-0e8": {
+    "__comp": "17896441",
+    "content": "8ef8d0ef"
+  },
+  "/zh/docs/introduction-f49": {
+    "__comp": "17896441",
+    "content": "13055719"
+  },
+  "/zh/docs/knowledge/debug_pytorch-0cb": {
+    "__comp": "17896441",
+    "content": "2eab0cc7"
+  },
+  "/zh/docs/preface-bb8": {
+    "__comp": "17896441",
+    "content": "949d89f5"
+  },
+  "/zh/docs/preliminaries-b08": {
+    "__comp": "14eb3368",
+    "categoryGeneratedIndex": "724e3a3d"
+  },
+  "/zh/docs/preliminaries/cuda_stream-c81": {
+    "__comp": "17896441",
+    "content": "bbe923e0"
+  },
+  "/zh/docs/preliminaries/pytorch_libtorch-0e0": {
+    "__comp": "17896441",
+    "content": "ef5ebd74"
+  },
+  "/zh/docs/preliminaries/rpc-df1": {
+    "__comp": "17896441",
+    "content": "02e05b68"
+  },
+  "/zh/docs/preliminaries/thread_process_gil-e27": {
+    "__comp": "17896441",
+    "content": "f5bf3fc3"
+  },
+  "/zh/docs/python/compile-aa6": {
+    "__comp": "17896441",
+    "content": "e375edce"
+  },
+  "/zh/docs/python/pipe-539": {
+    "__comp": "17896441",
+    "content": "f7194a4b"
+  },
+  "/zh/docs/python/test-95e": {
+    "__comp": "17896441",
+    "content": "4845c7f9"
+  },
+  "/zh/docs/quick_start_new_user-143": {
+    "__comp": "17896441",
+    "content": "d0296c72"
+  },
+  "/zh/docs/quick_start_professional-d2c": {
+    "__comp": "17896441",
+    "content": "411b40ae"
+  },
+  "/zh/docs/showcase-a33": {
+    "__comp": "17896441",
+    "content": "e0e3b952"
+  },
+  "/zh/docs/similar-65f": {
+    "__comp": "17896441",
+    "content": "0e8e0951"
+  },
+  "/zh/docs/similar/high_service-d51": {
+    "__comp": "17896441",
+    "content": "ad57ec88"
+  },
+  "/zh/docs/tools-7ec": {
+    "__comp": "14eb3368",
+    "categoryGeneratedIndex": "95eb424a"
+  },
+  "/zh/docs/tools/debug-6d1": {
+    "__comp": "17896441",
+    "content": "66dbff1b"
+  },
+  "/zh/docs/tools/encrypt-e95": {
+    "__comp": "17896441",
+    "content": "99d5ba7d"
+  },
+  "/zh/docs/tools/quantization-371": {
+    "__comp": "17896441",
+    "content": "01f487fd"
+  },
+  "/zh/docs/tools/training-008": {
+    "__comp": "17896441",
+    "content": "0e1990c6"
+  },
+  "/zh/docs/tools/vis-f6d": {
+    "__comp": "17896441",
+    "content": "cbb68271"
+  },
+  "/zh/docs/troubleshooting-5e9": {
+    "__comp": "17896441",
+    "content": "7ebdfe62"
+  },
+  "/zh/docs/welcome-7ef": {
+    "__comp": "17896441",
+    "content": "ebf567eb"
+  },
+  "/zh/-042": {
+    "__comp": "1df93b7f",
+    "__context": {
+      "plugin": "3df6537a"
+    },
+    "config": "5e9f5e1a"
+  }
+}

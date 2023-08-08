@@ -1,0 +1,22 @@
+{
+  "unversionedId": "getting-started",
+  "id": "getting-started",
+  "title": "Getting Started",
+  "description": "",
+  "source": "@site/docs/getting-started.md",
+  "sourceDirName": ".",
+  "slug": "/getting-started",
+  "permalink": "/docs/getting-started",
+  "draft": false,
+  "editUrl": "https://g.hz.netease.com/deploy/torchpipe-docs/-/tree/master/website/docs/getting-started.md",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "张仕洋",
+  "lastUpdatedAt": 1681465291,
+  "formattedLastUpdatedAt": "Apr 14, 2023",
+  "frontMatter": {
+    "id": "getting-started",
+    "title": "Getting Started",
+    "type": "tutorial"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "unversionedId": "preliminaries/legacy-package-management",
+  "id": "preliminaries/legacy-package-management",
+  "title": "Legacy Package Management",
+  "description": "Background",
+  "source": "@site/docs/preliminaries/legacy-package-management.md",
+  "sourceDirName": "preliminaries",
+  "slug": "/preliminaries/legacy-package-management",
+  "permalink": "/zh/docs/preliminaries/legacy-package-management",
+  "draft": false,
+  "editUrl": "https://g.hz.netease.com/deploy/torchpipe-docs/-/tree/master/website/docs/preliminaries/legacy-package-management.md",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "张仕洋",
+  "lastUpdatedAt": 1678420651,
+  "formattedLastUpdatedAt": "2023年3月10日",
+  "frontMatter": {
+    "id": "legacy-package-management",
+    "title": "Legacy Package Management",
+    "type": "recipe"
+  }
+}

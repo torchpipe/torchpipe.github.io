@@ -1,0 +1,22 @@
+{
+  "unversionedId": "Intra-node/batching",
+  "id": "Intra-node/batching",
+  "title": "batching",
+  "description": "",
+  "source": "@site/i18n/zh/docusaurus-plugin-content-docs/current/Intra-node/batching.md",
+  "sourceDirName": "Intra-node",
+  "slug": "/Intra-node/batching",
+  "permalink": "/zh/docs/Intra-node/batching",
+  "draft": false,
+  "editUrl": "https://g.hz.netease.com/deploy/torchpipe-docs/-/tree/master/website/i18n/zh/docusaurus-plugin-content-docs/current/Intra-node/batching.md",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "zhangshiyang",
+  "lastUpdatedAt": 1691136398,
+  "formattedLastUpdatedAt": "2023年8月4日",
+  "frontMatter": {
+    "id": "batching",
+    "title": "batching",
+    "type": "explainer"
+  }
+}

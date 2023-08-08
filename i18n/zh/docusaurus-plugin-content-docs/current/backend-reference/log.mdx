@@ -1,0 +1,51 @@
+---
+id: log
+title: 日志
+type: reference
+displayed_sidebar: api
+
+---
+
+:::caution
+本节文档验证中。
+
+- 日志在进程中只初始化一次
+- 日志配置参数直接写在全局参数中
+:::
+
+## 速览
+
+
+|名称|主要初始化参数|备注|
+|---|---|---|---|---|
+| [Logger](#logger) |`Logger::path`,`Logger::maxBytes`<br />`Logger::backupCount`,`Logger::flush_every`<br />`Logger::pattern`  | 默认存在于解释器的环境初始化中(Interpreter::env)，会在解释器初始化时初始化一次.|
+
+
+
+## Logger
+实现日志输出功能（包括：控制台输出、文件输出）。
+此后端默认采用控制台输出，如果配置了`Logger::path`参数，将同时输出到path对应的日志文件。
+
+### 初始化
+:::tip 参数
+- **Logger::path** - 指定日志文件路径，如果不指定路径，默认控制台输出日志，指定后，日志将同时在日志文件以及控制台输出。
+- **Logger::maxBytes** - 指定每个日志文件存储的最大空间， 单位是 Byte，仅当指定日志文件路径后生效，取值范围： 1 - 1073741824 (1G)。
+- **Logger::backupCount** - 指定日志文件的最大存储数量，配合Logger::maxBytes参数使用，取值范围：0 - 1024。当取值为0的时候，代表只在指定文件中循环存储，无备份。取值为1的时候，存储文件为：log.txt,log.1.txt，存在一个备份。
+- **Logger::pattern** 设置 [logger的打印模式](https://internal.dunescience.org/doxygen/classspdlog_1_1pattern__formatter.html)。
+   * debug模式下默认值为 `[%l][%m/%d %H:%M:%S][%s:%#%!]: %v`.
+   * release 下默认值为 `[%l][%m/%d %H:%M:%S][%s:%#]: %v`
+- **Logger::flush_every** - 刷新日志到文件的频率，默认为5，单位秒；设置为0代表会刷新每条日志。
+:::
+
+
+<details><summary>示例</summary>
+
+```toml
+"Logger::path" = "./torchpipe.log"  
+# 可选参数，保存日志文件路径，如果不设置，默认控制台输出日志 
+"Logger::maxBytes" = 1048576 #
+# 可选参数，设置后启用循环保存功能，设置单个日志文件存储最大空间，默认值：无穷大。取值范围： 1 - 1073741824 (1G)。 
+"Logger::backupCount" = 20                           
+# 可选参数，配合Logger::maxBytes参数，日志文件的最大保存数量，取值范围： 0 - 1024。
+```
+</details>

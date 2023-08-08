@@ -1,0 +1,16 @@
+{
+  "title": "单节点的并行化",
+  "description": "单个节点内部的线程安全，多实例并行，batching.",
+  "slug": "/Intra-node",
+  "permalink": "/docs/Intra-node",
+  "navigation": {
+    "previous": {
+      "title": "服务性能的关键评价指标",
+      "permalink": "/docs/preliminaries/rpc"
+    },
+    "next": {
+      "title": "resnet18 计算加速",
+      "permalink": "/docs/Intra-node/model_parallel"
+    }
+  }
+}

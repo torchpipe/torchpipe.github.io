@@ -1,0 +1,31 @@
+{
+  "unversionedId": "contribution_guide/communicate",
+  "id": "contribution_guide/communicate",
+  "title": "交流提问",
+  "description": "请在此提交issue",
+  "source": "@site/docs/contribution_guide/communicate.md",
+  "sourceDirName": "contribution_guide",
+  "slug": "/contribution_guide/communicate",
+  "permalink": "/docs/contribution_guide/communicate",
+  "draft": false,
+  "editUrl": "https://g.hz.netease.com/deploy/torchpipe-docs/-/tree/master/website/docs/contribution_guide/communicate.md",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "litangwei01",
+  "lastUpdatedAt": 1690450391,
+  "formattedLastUpdatedAt": "Jul 27, 2023",
+  "frontMatter": {
+    "id": "communicate",
+    "title": "交流提问",
+    "type": "reference"
+  },
+  "sidebar": "main",
+  "previous": {
+    "title": "权利说明",
+    "permalink": "/docs/contribution_guide/statement"
+  },
+  "next": {
+    "title": "1. 介绍",
+    "permalink": "/docs/introduction"
+  }
+}

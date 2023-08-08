@@ -1,0 +1,32 @@
+{
+  "unversionedId": "backend-reference/log",
+  "id": "backend-reference/log",
+  "title": "日志",
+  "description": "本节文档验证中。",
+  "source": "@site/docs/backend-reference/log.mdx",
+  "sourceDirName": "backend-reference",
+  "slug": "/backend-reference/log",
+  "permalink": "/docs/backend-reference/log",
+  "draft": false,
+  "editUrl": "https://g.hz.netease.com/deploy/torchpipe-docs/-/tree/master/website/docs/backend-reference/log.mdx",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "张仕洋",
+  "lastUpdatedAt": 1682331233,
+  "formattedLastUpdatedAt": "Apr 24, 2023",
+  "frontMatter": {
+    "id": "log",
+    "title": "日志",
+    "type": "reference",
+    "displayed_sidebar": "api"
+  },
+  "sidebar": "api",
+  "previous": {
+    "title": "torch相关后端",
+    "permalink": "/docs/backend-reference/torch"
+  },
+  "next": {
+    "title": "单节点调度系统",
+    "permalink": "/docs/Intra-node/schedule"
+  }
+}

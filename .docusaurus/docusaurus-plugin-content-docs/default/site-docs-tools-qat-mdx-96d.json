@@ -1,0 +1,31 @@
+{
+  "unversionedId": "tools/qat",
+  "id": "tools/qat",
+  "title": "训练时量化",
+  "description": "在官方notebook中，NVIDIA总结了如何在Pytorch中通过训练时量化提升量化精度。",
+  "source": "@site/docs/tools/qat.mdx",
+  "sourceDirName": "tools",
+  "slug": "/tools/qat",
+  "permalink": "/en/docs/tools/qat",
+  "draft": false,
+  "editUrl": "https://g.hz.netease.com/deploy/torchpipe-docs/-/tree/master/website/docs/tools/qat.mdx",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "zhangshiyang",
+  "lastUpdatedAt": 1689842564,
+  "formattedLastUpdatedAt": "Jul 20, 2023",
+  "frontMatter": {
+    "id": "qat",
+    "title": "训练时量化",
+    "type": "explainer"
+  },
+  "sidebar": "main",
+  "previous": {
+    "title": "加密",
+    "permalink": "/en/docs/tools/encrypt"
+  },
+  "next": {
+    "title": "流水线调度系统的调试",
+    "permalink": "/en/docs/tools/debug"
+  }
+}

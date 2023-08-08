@@ -1,0 +1,31 @@
+{
+  "unversionedId": "backend/fine-grained-backend",
+  "id": "backend/fine-grained-backend",
+  "title": "1",
+  "description": "<!--",
+  "source": "@site/docs/backend/fine-grained-backend.md",
+  "sourceDirName": "backend",
+  "slug": "/backend/fine-grained-backend",
+  "permalink": "/docs/backend/fine-grained-backend",
+  "draft": false,
+  "editUrl": "https://g.hz.netease.com/deploy/torchpipe-docs/-/tree/master/website/docs/backend/fine-grained-backend.md",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "张仕洋",
+  "lastUpdatedAt": 1680086200,
+  "formattedLastUpdatedAt": "2023年3月29日",
+  "frontMatter": {
+    "id": "fine-grained-backend",
+    "title": "1",
+    "type": "explainer"
+  },
+  "sidebar": "main",
+  "previous": {
+    "title": "WIP",
+    "permalink": "/docs/backend"
+  },
+  "next": {
+    "title": "How Caching Works",
+    "permalink": "/docs/backend/how-caching-works"
+  }
+}

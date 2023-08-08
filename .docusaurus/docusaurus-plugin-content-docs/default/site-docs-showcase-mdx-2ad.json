@@ -1,0 +1,22 @@
+{
+  "unversionedId": "showcase",
+  "id": "showcase",
+  "title": "案例展示",
+  "description": "<a",
+  "source": "@site/docs/showcase.mdx",
+  "sourceDirName": ".",
+  "slug": "/showcase",
+  "permalink": "/docs/showcase",
+  "draft": false,
+  "editUrl": "https://g.hz.netease.com/deploy/torchpipe-docs/-/tree/master/website/docs/showcase.mdx",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "张仕洋",
+  "lastUpdatedAt": 1682406814,
+  "formattedLastUpdatedAt": "2023年4月25日",
+  "frontMatter": {
+    "id": "showcase",
+    "title": "案例展示",
+    "type": "tutorial"
+  }
+}

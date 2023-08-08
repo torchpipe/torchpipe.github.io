@@ -1,0 +1,16 @@
+{
+  "title": "Intra-node",
+  "description": "here is Intra-node",
+  "slug": "/Intra-node",
+  "permalink": "/en/docs/Intra-node",
+  "navigation": {
+    "previous": {
+      "title": "服务性能的关键评价指标",
+      "permalink": "/en/docs/preliminaries/rpc"
+    },
+    "next": {
+      "title": "resnet18 计算加速",
+      "permalink": "/en/docs/Intra-node/model_parallel"
+    }
+  }
+}

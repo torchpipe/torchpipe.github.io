@@ -1,0 +1,28 @@
+{
+  "unversionedId": "features/legacy-package-management",
+  "id": "features/legacy-package-management",
+  "title": "Legacy Package Management",
+  "description": "Background",
+  "source": "@site/docs/features/legacy-package-management.md",
+  "sourceDirName": "features",
+  "slug": "/features/legacy-package-management",
+  "permalink": "/zh/docs/features/legacy-package-management",
+  "draft": false,
+  "editUrl": "https://github.com/lerna/lerna/tree/main/website/docs/features/legacy-package-management.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "id": "legacy-package-management",
+    "title": "Legacy Package Management",
+    "type": "recipe"
+  },
+  "sidebar": "main",
+  "previous": {
+    "title": "Editor Integrations",
+    "permalink": "/zh/docs/features/editor-integrations"
+  },
+  "next": {
+    "title": "Workspace Watching",
+    "permalink": "/zh/docs/features/workspace-watching"
+  }
+}

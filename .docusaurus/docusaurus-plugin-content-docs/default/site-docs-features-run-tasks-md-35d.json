@@ -1,0 +1,28 @@
+{
+  "unversionedId": "features/pytorch_libtorch",
+  "id": "features/pytorch_libtorch",
+  "title": "Run Tasks",
+  "description": "Monorepos can have hundreds or even thousands of projects, so being able to run npm scripts against all (or some) of",
+  "source": "@site/docs/features/pytorch_libtorch.md",
+  "sourceDirName": "features",
+  "slug": "/features/pytorch_libtorch",
+  "permalink": "/zh/docs/features/pytorch_libtorch",
+  "draft": false,
+  "editUrl": "https://github.com/lerna/lerna/tree/main/website/docs/features/pytorch_libtorch.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "id": "pytorch_libtorch",
+    "title": "Run Tasks",
+    "type": "explainer"
+  },
+  "sidebar": "main",
+  "previous": {
+    "title": "preliminaries",
+    "permalink": "/zh/docs/features"
+  },
+  "next": {
+    "title": "Cache Task Results",
+    "permalink": "/zh/docs/features/pytorch_libtorch"
+  }
+}

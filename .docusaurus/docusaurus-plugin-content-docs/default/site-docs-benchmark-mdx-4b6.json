@@ -1,0 +1,31 @@
+{
+  "unversionedId": "benchmark",
+  "id": "benchmark",
+  "title": "性能报告",
+  "description": "本文主要列举torchpipe的基础性能测试实验。triton inference server是我们的主要参照物，然而我们的目的并非与其进行性能竞赛。 框架与框架之间的性能差异有时候很难进行直接的对比， 部分实验中我们采取了合理的非公平对比，用来帮助使用者理解两种框架的特点。",
+  "source": "@site/docs/benchmark.mdx",
+  "sourceDirName": ".",
+  "slug": "/benchmark",
+  "permalink": "/docs/benchmark",
+  "draft": false,
+  "editUrl": "https://g.hz.netease.com/deploy/torchpipe-docs/-/tree/master/website/docs/benchmark.mdx",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "zhangshiyang",
+  "lastUpdatedAt": 1691466678,
+  "formattedLastUpdatedAt": "Aug 8, 2023",
+  "frontMatter": {
+    "id": "benchmark",
+    "title": "性能报告",
+    "type": "recipe"
+  },
+  "sidebar": "main",
+  "previous": {
+    "title": "配置文件可视化",
+    "permalink": "/docs/tools/vis"
+  },
+  "next": {
+    "title": "FAQ",
+    "permalink": "/docs/faq"
+  }
+}

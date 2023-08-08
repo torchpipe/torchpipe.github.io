@@ -1,0 +1,68 @@
+---
+id: preface
+title: 前言
+type: explainer
+---
+
+
+<!-- # 前言 -->
+
+
+## pytorch 中并发调用resnet18模型
+本项目开始于一个简单的需求，即我们需要求得一个 `X`，能够实现模型推理并满足：
+
+- 前向接口需要是线程安全的。
+- 在主要硬件平台（如 NVIDIA GPU）以及主要通用加速引擎（如 TensorRT）上实现了此 X。
+
+```py
+import torch, X
+resnet18 = X(model="resnet18_-1x3x224x224.onnx", # 动态尺度
+                    precision="fp16",
+                    max=4, # 动态batch模型的最大batch数目
+                    instance_num=4, # 多个并行计算实例
+                    batching_timeout=5) # 凑batch超时时间
+data = torch.from_numpy(data)
+net_output: torch.Tensor = resnet18(data=data)  # 线程安全调用
+```
+
+以此为起点，我们扩展到了对以下场景的支持：
+- 包含前处理在内的通用计算后端`X`的细粒度泛型扩展
+- 多节点组成的有向无环图(DAG)的流水线并行，多级结构化
+- 条件控制流
+
+## 背景
+
+在深度学习服务端部署中，如果需要将多个模型（也有可能包含其他计算节点或远程调用）的端到端业务逻辑部署为服务，就需要进行一定的工程化和性能优化工作。我们计划在PyTorch内部完成这一部分工作。具体来说，我们希望主要以PyTorch作为前端，完成以下三个功能：
+- 单节点的多实例、动态批处理和动态尺度调整。
+- 多节点的流水线调度。
+- 节点间的逻辑控制流。
+
+通过 PyTorch 内的多线程并行化改造（依赖于[PyTorch内部的CUDA流管理方式](https://pytorch.org/docs/stable/notes/cuda.html#cuda-streams)，以及自然引申出来的条件控制流），形成脱离 Python 的静态图。最终，借助此框架，可以达到以下优点：
+
+- 性能（吞吐量/延迟）上达到业务角度上的最优，减少广泛存在的负优化和节点间性能损耗。
+- 凭借细粒度泛型后端，便于硬件扩展，弱化硬件厂商生态迁移难度。
+- 简单而高性能的建模包括多模型融合在内的一些过于复杂的业务系统。工业界典型场景有智慧城市中多达10个模型节点的AI系统[A](https://paperswithcode.com/paper/videoflow-a-framework-for-building-visual)、[B](https://github.com/PaddlePaddle/PaddleDetection/blob/release/2.5/deploy/pipeline/README.md)，以及如果要极限优化，会涉及到子图独立调度、分桶调度、智能化组batch的OCR系统。
+- 最大限度摆脱 Python 运行时、GIL、异构硬件、虚拟化和多进程带来的性能损耗。
+  
+与许多其他服务化框架不同，我们将系统与 RPC 及负载均衡部分解耦，关注于 C++ 和 Python 接口的并发安全和流水线调度。
+
+吞吐量是一个广泛讨论但通常被算法工程师所忽略的性能目标。它受到一些容易被遗忘的因素的影响，比如 `GPU 资源总量`, `CPU 资源总量`, `其他资源总量`, `资源使用效率`等等。这些因素导致在现实中，除非有专门的经验丰富或者感觉灵敏的工程优化团队，否则业务性能往往受限于意想不到的细节。在足够广泛的范围内，这不是一个容易解决的问题，可以归类为一种技术平民化的问题。 
+
+
+ 
+
+
+![jpg](.././static/images/EngineFlow-light.png)
+
+## 关于
+本文档风格受到 [《动手学深度学习》](https://zh.d2l.ai/index.html)的启发。
+
+### 目标受众
+算法工程师。由于我们在计算机视觉领域积累了很多实践和后端，在此领域的应用更成熟。
+<!-- ### 内容和结构
+全书大致可分为三个部分，
+在 下图 中用不同的颜色呈现： -->
+
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';

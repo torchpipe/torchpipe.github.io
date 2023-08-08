@@ -1,0 +1,16 @@
+{
+  "title": "2. Preliminaries",
+  "description": "here is preliminaries",
+  "slug": "/preliminaries",
+  "permalink": "/docs/preliminaries",
+  "navigation": {
+    "previous": {
+      "title": "1. 引言",
+      "permalink": "/docs/introduction"
+    },
+    "next": {
+      "title": "CUDA: 流和并发",
+      "permalink": "/docs/preliminaries/cuda_stream"
+    }
+  }
+}

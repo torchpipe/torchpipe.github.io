@@ -1,0 +1,28 @@
+{
+  "unversionedId": "features/distribute-tasks",
+  "id": "features/distribute-tasks",
+  "title": "Distribute Task Execution",
+  "description": "Lerna speeds up your average CI time with caching and the --since flag. But neither of these features help with the worst case scenario. When something at the core of your repo has been modified and every task needs to be run in CI, the only way to improve the performance is by adding more agent jobs and efficiently parallelizing the tasks.",
+  "source": "@site/docs/features/distribute-tasks.md",
+  "sourceDirName": "features",
+  "slug": "/features/distribute-tasks",
+  "permalink": "/zh/docs/features/distribute-tasks",
+  "draft": false,
+  "editUrl": "https://github.com/lerna/lerna/tree/main/website/docs/features/distribute-tasks.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "id": "distribute-tasks",
+    "title": "Distribute Task Execution",
+    "type": "recipe"
+  },
+  "sidebar": "main",
+  "previous": {
+    "title": "Explore the Project Graph",
+    "permalink": "/zh/docs/features/project-graph"
+  },
+  "next": {
+    "title": "Version and Publish",
+    "permalink": "/zh/docs/features/version-and-publish"
+  }
+}

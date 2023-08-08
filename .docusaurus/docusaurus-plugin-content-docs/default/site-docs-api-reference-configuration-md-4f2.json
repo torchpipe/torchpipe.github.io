@@ -1,0 +1,31 @@
+{
+  "unversionedId": "api-reference/configuration",
+  "id": "api-reference/configuration",
+  "title": "Configuration",
+  "description": "Torchpipe's configuration is split into two files: lerna.json and nx.json.",
+  "source": "@site/docs/api-reference/configuration.md",
+  "sourceDirName": "api-reference",
+  "slug": "/api-reference/configuration",
+  "permalink": "/zh/docs/api-reference/configuration",
+  "draft": false,
+  "editUrl": "https://g.hz.netease.com/deploy/torchpipe-docs/-/tree/master/website/docs/api-reference/configuration.md",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "张仕洋",
+  "lastUpdatedAt": 1678420651,
+  "formattedLastUpdatedAt": "2023年3月10日",
+  "frontMatter": {
+    "id": "configuration",
+    "title": "Configuration",
+    "type": "reference"
+  },
+  "sidebar": "main",
+  "previous": {
+    "title": "Commands",
+    "permalink": "/zh/docs/api-reference/commands"
+  },
+  "next": {
+    "title": "--",
+    "permalink": "/zh/docs/frontend/using-pnpm-with-lerna"
+  }
+}

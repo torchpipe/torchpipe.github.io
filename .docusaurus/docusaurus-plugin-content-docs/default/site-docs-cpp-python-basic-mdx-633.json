@@ -1,0 +1,28 @@
+{
+  "unversionedId": "cpp-python/basic",
+  "id": "cpp-python/basic",
+  "title": "类型转换",
+  "description": "dict",
+  "source": "@site/docs/cpp-python/basic.mdx",
+  "sourceDirName": "cpp-python",
+  "slug": "/cpp-python/basic",
+  "permalink": "/docs/cpp-python/basic",
+  "draft": false,
+  "editUrl": "https://g.hz.netease.com/deploy/torchpipe-docs/-/tree/master/website/docs/cpp-python/basic.mdx",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "张仕洋",
+  "lastUpdatedAt": 1681804484,
+  "formattedLastUpdatedAt": "Apr 18, 2023",
+  "frontMatter": {
+    "id": "basic",
+    "title": "类型转换",
+    "type": "reference",
+    "displayed_sidebar": "api"
+  },
+  "sidebar": "api",
+  "previous": {
+    "title": "单节点调度系统",
+    "permalink": "/docs/Intra-node/schedule"
+  }
+}

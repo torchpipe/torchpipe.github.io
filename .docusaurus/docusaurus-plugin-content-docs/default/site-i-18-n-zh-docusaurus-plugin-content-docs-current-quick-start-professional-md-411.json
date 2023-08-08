@@ -1,0 +1,31 @@
+{
+  "unversionedId": "quick_start_professional",
+  "id": "quick_start_professional",
+  "title": "进阶版--升级打怪",
+  "description": "此处提供了专业用户在多模型级联中使用 torchpipe 的快速上手教程，主要内容基于 分类+检测模型串行，快速体验不同模型级联的端到端模型部署加速服务效果。",
+  "source": "@site/i18n/zh/docusaurus-plugin-content-docs/current/quick_start_professional.md",
+  "sourceDirName": ".",
+  "slug": "/quick_start_professional",
+  "permalink": "/zh/docs/quick_start_professional",
+  "draft": false,
+  "editUrl": "https://g.hz.netease.com/deploy/torchpipe-docs/-/tree/master/website/i18n/zh/docusaurus-plugin-content-docs/current/quick_start_professional.md",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "zhangshiyang",
+  "lastUpdatedAt": 1691136398,
+  "formattedLastUpdatedAt": "2023年8月4日",
+  "frontMatter": {
+    "id": "quick_start_professional",
+    "title": "进阶版--升级打怪",
+    "type": "explainer"
+  },
+  "sidebar": "main",
+  "previous": {
+    "title": "初阶版--小试牛刀",
+    "permalink": "/zh/docs/quick_start_new_user"
+  },
+  "next": {
+    "title": "贡献指南",
+    "permalink": "/zh/docs/contribution"
+  }
+}

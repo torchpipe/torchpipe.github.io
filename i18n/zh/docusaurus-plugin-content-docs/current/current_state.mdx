@@ -1,0 +1,47 @@
+
+# 项目进度
+ 
+ 
+## 开源目标
+
+:::info 合格线
+|内部开源|外部开源|
+|------|-------|
+|半年内有一条有效规范指引，外部建议或试用反馈|一年内有200star和10个以上试用反馈|
+
+:::
+
+## 功能进度
+
+- S ：支持，深度优化并，推荐使用
+- A ：支持，初步优化，可以使用
+- B ：支持，无优化或在实验状态，不推荐使用
+- C ：不支持
+
+
+| Architecture / functionality |        | 功能      | 文档/示例       |  
+|--------------------------|--------|-------------|------------| 
+| 计算后端的封装                      | onnx->tensorrt | S           | A          |  
+|                          | opencv           |   S   |A           |  
+|                          | gpu-preprocessor   | A      | A           |  
+|                          | torchscript           | B     | C          |  
+|                          | Torch/SyncTensor           | A     | A          |  
+| **单节点调度**              | **instance_num** | S           | -          | 
+|                          | **dynamic batch size**                 | S      | -           |  
+|                          | **Sequential**                  | S      | -           |  
+| 多节点调度           | 条件控制(filter)      | S           | -         | 
+|                          | **分支（map）**                      | S | -           | 
+|                          | 多级别对象（MapReduce）                     | A      | -           | 
+|                          | context语法糖                   | A      | -           | 
+|                          | 逻辑节点                    | B      | -           |
+| 工具             | 量化 | A(缺少定制backbone，vit准备减慢速度)          | -          | 
+|                          |训练的集成                  | A      | -           |
+| 编译             | NGC docker/定制docker | A         | -          | 
+|             | c++扩展 | A         | -          | 
+|                          |pypi/manylinux                 | B      | -           |
+|                          |文档CI管道                | A(gitlab CI走通，开源后自动更新到github.io)      | -           |
+| 规范             | 第三方代码的引用 | C          | -          | 
+|                          |license                 | C      | -           |
+|                          |代码规范                 | B      | -           |
+|                          |测试                | B      | -           |
+|                          |technical report                | C      | -           |

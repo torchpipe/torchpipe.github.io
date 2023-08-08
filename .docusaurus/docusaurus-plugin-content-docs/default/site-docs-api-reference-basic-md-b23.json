@@ -1,0 +1,28 @@
+{
+  "unversionedId": "api-reference/basic",
+  "id": "api-reference/basic",
+  "title": "基础性后端",
+  "description": "速览",
+  "source": "@site/docs/api-reference/basic.md",
+  "sourceDirName": "api-reference",
+  "slug": "/api-reference/basic",
+  "permalink": "/zh/docs/api-reference/basic",
+  "draft": false,
+  "editUrl": "https://g.hz.netease.com/deploy/torchpipe-docs/-/tree/master/website/docs/api-reference/basic.md",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "张仕洋",
+  "lastUpdatedAt": 1681126894,
+  "formattedLastUpdatedAt": "2023年4月10日",
+  "frontMatter": {
+    "id": "basic",
+    "title": "基础性后端",
+    "type": "reference",
+    "displayed_sidebar": "api"
+  },
+  "sidebar": "api",
+  "next": {
+    "title": "opencv相关后端",
+    "permalink": "/zh/docs/api-reference/opencv"
+  }
+}

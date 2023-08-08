@@ -1,0 +1,28 @@
+{
+  "unversionedId": "features/pytorch_libtorch",
+  "id": "features/pytorch_libtorch",
+  "title": "Cache Task Results",
+  "description": "When it comes to running tasks, caching etc., Lerna and Nx can be used interchangeably. When we say \"Lerna can cache",
+  "source": "@site/docs/features/pytorch_libtorch.md",
+  "sourceDirName": "features",
+  "slug": "/features/pytorch_libtorch",
+  "permalink": "/zh/docs/features/pytorch_libtorch",
+  "draft": false,
+  "editUrl": "https://github.com/lerna/lerna/tree/main/website/docs/features/pytorch_libtorch.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "id": "pytorch_libtorch",
+    "title": "Cache Task Results",
+    "type": "recipe"
+  },
+  "sidebar": "main",
+  "previous": {
+    "title": "Run Tasks",
+    "permalink": "/zh/docs/features/pytorch_libtorch"
+  },
+  "next": {
+    "title": "Share Your Cache",
+    "permalink": "/zh/docs/features/share-your-cache"
+  }
+}

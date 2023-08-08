@@ -1,0 +1,31 @@
+{
+  "unversionedId": "Inter-node/graphtraversal",
+  "id": "Inter-node/graphtraversal",
+  "title": "图的跳转",
+  "description": "多级结构化",
+  "source": "@site/i18n/zh/docusaurus-plugin-content-docs/current/Inter-node/graphtraversal.mdx",
+  "sourceDirName": "Inter-node",
+  "slug": "/Inter-node/graphtraversal",
+  "permalink": "/zh/docs/Inter-node/graphtraversal",
+  "draft": false,
+  "editUrl": "https://g.hz.netease.com/deploy/torchpipe-docs/-/tree/master/website/i18n/zh/docusaurus-plugin-content-docs/current/Inter-node/graphtraversal.mdx",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "zhangshiyang",
+  "lastUpdatedAt": 1691136398,
+  "formattedLastUpdatedAt": "2023年8月4日",
+  "frontMatter": {
+    "id": "graphtraversal",
+    "title": "图的跳转",
+    "type": "explainer"
+  },
+  "sidebar": "main",
+  "previous": {
+    "title": "context: 自动map语法糖",
+    "permalink": "/zh/docs/Inter-node/context"
+  },
+  "next": {
+    "title": "逻辑节点",
+    "permalink": "/zh/docs/Inter-node/logical_nodes"
+  }
+}

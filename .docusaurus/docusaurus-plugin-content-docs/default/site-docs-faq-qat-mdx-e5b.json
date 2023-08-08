@@ -1,0 +1,22 @@
+{
+  "unversionedId": "faq/qat",
+  "id": "faq/qat",
+  "title": "训练时量化",
+  "description": "在官方notebook中，NVIDIA总结了如何在Pytorch中通过训练时量化提升量化精度。",
+  "source": "@site/docs/faq/qat.mdx",
+  "sourceDirName": "faq",
+  "slug": "/faq/qat",
+  "permalink": "/en/docs/faq/qat",
+  "draft": false,
+  "editUrl": "https://g.hz.netease.com/deploy/torchpipe-docs/-/tree/master/website/docs/faq/qat.mdx",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "zhangshiyang",
+  "lastUpdatedAt": 1689841291,
+  "formattedLastUpdatedAt": "Jul 20, 2023",
+  "frontMatter": {
+    "id": "qat",
+    "title": "训练时量化",
+    "type": "explainer"
+  }
+}

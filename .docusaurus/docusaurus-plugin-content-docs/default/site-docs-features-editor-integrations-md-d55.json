@@ -1,0 +1,28 @@
+{
+  "unversionedId": "features/editor-integrations",
+  "id": "features/editor-integrations",
+  "title": "Editor Integrations",
+  "description": "Nx Console displays the npm scripts for all your projects in the VS Code sidebar and allows you to run them with a single click or open the script definition in your editor.",
+  "source": "@site/docs/features/editor-integrations.md",
+  "sourceDirName": "features",
+  "slug": "/features/editor-integrations",
+  "permalink": "/zh/docs/features/editor-integrations",
+  "draft": false,
+  "editUrl": "https://github.com/lerna/lerna/tree/main/website/docs/features/editor-integrations.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "id": "editor-integrations",
+    "title": "Editor Integrations",
+    "type": "recipe"
+  },
+  "sidebar": "main",
+  "previous": {
+    "title": "Version and Publish",
+    "permalink": "/zh/docs/features/version-and-publish"
+  },
+  "next": {
+    "title": "Legacy Package Management",
+    "permalink": "/zh/docs/features/legacy-package-management"
+  }
+}

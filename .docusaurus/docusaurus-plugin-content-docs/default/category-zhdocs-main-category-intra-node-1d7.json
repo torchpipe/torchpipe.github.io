@@ -1,0 +1,16 @@
+{
+  "title": "Intra-node",
+  "description": "here is Intra-node",
+  "slug": "/Intra-node",
+  "permalink": "/zh/docs/Intra-node",
+  "navigation": {
+    "previous": {
+      "title": "服务性能的关键评价指标",
+      "permalink": "/zh/docs/preliminaries/rpc"
+    },
+    "next": {
+      "title": "batching",
+      "permalink": "/zh/docs/Intra-node/batching"
+    }
+  }
+}

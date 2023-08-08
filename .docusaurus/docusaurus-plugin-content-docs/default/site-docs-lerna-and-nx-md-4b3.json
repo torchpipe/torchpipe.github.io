@@ -1,0 +1,22 @@
+{
+  "unversionedId": "lerna-and-nx",
+  "id": "lerna-and-nx",
+  "title": "Torchpipe and Nx",
+  "description": "",
+  "source": "@site/docs/lerna-and-nx.md",
+  "sourceDirName": ".",
+  "slug": "/lerna-and-nx",
+  "permalink": "/en/docs/lerna-and-nx",
+  "draft": false,
+  "editUrl": "https://g.hz.netease.com/deploy/torchpipe-docs/-/tree/master/website/docs/lerna-and-nx.md",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "张仕洋",
+  "lastUpdatedAt": 1681465291,
+  "formattedLastUpdatedAt": "Apr 14, 2023",
+  "frontMatter": {
+    "id": "lerna-and-nx",
+    "title": "Torchpipe and Nx",
+    "type": "explainer"
+  }
+}
