@@ -2,7 +2,7 @@ torchpipe的文档站点
 
 ## 修改方法
 
-- **文档部分建议只修改中文版本，路径为：[./i18n/zh/docusaurus-plugin-content-docs/current](./i18n/zh/docusaurus-plugin-content-docs/current)**
+- **文档部分建议优先修改中文版本，路径为：[./i18n/zh/docusaurus-plugin-content-docs/current](./i18n/zh/docusaurus-plugin-content-docs/current)**
 - 您也可以删除中文版的文件，修改英语版本，这样中文版就默认为英语版本的内容；后期再翻译英语版本亦可。
 - 待中文版成熟后，翻译为英语版本
 
@@ -13,8 +13,9 @@ torchpipe的文档站点
 ```bash
 # remove image if needed
 docker stop docu2 && docker rm docu2
+export your_ip=<your_ip>
 # 修改对外ip和端口（your_ip:port:3000 ）：
-docker run  -p <your_ip>:3000:3000 --privileged=true  -v `pwd`:/workspace  --name="docu2"  --cap-add=SYS_PTRACE  -itd   node     
+docker run  -p $your_ip:3000:3000 --privileged=true  -v `pwd`:/workspace  --name="docu2"  --cap-add=SYS_PTRACE  -itd   node     
 docker exec -it -w/workspace/ docu2 bash
 ```
 
@@ -28,6 +29,7 @@ yarn upgrade @docusaurus/core@latest @docusaurus/preset-classic@latest
 
 ### 编译并运行
 
+本地预览时，需要将`docusaurus.config.js`中的`url`修改为您的IP
 ```bash
 git config --global --add safe.directory /workspace
 
@@ -46,7 +48,7 @@ npm run serve &
 - 将主体用英语书写
 - 再执行：
 ```bash
-yarn run write-translations -- --locale zh
+yarn run write-translations --locale zh
 ```
 - 在生成的文件中将对应的英文修改为中文
 

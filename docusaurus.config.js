@@ -4,7 +4,7 @@
 const lightCodeTheme = require("prism-react-renderer/themes/github");
 const darkCodeTheme = require("prism-react-renderer/themes/dracula");
  
-const DefaultLocale = 'en';
+const DefaultLocale = 'zh';
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -56,7 +56,7 @@ const config = {
           // editUrl: "https://g.hz.netease.com/deploy/torchpipe-docs/-/tree/master/website/",
           editUrl: ({locale, versionDocsDirPath, docPath}) => {
                   // Link to Crowdin for French docs
-                  if (locale == DefaultLocale) { 
+                  if (locale == 'en') { 
                     return `https://github.com/torchpipe/torchpipe.github.io/edit/main/docs/${docPath}`;
                   }
                   // Link to GitHub for English docs
