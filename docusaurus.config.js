@@ -191,7 +191,7 @@ const config = {
           //   label: "Nrwl",
           // },
           {
-            href: "https://g.hz.netease.com/deploy/torchpipe/-/tree/master",
+            href: "https://g.hz.netease.com/deploy/torchpipe/-/tree/develop",
             className: "header-gitlab-link",
             "aria-label": "GitLab repository",
             position: "right",
