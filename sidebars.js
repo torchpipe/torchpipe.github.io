@@ -120,7 +120,6 @@ const sidebars = {
         "tools/encrypt",
         "tools/quantization",
         "tools/training",
-        "tools/debug",
         "tools/vis",
       ],
       link: {

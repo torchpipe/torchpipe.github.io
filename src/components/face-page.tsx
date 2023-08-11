@@ -61,7 +61,7 @@ export default function FacePage(): JSX.Element {
               <ChevronRightIcon className={styles.callout__icon} aria-hidden="true" />
             </a>
             <h1 className={styles.slogan}>
-              <span><Translate id="home.tagline0">Serving inside Pytorch</Translate></span>
+              <span><Translate id="home.tagline0">Serving Inside Pytorch</Translate></span>
               <span className={styles.slogan__highlight}><Translate id="home.tagline1">with Multiple Threads</Translate></span>
             </h1>
             <p className={styles.description}>
@@ -165,7 +165,7 @@ export default function FacePage(): JSX.Element {
 //               <ChevronRightIcon className={styles.callout__icon} aria-hidden="true" />
 //             </a>
 //             <h1 className={styles.slogan}>
-//               <span><Translate id="home.tagline0">Serving inside Pytorch</Translate></span>
+//               <span><Translate id="home.tagline0">Serving Inside Pytorch</Translate></span>
 //               <span className={styles.slogan__highlight}><Translate id="home.tagline1">with Multiple Threads</Translate></span>
 //             </h1>
 //             <p className={styles.description}>

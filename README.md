@@ -1,4 +1,4 @@
-torchpipe的文档站点
+torchpipe的中文文档站点
 
 ## 修改方法
 
