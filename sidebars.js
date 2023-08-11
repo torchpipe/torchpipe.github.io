@@ -27,7 +27,7 @@ const sidebars = {
       items: [
         "installation",
         "quick_start_new_user",
-        "quick_start_professional",
+        //"quick_start_professional",
         {
           type: "category",
           label: "贡献指南",
@@ -44,7 +44,7 @@ const sidebars = {
       link: {
         type: "generated-index",
         title: "快速上手",
-        description: "本章节在为刚接触 Torchpipe 项目的用户提供快速上手的方法。从安装到初阶版单模型加速案例再到多模型级联加速案例，看完本教程后，新用户应该能够快速上手使用 Torchpipe 来优化加速模型部署方案。",
+        description: "本章节在为刚接触 torchpipe 项目的用户提供快速上手的方法。看完本教程后，新用户应该能够快速上手使用 torchpipe 来优化加速模型部署方案。",
         slug: "/",
       },
     },
