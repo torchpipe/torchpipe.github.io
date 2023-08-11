@@ -1,7 +1,7 @@
 <div align="center">
 
 
-<h1 align="center">Torchpipe|[Documentation](https://torchpipe.github.io)</h1>
+<h1 align="center">Torchpipe|<a href="https://torchpipe.github.io">Documentation</a></h1>
 <p align="center">
  <a href="https://pytorch.org/">Pytorch</a> 内部的多线程流水线并行推理库。
  </p>
