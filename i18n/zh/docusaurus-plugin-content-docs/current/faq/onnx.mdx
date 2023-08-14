@@ -72,6 +72,26 @@ onnx_model = onnx.shape_inference.infer_shapes(onnx_model)
 model_simp, check = onnx_simplifier.simplify(onnx_model, check_n = 0)
 onnx.save(model_simp, onnx_save_path)
 ```
+
+<details><summary>为了方便，针对这步我们提供了torchpipe.utils.onnx_export小工具</summary>
+
+- 该工具可以实现将PyTorch模型转换为ONNX模型并保存到本地
+
+```python
+import os
+from torchvision import models
+import torch
+import torchpipe
+
+## export onnx
+m = models.resnet50(weights=None).eval()
+onnx_path = os.path.join("/tmp", f"resnet50.onnx")
+input = torch.randn(1, 3, 224, 224)
+torchpipe.utils.onnx_export(m, onnx_path, input, opset=17)
+
+```
+</details>
+
 ### 转换失败说明
 
 
