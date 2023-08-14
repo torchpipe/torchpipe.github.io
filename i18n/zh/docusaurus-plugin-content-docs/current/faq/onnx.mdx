@@ -73,9 +73,24 @@ model_simp, check = onnx_simplifier.simplify(onnx_model, check_n = 0)
 onnx.save(model_simp, onnx_save_path)
 ```
 
-<details><summary>为了方便，针对这步我们提供了torchpipe.utils.onnx_export小工具</summary>
+<details><summary>为了方便，针对这步我们提供了torchpipe.utils.onnx_export小工具(0.3.1b3开始生效)</summary>
 
-- 该工具可以实现将PyTorch模型转换为ONNX模型并保存到本地
+- 该工具可以实现将PyTorch模型转换为ONNX模型并保存到本地。
+- 支持动态batch，并且自带onnx-simplify优化。
+
+```python
+def onnx_export(model: Union[torch.nn.Module, torch.jit.ScriptModule, torch.jit.ScriptFunction], onnx_path, input = None, opset = 17):
+```
+:::tip 参数
+- **model** - PyTorch模型。
+- **onnx_path** - ONNX模型保存路径。
+- **input** - 模型输入，如果不设置默认为torch.randn(1,3,224,224)。
+- **opset** ONNX的opset。
+
+:::
+
+
+<details><summary>示例代码</summary>
 
 ```python
 import os
@@ -90,6 +105,7 @@ input = torch.randn(1, 3, 224, 224)
 torchpipe.utils.onnx_export(m, onnx_path, input, opset=17)
 
 ```
+</details>
 </details>
 
 ### 转换失败说明
