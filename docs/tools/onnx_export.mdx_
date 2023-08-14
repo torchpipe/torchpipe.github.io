@@ -11,11 +11,13 @@ torchpipe封装的PyTorch模型转为ONNX模型接口。
 :::caution 验证阶段
 - onnx_export API暂不稳定。需要收集更多意见。
 - 转换后，建议验证与转换前原模型的输出是否一致。
+:::
 
 ###  torchpipe.utils.onnx_export
 ```python
 def onnx_export(model: Union[torch.nn.Module, torch.jit.ScriptModule, torch.jit.ScriptFunction], onnx_path, input = None, opset = 17, simplify=True):
 ```
+
 > 给定模型PyTorch模型，将该模型转换为ONNX模型，默认采用opset=17
 
 :::tip 参数
