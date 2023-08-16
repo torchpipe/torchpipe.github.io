@@ -151,9 +151,9 @@ torch.save(torch.from_numpy(data),os.path.join(calibrate_dir, f"cache_{random.ra
 </details>
 </details>
 
-### *torchpipe.utils.test.test_functions*
+### *torchpipe.utils.test.test_function*
 ```python
-def test_functions(forward_function:Union[Callable,List[Callable]], 
+def test_function(forward_function:Union[Callable,List[Callable]], 
                 num_clients=10, 
                 batch_size=1, 
                 total_number=10000)
@@ -173,7 +173,7 @@ def test_functions(forward_function:Union[Callable,List[Callable]],
 
 ```python
 import torchpipe as tp
-from torchpipe.utils.test import test_functions
+from torchpipe.utils.test import test_function
 
 model = tp.pipe({"backend":"DecodeMat","instance_num":10})
 
@@ -186,7 +186,7 @@ def run():
     model(input)
     assert(input["result"].shape==(576, 768, 3))
 
-torchpipe.utils.test.test_functions(run, num_clients=5, batch_size=1,total_number=1000)
+torchpipe.utils.test.test_function(run, num_clients=5, batch_size=1,total_number=1000)
 ```
 </details>
  
