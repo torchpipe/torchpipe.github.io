@@ -109,7 +109,7 @@ test_from_raw_file(forward_function, os.path.join("assets/norm_jpg/"),
 *从0.3.1b3版本开始生效*
 
 ```python
-def throughout(model_path, precision='fp16', num_clients=10, total_number=10000, postprocessor=None)
+def throughout(model_path, precision='fp16', num_clients=10, total_number=10000, post_processor=None)
 ```
 > 给定模型文件路径[onnx or tensorrt]，测试该模型在torchpipe吞吐，默认配置max=4，instance=2
 
@@ -118,7 +118,7 @@ def throughout(model_path, precision='fp16', num_clients=10, total_number=10000,
 - **precision** - 支持fp32、fp16、int8、best(int8+fp16)。
 - **num_clients** - 客户端数目/并发路数。
 - **total_number** 总共的数据量。
-- **postprocessor** - 模型需要的postprocessor算子。
+- **post_processor** - 模型需要的postprocessor算子。
 
 :::
 
