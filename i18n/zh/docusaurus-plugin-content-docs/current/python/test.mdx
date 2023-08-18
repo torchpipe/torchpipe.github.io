@@ -111,7 +111,7 @@ test_from_raw_file(forward_function, os.path.join("assets/norm_jpg/"),
 ```python
 def throughout(model_path, precision='fp16', num_clients=10, total_number=10000, post_processor=None)
 ```
-> 给定模型文件路径[onnx or tensorrt]，测试该模型在torchpipe吞吐，默认配置max=4，instance=2
+> 给定模型文件路径[onnx or tensorrt]，测试该模型在torchpipe吞吐，torchpipe的默认配置max=4，instance=2
 
 :::tip 参数
 - **model_path** - 测试模型的路径，支持onnx和tensorrt模型，onnx模型需后缀名为.onnx，测试时会自动转为tensorrt模型，tensorrt模型需要后缀名为.trt
