@@ -17,12 +17,12 @@ displayed_sidebar: api
 torchpipe.utils.test 集成了多客户端/多线程性能测试和并发推理工具。
 通常情况下，我们推荐功能更强大的[locust](https://locust.io/)，然而，如果你只需要一个简单的脚本，去方便的测本地函数和远程函数调用，并给出测试报告，或者并发的调用函数并处理结果，可以用此工具。
 
-|*locust*|*torchpipe.utils.test*|
-|--|--|
-|基于事件驱动，可以支持更高的并发数, 可分布式|基于本地线程，并发数有限，不支持分布式|
-|拥有web端模式|无|
-|支持扩展|支持扩展|
-|`locust -f target.py`|python函数|
+| *locust*                                    | *torchpipe.utils.test*               |
+|---------------------------------------------|--------------------------------------|
+| 基于事件驱动，可以支持更高的并发数, 可分布式 | 基于本地线程，并发数有限，不支持分布式 |
+| 拥有web端模式                               | 无                                   |
+| 支持扩展                                    | 支持扩展                             |
+| `locust -f target.py`                       | python函数                           |
 
 
 import Tabs from '@theme/Tabs';

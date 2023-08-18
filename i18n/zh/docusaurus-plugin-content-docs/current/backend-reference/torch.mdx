@@ -11,19 +11,19 @@ displayed_sidebar: api
 ## 速览
 
 
-|名称|主要初始化参数|输入[类型]|输出[类型]|备注|
-|---|---|---|---|---|
-| [DecodeTensor](#decodetensor) | `color(default=rgb)` |`data[str/bytes]`|result[at::Tensor]<br /> color[str]| |
-| [cvtColorTensor](#cvtcolortensor) |color|data[at::Tensor]<br /> color[str]|result[at::Tensor]| |
-|[ResizeTensor](#resizetensor)|resize_h,resize_w|data[at::Tensor]|result[at::Tensor]||
-| [PillowResizeTensor](#pillowresizetensor)| resize_h,resize_w|data[at::Tensor]|result[at::Tensor]| CV_8UC3 |
-| [ResizePadTensor](#resizepadtensor)| max_h,max_w,pad_value|data[at::Tensor] |- result[at::Tensor]<br />- inverse_trans<br />[std::function<std::pair<float, float>(float x, float y)>]   ||
-| [TensorrtTensor](#tensorrttensor)| `model`,`instance_num`,<br />`max`,`precision`,<br />`mean`,`std`,`model::cache` |  |    |tensorrt推理引擎|
-| [Tensor2Mat](#tensor2mat)| |data[at::Tensor] |result[cv::Mat]   ||
-| [SyncTensor](#synctensor)|`device_id` `SyncTensor::backend` |data[at::Tensor] |result[at::Tensor]   ||
-| [SaveTensor](#savetensor)|save_dir |data[at::Tensor] |result[at::Tensor]   ||
-| [LoadTensor](#loadtensor)|tensor_name ||result[at::Tensor]   ||
-| C10Exception| ||   |抛出c10::Error异常,用于模拟torch内部异常|
+| 名称                                      | 主要初始化参数                                                                   | 输入[类型]                        | 输出[类型]                                                                                                | 备注                                     |
+|-------------------------------------------|----------------------------------------------------------------------------------|-----------------------------------|-----------------------------------------------------------------------------------------------------------|------------------------------------------|
+| [DecodeTensor](#decodetensor)             | `color(default=rgb)`                                                             | `data[str/bytes]`                 | result[at::Tensor]<br /> color[str]                                                                       |                                          |
+| [cvtColorTensor](#cvtcolortensor)         | color                                                                            | data[at::Tensor]<br /> color[str] | result[at::Tensor]                                                                                        |                                          |
+| [ResizeTensor](#resizetensor)             | resize_h,resize_w                                                                | data[at::Tensor]                  | result[at::Tensor]                                                                                        |                                          |
+| [PillowResizeTensor](#pillowresizetensor) | resize_h,resize_w                                                                | data[at::Tensor]                  | result[at::Tensor]                                                                                        | CV_8UC3                                  |
+| [ResizePadTensor](#resizepadtensor)       | max_h,max_w,pad_value                                                            | data[at::Tensor]                  | - result[at::Tensor]<br />- inverse_trans<br />[std::function<std::pair<float, float>(float x, float y)>] |                                          |
+| [TensorrtTensor](#tensorrttensor)         | `model`,`instance_num`,<br />`max`,`precision`,<br />`mean`,`std`,`model::cache` |                                   |                                                                                                           | tensorrt推理引擎                         |
+| [Tensor2Mat](#tensor2mat)                 |                                                                                  | data[at::Tensor]                  | result[cv::Mat]                                                                                           |                                          |
+| [SyncTensor](#synctensor)                 | `device_id` `SyncTensor::backend`                                                | data[at::Tensor]                  | result[at::Tensor]                                                                                        |                                          |
+| [SaveTensor](#savetensor)                 | save_dir                                                                         | data[at::Tensor]                  | result[at::Tensor]                                                                                        |                                          |
+| [LoadTensor](#loadtensor)                 | tensor_name                                                                      |                                   | result[at::Tensor]                                                                                        |                                          |
+| C10Exception                              |                                                                                  |                                   |                                                                                                           | 抛出c10::Error异常,用于模拟torch内部异常 |
 
 
 
@@ -110,31 +110,31 @@ tensorrt推理引擎
 
 以下是初始化参数：
 
-||说明|备注|
-|---|---|---|
-|model|模型路径|支持 <br />- 以 .onnx 结尾的onnx文件<br />- 以 .trt 结尾的tensorrt engine文件 <br />- 以 .onnx.encrypted 和 .trt.encrypted 结尾的[加密](../tools/encrypt.mdx)文件|
-|instance_num |实例数目 |如果tensorrt engine的profile数目不足以建立足够的实例数，将反序列化多个engine. |
-|[postprocessor](#后处理扩展) |自定义后处理 |自定义网络输出c++批后处理;默认操作是拆分batch维度； 需要实现为 PostProcessor 的子类并注册 |
+|                              | 说明         | 备注                                                                                                                                                              |
+|------------------------------|------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| model                        | 模型路径     | 支持 <br />- 以 .onnx 结尾的onnx文件<br />- 以 .trt 结尾的tensorrt engine文件 <br />- 以 .onnx.encrypted 和 .trt.encrypted 结尾的[加密](../tools/encrypt.mdx)文件 |
+| instance_num                 | 实例数目     | 如果tensorrt engine的profile数目不足以建立足够的实例数，将反序列化多个engine.                                                                                      |
+| [postprocessor](#后处理扩展) | 自定义后处理 | 自定义网络输出c++批后处理;默认操作是拆分batch维度； 需要实现为 PostProcessor 的子类并注册                                                                          |
 
 对于onnx模型，有以下额外参数
 
-||说明|备注|
-|---|---|---|
-|min/max | 模型最小/最大输入| 形式上， 可以是`1`, `1x3x224x224`,或者 `1,1`(多输入网络)。 字典序排序;<br />`instance_num > 1`时，可以是以`;`隔开的多组配置|
-|precision | 模型精度| [fp32,fp16,int8,best]. 版本<=0.3.1b1时默认值为fp16，版本>0.3.1b1时默认为[fp16(SM>6.1), fp32(SM<=6.1)]; 如果精度不被支持，将自动退化到受支持的精度|
-|precision::fp32 | 设置部分层的精度为fp32（覆盖precision的设置）| 层的名称（可以只提供名称的一部分），以逗号分开|
-|precision::fp16 | 设置部分层的精度为fp16（覆盖precision的设置）| 层的名称（可以只提供名称的一部分），以逗号分开|
-|precision::output::fp32 | 设置部分层输出精度为fp32（覆盖precision的设置）| 层的名称（可以只提供名称的一部分），以逗号分开；（>=0.3.1b2）|
-|precision::output::fp16 | 设置部分层输出精度为fp16（覆盖precision的设置）| 层的名称（可以只提供名称的一部分），以逗号分开；（>=0.3.1b2）|
-|mean/std|图像前处理中的减均值除方差操作参数|该操作将插入tensorrt网络。需要大于`1+1e-5`（>=0.3.1b2）|
-|model::cache|自动缓存模型文件路径|支持 .trt 和 .trt.encrypted 后缀的文件名。 如果文件不存在，将自动保存该文件；否则将直接加载此文件。|
+|                         | 说明                                          | 备注                                                                                                                                            |
+|-------------------------|---------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------|
+| min/max                 | 模型最小/最大输入                             | 形式上， 可以是`1`, `1x3x224x224`,或者 `1,1`(多输入网络)。 字典序排序;<br />`instance_num > 1`时，可以是以`;`隔开的多组配置                        |
+| precision               | 模型精度                                      | [fp32,fp16,int8,best]. 版本<=0.3.1b1时默认值为fp16，版本>0.3.1b1时默认为[fp16(SM>6.1), fp32(SM<=6.1)]; 如果精度不被支持，将自动退化到受支持的精度 |
+| precision::fp32         | 设置部分层的精度为fp32（覆盖precision的设置）   | 层的名称（可以只提供名称的一部分），以逗号分开                                                                                                     |
+| precision::fp16         | 设置部分层的精度为fp16（覆盖precision的设置）   | 层的名称（可以只提供名称的一部分），以逗号分开                                                                                                     |
+| precision::output::fp32 | 设置部分层输出精度为fp32（覆盖precision的设置） | 层的名称（可以只提供名称的一部分），以逗号分开；（>=0.3.1b2）                                                                                         |
+| precision::output::fp16 | 设置部分层输出精度为fp16（覆盖precision的设置） | 层的名称（可以只提供名称的一部分），以逗号分开；（>=0.3.1b2）                                                                                         |
+| mean/std                | 图像前处理中的减均值除方差操作参数            | 该操作将插入tensorrt网络。需要大于`1+1e-5`（>=0.3.1b2）                                                                                            |
+| model::cache            | 自动缓存模型文件路径                          | 支持 .trt 和 .trt.encrypted 后缀的文件名。 如果文件不存在，将自动保存该文件；否则将直接加载此文件。                                                 |
 
 对于使用tensorrt量化onnx模型，有如下参数：
 
-||说明|备注|起始版本|
-|---|---|---|---|
-|calibrate_input | 校准的输入目录| 使用torch.save 或者SaveTensor后端保存的tensor，形状为1chw||
-|calibrate_cache | 可选。校准缓存，例如"resnet18.cache"，如果存在，将跳过calibrate_input| 校准可能很昂贵，可缓存于文件。如果网络结构发生变化或输入数据集发生变化，则还应重新校准网络。|>=0.3.0b4|
+|                 | 说明                                                              | 备注                                                                                     | 起始版本  |
+|-----------------|-----------------------------------------------------------------|----------------------------------------------------------------------------------------|-----------|
+| calibrate_input | 校准的输入目录                                                    | 使用torch.save 或者SaveTensor后端保存的tensor，形状为1chw                                 |           |
+| calibrate_cache | 可选。校准缓存，例如"resnet18.cache"，如果存在，将跳过calibrate_input | 校准可能很昂贵，可缓存于文件。如果网络结构发生变化或输入数据集发生变化，则还应重新校准网络。 | >=0.3.0b4 |
 
 
 
@@ -143,10 +143,10 @@ tensorrt推理引擎
 
 ### 前向计算
 
-||说明|备注|
-|---|---|---|
-|TASK_DATA_KEY|网络为单输入输出时，类型为at::Tensor/torch.Tensor, 网络为多输入输出时， 类型为vector/List. |字典序排列|
-|TASK_RESULT_KEY(输出)|输出类型参照输入类型，  postprocessor 可自定义输出|字典序排列|
+|                       | 说明                                                                                     | 备注       |
+|-----------------------|----------------------------------------------------------------------------------------|----------|
+| TASK_DATA_KEY         | 网络为单输入输出时，类型为at::Tensor/torch.Tensor, 网络为多输入输出时， 类型为vector/List. | 字典序排列 |
+| TASK_RESULT_KEY(输出) | 输出类型参照输入类型，  postprocessor 可自定义输出                                        | 字典序排列 |
 
 ### min()/max()
 输入范围将从tensorrt模型中读取。
@@ -190,10 +190,10 @@ class PostProcessor {
 用户继承`PostProcessor<at::Tensor>`并实现前向接口后，可采用[AOT编译](../Intra-node/extensible_backend.mdx#编译)的方式编译后使用。
 内置后处理：
 
-||功能|备注|
-|-|-|-|
-|cpu|将数据拷贝到cpu上||
-|softmaxcpu|对二维tensor进行softmax操作后，将数据拷贝到cpu上||
+|            | 功能                                            | 备注 |
+|------------|-----------------------------------------------|------|
+| cpu        | 将数据拷贝到cpu上                               |      |
+| softmaxcpu | 对二维tensor进行softmax操作后，将数据拷贝到cpu上 |      |
 
 以下是`softmaxcpu`的参考实现：
 ```cpp

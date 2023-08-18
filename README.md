@@ -1,15 +1,18 @@
-<div align="center">
 
 
-<h1 align="center">Torchpipe|<a href="https://torchpipe.github.io">Documentation</a></h1>
 <p align="center">
- <a href="https://pytorch.org/">Pytorch</a> 内部的多线程流水线并行推理库。
- </p>
- <p align="center">
-Serving Inside <a href="https://pytorch.org/">Pytorch</a> with Multiple Threads.
+<h1 align="center">torchpipe</h1>
+<h6 align="center">Serving Inside <a href="https://pytorch.org/">Pytorch</a> with Multiple Threads</h6>
+</p>
+<p align="center">
+<!-- <img alt="license" src="https://img.shields.io/github/license/alibaba/async_simple?style=flat-square"> -->
+<img alt="build" src="https://img.shields.io/badge/build-passing-brightgreen">
+<img alt="language" src="https://img.shields.io/github/languages/top/torchpipe/torchpipe.github.io?style=flat-square">
+<img alt="feature" src="https://img.shields.io/badge/pytorch-Serving-orange?style=flat-square">
+<img alt="last commit" src="https://img.shields.io/github/last-commit/torchpipe/torchpipe.github.io?style=flat-square">
 </p>
 
-</div>
+
 
 
 torchpipe是 介于底层加速库（如tensorrt，opencv，torchscript）以及 RPC（如thrift, gRPC）之间并与他们严格解耦的多实例流水线并行库；对外提供面向pytorch前端的线程安全函数接口，对内提供面向用户的细粒度后端扩展。

@@ -13,12 +13,12 @@ type: explainer
 ## 依赖项
 基础环境如下：
 
-|  依赖	|  版本	|  备注	|
-|---	|:---	|---	|
-|  `cuda`	|  >= 11.0	|  - 与PyTorch依赖的cuda版本必须一致（便于`torch.utils.cpp_extension`即时编译代码） <br />- 不再对CUDA 10.2的兼容进行测试。	|
-|  `pytorch`	|  >= 1.13.0	|  - 对于`c++14/cuda-10.2/pytorch==1.10.2`不再进行兼容测试，然而通过简单修改，您可能仍可运行。	|
-|  `opencv`(可选)	| 3.x, 4.x 	|  至少包含 core, imgproc，imgcodecs 和 highgui 四个模块	|
-|  `tensorrt`(可选)	|>= 7.2<br /><= 8.6.1.5| - tensorrt 7.0 动态输入下存在[内存泄漏](https://github.com/NVIDIA/TensorRT/issues/351)<br />- tensorrt 7.1 及以下无法直接int8化动态输入的模型 	|
+| 依赖             | 版本                   | 备注                                                                                                                                          |
+|------------------|:-----------------------|---------------------------------------------------------------------------------------------------------------------------------------------|
+| `cuda`           | >= 11.0                | - 与PyTorch依赖的cuda版本必须一致（便于`torch.utils.cpp_extension`即时编译代码） <br />- 不再对CUDA 10.2的兼容进行测试。                         |
+| `pytorch`        | >= 1.13.0              | - 对于`c++14/cuda-10.2/pytorch==1.10.2`不再进行兼容测试，然而通过简单修改，您可能仍可运行。                                                      |
+| `opencv`(可选)   | 3.x, 4.x               | 至少包含 core, imgproc，imgcodecs 和 highgui 四个模块                                                                                          |
+| `tensorrt`(可选) | >= 7.2<br /><= 8.6.1.5 | - tensorrt 7.0 动态输入下存在[内存泄漏](https://github.com/NVIDIA/TensorRT/issues/351)<br />- tensorrt 7.1 及以下无法直接int8化动态输入的模型 |
 
 :::note 
 以上依赖项均来源于默认存在的特定计算后端。构筑c++核心不依赖于以上任意一项。
@@ -154,12 +154,12 @@ wget https://codeload.github.com/opencv/opencv/zip/refs/tags/4.5.4 -O thirdparty
 
 ### 编译选项
 
-| 选项 	| 默认值 	|  说明	|
-|---	|:---:	|:---:	|
-| DEBUG 	|  	0|  是否编译为调试模式	|
-| WITH_OPENCV 	| 1 	|  是否编译依赖opencv的c++后端	|
-| WITH_TENSORRT 	|  	1|  是否编译依赖tensorrt的c++后端	|
-| IPIPE_KEY(optinal) 	|  无|  str(length>=8)，使用加解密功能时，需要设置此密钥	|
+| 选项               | 默认值 |                      说明                      |
+|--------------------|:------:|:--------------------------------------------:|
+| DEBUG              |   0    |               是否编译为调试模式               |
+| WITH_OPENCV        |   1    |          是否编译依赖opencv的c++后端           |
+| WITH_TENSORRT      |   1    |         是否编译依赖tensorrt的c++后端          |
+| IPIPE_KEY(optinal) |   无   | str(length>=8)，使用加解密功能时，需要设置此密钥 |
 
 
 
@@ -169,11 +169,11 @@ wget https://codeload.github.com/opencv/opencv/zip/refs/tags/4.5.4 -O thirdparty
 ```bash
 python -c "import torch; print(torch._C._GLIBCXX_USE_CXX11_ABI)"
 ```
-|  安装源	| _GLIBCXX_USE_CXX11_ABI 	|
-|:---	|:---:	|
-| [PyPI-PyTorch](https://pytorch.org/get-started/locally/) 	|  0	|
-| [NGC-PyTorch](https://catalog.ngc.nvidia.com/orgs/nvidia/containers/pytorch) 	|  1	|
-| [libtorch](https://pytorch.org/cppdocs/installing.html) 	|  1	|
+| 安装源                                                                       | _GLIBCXX_USE_CXX11_ABI |
+|:-----------------------------------------------------------------------------|:----------------------:|
+| [PyPI-PyTorch](https://pytorch.org/get-started/locally/)                     |           0            |
+| [NGC-PyTorch](https://catalog.ngc.nvidia.com/orgs/nvidia/containers/pytorch) |           1            |
+| [libtorch](https://pytorch.org/cppdocs/installing.html)                      |           1            |
 
 
 

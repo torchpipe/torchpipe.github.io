@@ -24,10 +24,10 @@ import TabItem from '@theme/TabItem';
 
 为了方便，假设将tensorrt推理功能封装为名称为 `TensorrtTensor` 的**计算后端**。由于计算发生在gpu设备上，我们加上`SyncTensor` 表示gpu上的流同步操作。
 
-|配置项|参数|说明|
-|---|---|---|
-|backend|"SyncTensor[TensorrtTensor]"|**计算后端**和tensorrt推理本身一样，不是线程安全的。|
-| max |4| 模型支持的最大batchsize，用于模型转换（onnx->tensorrt） |
+| 配置项  | 参数                         | 说明                                                 |
+|---------|------------------------------|----------------------------------------------------|
+| backend | "SyncTensor[TensorrtTensor]" | **计算后端**和tensorrt推理本身一样，不是线程安全的。   |
+| max     | 4                            | 模型支持的最大batchsize，用于模型转换（onnx->tensorrt） |
 
 
 如果可以从多个线程中同时调用某个函数，则该函数是线程安全的。提供线程安全的接口将极大的方便使用者。
@@ -38,18 +38,18 @@ torchpipe默认会在此**计算后端**上包裹一层可扩展的**单节点�
 
 -  多实例并行
 
-    |配置项|默认值|说明|
-    |---|---|---|
-    |instance_num|1|多个模型实例并行执行推理任务。|
+    | 配置项       | 默认值 | 说明                          |
+    |--------------|--------|-----------------------------|
+    | instance_num | 1      | 多个模型实例并行执行推理任务。 |
     
 
 - Batching
 
     对于resnet18, 模型本身输入为`-1x3x224x224`, batchsize越大，单位硬件资源所完成的任务越多。 batchsize 从**计算后端**（TensorrtTensor）读取。
 
-    |配置项|默认值|说明|
-    |---|---|---|
-    | batching_timeout |0|单位为毫秒，在此时间内如果没有接收到 batchsize 个数目的请求，则放弃等待。|
+    | 配置项           | 默认值 | 说明                                                                   |
+    |------------------|--------|----------------------------------------------------------------------|
+    | batching_timeout | 0      | 单位为毫秒，在此时间内如果没有接收到 batchsize 个数目的请求，则放弃等待。 |
         
 
 
@@ -59,10 +59,10 @@ torchpipe默认会在此**计算后端**上包裹一层可扩展的**单节点�
 <Tabs groupId="language"  className="unique-tabs">
 <TabItem value="python" label="Python">
 
-<!-- ||值|备注|
-|---|---|---|
-|`torchpipe.TASK_DATA_KEY`|"data"|代表输入，必需存在，同一大版本不会改变定义|
-|`torchpipe.TASK_RESULT_KEY`|"result"|代表输出，可能不存在，同一大版本不会改变定义| -->
+<!-- |                             | 值       | 备注                                       |
+-----|-----------------------------|----------|------------------------------------------|----
+     | `torchpipe.TASK_DATA_KEY`   | "data"   | 代表输入，必需存在，同一大版本不会改变定义   |
+     | `torchpipe.TASK_RESULT_KEY` | "result" | 代表输出，可能不存在，同一大版本不会改变定义 | -->
 
 ```python
 import torchpipe as tp
@@ -91,10 +91,10 @@ result: torch.Tensor = input["result"] # 失败则 "result" 不存在
 </TabItem>
 <TabItem value="cpp" label="C++">
 
-<!-- ||值|备注|
-|---|---|---|
-|ipipe::TASK_DATA_KEY|"data"|代表输入，必需存在，同一大版本不会改变定义|
-|ipipe::TASK_RESULT_KEY|"result"|代表输出，可能不存在，同一大版本不会改变定义|
+<!-- |                        | 值       | 备注
+-----|------------------------|----------|-----------------------
+     | ipipe::TASK_DATA_KEY   | "data"   | 代表输入，必需存在，同一大版本不会改变定义
+     | ipipe::TASK_RESULT_KEY | "result" | 代表输出，可能不存在，同一大版本不会改变定义
  -->
 
 ```cpp

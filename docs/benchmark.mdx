@@ -48,12 +48,12 @@ thrift采用了多线程模式, 以`python`为客户端/服务端语言。
 
 客户端1/计算后端实例1/超时时间0/max_batch1
 
-|   |  python后端 | c++后端 |  
-|:---:|:---|:---| 
-|  torchpipie | QPS: 65227 <br /> | QPS: 70671 <br /> |
-|  torchpipie+thrift | QPS: 10020 <br /> | QPS: 10444  |
-|  thrift | QPS:  14890 <br />  | - |
-|  triton-cli | QPS: 7342 <br />  | - |
+|                   | python后端         | c++后端           |
+|:-----------------:|:-------------------|:------------------|
+|    torchpipie     | QPS: 65227 <br />  | QPS: 70671 <br /> |
+| torchpipie+thrift | QPS: 10020 <br />  | QPS: 10444        |
+|      thrift       | QPS:  14890 <br /> | -                 |
+|    triton-cli     | QPS: 7342 <br />   | -                 |
 
 
 相对于rpc框架本身数十万以上的并发要求， `torchpipe` 和 `triton`本身的qps并不高。视觉领域的服务是计算密集型的，通常并不能算一种`高并发`服务，实际单卡QPS一般在100-2000之间；以上实测空载性能上限满足要求。
@@ -69,12 +69,12 @@ thrift采用了多线程模式, 以`python`为客户端/服务端语言。
 
 客户端10/计算后端实例1/超时时间0/max_batch1
 
-|   |  python后端 | c++后端 |  
-|:---:|:---|:---| 
-|  torchpipie |  QPS: 46655 <br /> | QPS: 55949 <br />  |
-|  torchpipie-thrift | QPS: 13221  | QPS: 14977  <br />|
-|  thrift | QPS:   17262 <br /> | - |
-|  triton-cli | QPS: 15039 <br /> | - |
+|                   | python后端          | c++后端            |
+|:-----------------:|:--------------------|:-------------------|
+|    torchpipie     | QPS: 46655 <br />   | QPS: 55949 <br />  |
+| torchpipie-thrift | QPS: 13221          | QPS: 14977  <br /> |
+|      thrift       | QPS:   17262 <br /> | -                  |
+|    triton-cli     | QPS: 15039 <br />   | -                  |
 
  
 [import]: https://g.hz.netease.com/deploy/torchpipe/blob/main/libs/commands/import/README.md
@@ -88,12 +88,12 @@ thrift采用了多线程模式, 以`python`为客户端/服务端语言。
  
 计算后端实例1/超时时间10ms/max_batch4
 
-| 客户端数目  |  torchpipe | triton |  
-|:---:|:---:|:---:| 
-|  1  | **TP50: 0.25** |  **TP50: 10.5** |
-|  2  | TP50: 10.25 |  TP50: 10.57 |
-|  4  | TP50: 0.34 |  TP50: 0.5 |
-|  10  | TP50: 0.82 |  TP50: 0.97 |
+| 客户端数目 |   torchpipe    |     triton     |
+|:----------:|:--------------:|:--------------:|
+|     1      | **TP50: 0.25** | **TP50: 10.5** |
+|     2      |  TP50: 10.25   |  TP50: 10.57   |
+|     4      |   TP50: 0.34   |   TP50: 0.5    |
+|     10     |   TP50: 0.82   |   TP50: 0.97   |
 
 实验验证了torchpipie采取的保守的自适应策略，能在一定情况下，减少白白等待凑batch的时间。
 
@@ -105,10 +105,10 @@ thrift采用了多线程模式, 以`python`为客户端/服务端语言。
 
 计算后端实例1/超时时间10ms/max_batch1
 
-| 客户端数目  |  torchpipie | triton |  
-|:---:|:---:|:---:| 
-|  1  | TP50: 0.09 |  TP50: 0.23 |
-|  10 | TP50: 0.64 |  TP50: 1.26 |
+| 客户端数目 | torchpipie |   triton   |
+|:----------:|:----------:|:----------:|
+|     1      | TP50: 0.09 | TP50: 0.23 |
+|     10     | TP50: 0.64 | TP50: 1.26 |
 
 
 
@@ -120,20 +120,20 @@ thrift采用了多线程模式, 以`python`为客户端/服务端语言。
 ## python后端（cpu）并发性能
 `torchpipe`原生支持多线程模式，然而由于GIL锁的影响，此种模式对于python计算后端注定有比较大的缺陷；
 
-|  类型	|  模式	| 备注 	|
-|---	|---	|------	|
-| GPU后端 	| 多线程 	| 多进程下需要虚拟化，存在共享显存传递的问题 	|
-| 不涉及GIL锁的CPU后端 	|  可多线程	|  -	|
-| 涉及GIL锁的CPU后端 	| 多进程/RPC 	|在python后端中使用`multiprocessing/Joblib`库，或者桥接第三方RPC框架 <br />	|
+| 类型                 | 模式       | 备注                                                                      |
+|--------------------|----------|---------------------------------------------------------------------------|
+| GPU后端              | 多线程     | 多进程下需要虚拟化，存在共享显存传递的问题                                 |
+| 不涉及GIL锁的CPU后端 | 可多线程   | -                                                                         |
+| 涉及GIL锁的CPU后端   | 多进程/RPC | 在python后端中使用`multiprocessing/Joblib`库，或者桥接第三方RPC框架 <br /> |
 
 
 以下表格验证了多进程模式处理GIL锁的有效性（后端进行了python的1-100000的累加操作）：
 
 客户端10/计算后端实例10/超时时间0/max_batch1
 
-|  torchpipie(python后端) | triton  | torchpipie-multiprocess |  
-|:---:|:---:|:---:| 
-|  QPS: 233 | QPS: 814 | QPS: 872 |
+| torchpipie(python后端) |  triton  | torchpipie-multiprocess |
+|:----------------------:|:--------:|:-----------------------:|
+|        QPS: 233        | QPS: 814 |        QPS: 872         |
 
 
 ## 纯cpu后端效率对比
@@ -162,16 +162,16 @@ cv::Mat imdecode(cv::InputArray buf, int flags)
 
 客户端1/计算后端实例1/超时时间0/max_batch1
 
-|  torchpipie-thrift(c++后端) |  torchpipie-thrift(python后端) | torchpipie-thrift-multiprocess  | triton-cli |  
-|:---:|:---:|:---:|:---:| 
-|  QPS: 426 |  QPS: 406 | QPS: - | QPS: 339 |
+| torchpipie-thrift(c++后端) | torchpipie-thrift(python后端) | torchpipie-thrift-multiprocess | triton-cli |
+|:--------------------------:|:-----------------------------:|:------------------------------:|:----------:|
+|          QPS: 426          |           QPS: 406            |             QPS: -             |  QPS: 339  |
 
 
 客户端10/计算后端实例10/超时时间0/max_batch1
 
-|  torchpipie-thrift(c++后端) |  torchpipie-thrift(python后端) | torchpipie-thrift-multiprocess  | triton-cli |  
-|:---:|:---:|:---:|:---:| 
-|  QPS: 1599 |  QPS: 1334 | QPS: - | 1440  |
+| torchpipie-thrift(c++后端) | torchpipie-thrift(python后端) | torchpipie-thrift-multiprocess | triton-cli |
+|:--------------------------:|:-----------------------------:|:------------------------------:|:----------:|
+|         QPS: 1599          |           QPS: 1334           |             QPS: -             |    1440    |
 
 实验结果与预期相符：各种方式下的效率相近。最终，在十客户端下，
 `torchpipie-thrift(c++后端)` > `triton-cli` > `torchpipie-thrift(python后端)`.
@@ -187,16 +187,16 @@ cv::Mat imdecode(cv::InputArray buf, int flags)
 
 客户端1/计算后端实例1/超时时间0/max_batch1
 
-|  torchpipie-thrift-rpc|  triton-rpc|  torchpipie-thrift | triton-cli  | 备注 |  
-|:---:|:---:|:---:|:---:|:---:| 
-|  QPS: 7519 |  QPS: 1819 |  QPS: 381 | QPS: 358 |   |
+| torchpipie-thrift-rpc | triton-rpc | torchpipie-thrift | triton-cli | 备注 |
+|:---------------------:|:----------:|:-----------------:|:----------:|:----:|
+|       QPS: 7519       | QPS: 1819  |     QPS: 381      |  QPS: 358  |      |
 
 
 客户端10/计算后端实例10/超时时间0/max_batch1
 
-|  torchpipie-thrift-rpc|  triton-rpc|  torchpipie-thrift | triton-cli  | 备注 |  
-|:---:|:---:|:---:|:---:|:---:| 
-|  QPS: 11938 |  QPS: 3355 |  QPS: 720 | QPS: 722 |   |
+| torchpipie-thrift-rpc | triton-rpc | torchpipie-thrift | triton-cli | 备注 |
+|:---------------------:|:----------:|:-----------------:|:----------:|:----:|
+|      QPS: 11938       | QPS: 3355  |     QPS: 720      |  QPS: 722  |      |
 
 
 
@@ -206,9 +206,9 @@ cv::Mat imdecode(cv::InputArray buf, int flags)
 
 客户端10/计算后端实例2/超时时间5/max_batch4
 
-|  torchpipie-thrift | triton-cli  | 备注 |  
-|:---:|:---:|:---:| 
-|  QPS: 907  | QPS: 898 | -  |
+| torchpipie-thrift | triton-cli | 备注 |
+|:-----------------:|:----------:|:----:|
+|     QPS: 907      |  QPS: 898  |  -   |
 
 
 
@@ -224,16 +224,16 @@ triton推荐的使用方式是采用rpc的方式进行调用，torchpipe的推�
 
 客户端1/计算后端实例1/超时时间0/max_batch1
 
-|  torchpipie|  triton-rpc|  备注 |
-|:---:|:---:|:---:|
-|  QPS: 559 |  QPS: 462 |   | 
+| torchpipie | triton-rpc | 备注 |
+|:----------:|:----------:|:----:|
+|  QPS: 559  |  QPS: 462  |      |
 
 
 客户端10/计算后端实例1/超时时间0/max_batch1
 
-|  torchpipie|  triton-rpc|  备注 |
-|:---:|:---:|:---:|
-|  QPS: 1303 |  QPS: 907 |   | 
+| torchpipie | triton-rpc | 备注 |
+|:----------:|:----------:|:----:|
+| QPS: 1303  |  QPS: 907  |      |
 
 
 

@@ -12,18 +12,18 @@ displayed_sidebar: api
 以下后端输入范围`max()`均为1.
 
 
-|名称|初始化参数|输入[类型]|输出[类型]|备注|
-|---|---|---|---|---|
-| [DecodeMat](#decodemat) |无|`data[str/bytes]`|result[cv::Mat]<br /> color[str]| |
-| [cvtColorMat](#cvtcolormat) |color|data[cv::Mat]<br /> color[str]|result[cv::Mat]| |
-|[ResizeMat](#resizemat)|resize_h,resize_w|data[cv::Mat]|result[cv::Mat]||
-| [PillowResizeMat](#pillowresizemat)| resize_h,resize_w|data[cv::Mat]|result[cv::Mat]| CV_8UC3 |
-| [ResizePadMat](#resizepadmat)| max_h,max_w,pad_value|data[cv::Mat] |- result[cv::Mat]<br />- inverse_trans<br />[std::function<std::pair<float, float>(float x, float y)>]   |CV_8UC3|
-| [Mat2Tensor](#mat2tensor)| device=cpu,gpu|data[cv::Mat] |result[at::Tensor]   |[Mat2CpuTensor](#mat2cputensor) <br />[Mat2GpuTensor](#mat2gputensor)|
-| [SaveMat](#savemat)|save_dir |data[cv::Mat] |result[cv::Mat]   ||
-| [AlignMat](#alignmat)|align,resize_h,max_w |data[cv::Mat] |result[cv::Mat],resize_h[int],resize_w[int]   |max()=UINT32_MAX|
-| [DynamicResizeMat](#dynamicresizemat)||data[cv::Mat],resize_h,resize_w[int] |result[cv::Mat]   ||
-| [PerspectiveTransformMat](#perspectivetransformmat)||data[cv::Mat],TASK_BOX_KEY|result[cv::Mat]   ||
+| 名称                                                | 初始化参数            | 输入[类型]                           | 输出[类型]                                                                                             | 备注                                                                  |
+|-----------------------------------------------------|-----------------------|--------------------------------------|--------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------|
+| [DecodeMat](#decodemat)                             | 无                    | `data[str/bytes]`                    | result[cv::Mat]<br /> color[str]                                                                       |                                                                       |
+| [cvtColorMat](#cvtcolormat)                         | color                 | data[cv::Mat]<br /> color[str]       | result[cv::Mat]                                                                                        |                                                                       |
+| [ResizeMat](#resizemat)                             | resize_h,resize_w     | data[cv::Mat]                        | result[cv::Mat]                                                                                        |                                                                       |
+| [PillowResizeMat](#pillowresizemat)                 | resize_h,resize_w     | data[cv::Mat]                        | result[cv::Mat]                                                                                        | CV_8UC3                                                               |
+| [ResizePadMat](#resizepadmat)                       | max_h,max_w,pad_value | data[cv::Mat]                        | - result[cv::Mat]<br />- inverse_trans<br />[std::function<std::pair<float, float>(float x, float y)>] | CV_8UC3                                                               |
+| [Mat2Tensor](#mat2tensor)                           | device=cpu,gpu        | data[cv::Mat]                        | result[at::Tensor]                                                                                     | [Mat2CpuTensor](#mat2cputensor) <br />[Mat2GpuTensor](#mat2gputensor) |
+| [SaveMat](#savemat)                                 | save_dir              | data[cv::Mat]                        | result[cv::Mat]                                                                                        |                                                                       |
+| [AlignMat](#alignmat)                               | align,resize_h,max_w  | data[cv::Mat]                        | result[cv::Mat],resize_h[int],resize_w[int]                                                            | max()=UINT32_MAX                                                      |
+| [DynamicResizeMat](#dynamicresizemat)               |                       | data[cv::Mat],resize_h,resize_w[int] | result[cv::Mat]                                                                                        |                                                                       |
+| [PerspectiveTransformMat](#perspectivetransformmat) |                       | data[cv::Mat],TASK_BOX_KEY           | result[cv::Mat]                                                                                        |                                                                       |
 
 
 ## DecodeMat

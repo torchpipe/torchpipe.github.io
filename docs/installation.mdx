@@ -11,11 +11,11 @@ type: explainer
 ## Dependencies
 The basic environment is as follows:
 
-| Dependency | Version | Remarks |
-|---	|:---	|---	|
-|  `cuda`	|  >= 11.0	|  - The CUDA version must be consistent with the version that PyTorch depends on (for the convenience of `torch.utils.cpp_extension` to compile code on the fly). <br />- Compatibility testing with CUDA 10.2 is no longer performed.	|
-|  `pytorch`	|  >= 1.13.0	|  - Compatibility testing is no longer performed for `c++14/cuda-10.2/pytorch==1.10.2`, but you may still be able to run it with simple modifications.	|
-|  `opencv`(optional)	| 3.x, 4.x 	|  At least the core, imgproc, imgcodecs, and highgui modules are included.	|
+| Dependency         | Version   | Remarks                                                                                                                                                                                                                              |
+|--------------------|:----------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `cuda`             | >= 11.0   | - The CUDA version must be consistent with the version that PyTorch depends on (for the convenience of `torch.utils.cpp_extension` to compile code on the fly). <br />- Compatibility testing with CUDA 10.2 is no longer performed. |
+| `pytorch`          | >= 1.13.0 | - Compatibility testing is no longer performed for `c++14/cuda-10.2/pytorch==1.10.2`, but you may still be able to run it with simple modifications.                                                                                 |
+| `opencv`(optional) | 3.x, 4.x  | At least the core, imgproc, imgcodecs, and highgui modules are included.                                                                                                                                                             |
 |  `tensorrt`(optional)	|>= 7.2<br /><= 8.6.1.5| - There is a [memory leak](https://github.com/NVIDIA/TensorRT/issues/351) in TensorRT 7.0 with dynamic inputs.<br />- TensorRT 7.1 and earlier cannot directly INT8-quantize models with dynamic inputs.
 
 
@@ -160,12 +160,12 @@ Base images compiled in this way have smaller sizes than NGC PyTorch images. Ple
 
 ### Compilation Options
 
-| Option 	| Default 	| Description	|
-|---	|:---:	|:---:	|
-| DEBUG 	|  	0|  Whether to compile in debug mode	|
-| WITH_OPENCV 	| 1 	|  Whether to compile the C++ backend that depends on OpenCV	|
-| WITH_TENSORRT 	|  	1|  Whether to compile the C++ backend that depends on TensorRT	|
-| IPIPE_KEY(optinal) 	|  None|  str(length>=8). If using encryption and decryption functions, this key needs to be set.	| 
+| Option             | Default |                                       Description                                       |
+|--------------------|:-------:|:---------------------------------------------------------------------------------------:|
+| DEBUG              |    0    |                            Whether to compile in debug mode                             |
+| WITH_OPENCV        |    1    |                Whether to compile the C++ backend that depends on OpenCV                |
+| WITH_TENSORRT      |    1    |               Whether to compile the C++ backend that depends on TensorRT               |
+| IPIPE_KEY(optinal) |  None   | str(length>=8). If using encryption and decryption functions, this key needs to be set. |
 
 
 
@@ -177,11 +177,11 @@ The compiler used for both compiling the code and the dependent libraries needs 
 python -c "import torch; print(torch._C._GLIBCXX_USE_CXX11_ABI)"
 ```
 
-| Installation Source | _GLIBCXX_USE_CXX11_ABI |
-| :------------------ | :---------------------: |
-| [PyPI-PyTorch](https://pytorch.org/get-started/locally/) | 0 |
-| [NGC-PyTorch](https://catalog.ngc.nvidia.com/orgs/nvidia/containers/pytorch) | 1 |
-| [libtorch](https://pytorch.org/cppdocs/installing.html) | 1 |
+| Installation Source                                                          | _GLIBCXX_USE_CXX11_ABI |
+|:-----------------------------------------------------------------------------|:----------------------:|
+| [PyPI-PyTorch](https://pytorch.org/get-started/locally/)                     |           0            |
+| [NGC-PyTorch](https://catalog.ngc.nvidia.com/orgs/nvidia/containers/pytorch) |           1            |
+| [libtorch](https://pytorch.org/cppdocs/installing.html)                      |           1            |
 
 
 ### Compiling with integrated third-party libraries (using Ubuntu-OpenCV as an example)

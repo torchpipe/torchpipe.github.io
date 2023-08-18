@@ -151,14 +151,14 @@ def __call__(self, data: List[Dict[str, Any]]) -> None
 
 ### 系统保留键值 {#system-keep}
 
-||定义|备注|
-|---|---|---|
-|TASK_DATA_KEY|`data`|用于输入之一键值|
-|TASK_RESULT_KEY|`result`|用于输出之一键值|
-|TASK_CONTEXT_KEY|`context`|用于全局共享上下文语法糖|
-|TASK_EVENT_KEY|`event`||
-|"_*"||所有以下划线开始的字符串|
-|TASK_NODE_NAME_KEY|`node_name`||
-|"global"||目前用于表示全局设置|
-|"default"|||
-|"TASK_*_KEY"||以`TASK_`开头以`_KEY`结束的字符串|
+|                    | 定义        | 备注                              |
+|--------------------|-------------|-----------------------------------|
+| TASK_DATA_KEY      | `data`      | 用于输入之一键值                  |
+| TASK_RESULT_KEY    | `result`    | 用于输出之一键值                  |
+| TASK_CONTEXT_KEY   | `context`   | 用于全局共享上下文语法糖          |
+| TASK_EVENT_KEY     | `event`     |                                   |
+| "_*"               |             | 所有以下划线开始的字符串          |
+| TASK_NODE_NAME_KEY | `node_name` |                                   |
+| "global"           |             | 目前用于表示全局设置              |
+| "default"          |             |                                   |
+| "TASK_*_KEY"       |             | 以`TASK_`开头以`_KEY`结束的字符串 |
