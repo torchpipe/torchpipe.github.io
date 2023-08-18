@@ -88,14 +88,7 @@ yarn run write-translations --locale zh
 给你一段代码，你把其中文注释一一对应翻译为英语注释
 ```
 
-## 其他
 ### 图标
 
 本项目使用了来自于[IconPark](https://iconpark.oceanengine.com/official)的免费图标(soap-bubble)，其遵循[Apache License 2.0](https://github.com/bytedance/IconPark/blob/master/LICENSE), 并经过ChatGPT4对其矢量图进行调优。
 
-### 可替代选择
-[Material for MkDocs](https://squidfunk.github.io/mkdocs-material/)
-
-
-### 参考链接：
-  https://docusaurus.io/docs
