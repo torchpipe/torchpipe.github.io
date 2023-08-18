@@ -43,7 +43,7 @@ class FilterContinue : public Filter {
  public:
   status forward(dict data) override { return Filter::status::Continue; }
 };
-IPIPE_REGISTER(Filter, FilterContinue, "Continue,continue,run");
+IPIPE_REGISTER(Filter, FilterContinue, "Continue,run");
 ```
 
 

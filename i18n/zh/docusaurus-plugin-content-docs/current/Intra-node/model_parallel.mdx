@@ -10,12 +10,6 @@ import TabItem from '@theme/TabItem';
 
 
 # resnet18 计算加速
-对于onnx格式的 resnet18的模型`resnet18_-1x3x224x224.onnx`,
-通常有以下手段进行推理加速：
-- 使用tensorrt等框架进行模型针对性加速 
-- 避免频繁显存申请
-- 多实例，batching，分别用来提高资源使用量和使用效率
-- 优化数据传输
 
 
 
@@ -59,10 +53,7 @@ torchpipe默认会在此**计算后端**上包裹一层可扩展的**单节点�
 <Tabs groupId="language"  className="unique-tabs">
 <TabItem value="python" label="Python">
 
-<!-- |                             | 值       | 备注                                       |
------|-----------------------------|----------|------------------------------------------|----
-     | `torchpipe.TASK_DATA_KEY`   | "data"   | 代表输入，必需存在，同一大版本不会改变定义   |
-     | `torchpipe.TASK_RESULT_KEY` | "result" | 代表输出，可能不存在，同一大版本不会改变定义 | -->
+
 
 ```python
 import torchpipe as tp
@@ -91,11 +82,7 @@ result: torch.Tensor = input["result"] # 失败则 "result" 不存在
 </TabItem>
 <TabItem value="cpp" label="C++">
 
-<!-- |                        | 值       | 备注
------|------------------------|----------|-----------------------
-     | ipipe::TASK_DATA_KEY   | "data"   | 代表输入，必需存在，同一大版本不会改变定义
-     | ipipe::TASK_RESULT_KEY | "result" | 代表输出，可能不存在，同一大版本不会改变定义
- -->
+
 
 ```cpp
 #include "Interpreter.hpp"
@@ -133,11 +120,11 @@ int main(void) {
 
 ## 性能取舍 {#assumption}
 请注意，我们的加速做了如下假设：
-> **同设备上的数据拷贝（如cpu-cpu数据拷贝，gpu-gpu同一显卡内部显存拷贝）速度快，消耗资源少，整体上可忽略不计。 **
+> **cpu到cpu，单张显卡内部gpu到gpu的数据拷贝）速度快，消耗资源少，整体上可忽略不计。 **
 
 :::tip
 
-相对于cpu-gpu数据拷贝以及其他的计算，这条假设是没问题的。后面我们将看到，在一些特殊场景，这条假设可能不成立，需要相应的规避手段。
+相对于异构设备间的数据拷贝以及其他的计算，这条假设是没问题的。后面我们将看到，在一些特殊场景，这条假设可能不成立，需要相应的规避手段。
 ::: 
 
 ## 小结

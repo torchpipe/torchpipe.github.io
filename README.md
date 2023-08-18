@@ -95,3 +95,6 @@ yarn run write-translations --locale zh
 
 本项目使用了来自于[IconPark](https://iconpark.oceanengine.com/official)的免费图标(soap-bubble)，其遵循[Apache License 2.0](https://github.com/bytedance/IconPark/blob/master/LICENSE), 并经过ChatGPT4对其矢量图进行调优。
 
+
+
+

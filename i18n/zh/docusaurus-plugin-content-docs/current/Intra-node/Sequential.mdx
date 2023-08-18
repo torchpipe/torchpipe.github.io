@@ -24,7 +24,7 @@ import TabItem from '@theme/TabItem';
 `Sequential` 这个后端本身实现了对控制流语法扩展的支持。事实上，`S[DecodeMat,ResizeMat]` 等价于`S[(Continue)DecodeMat,(swap)ResizeMat]`.
 
 `()`括号内的filter可返回以下状态：
-- Continue, 代表可以跳过当前子后端，等待进入下一个子后端
+- Continue, 代表可以跳过当前子后端，等待进入下一个子后端 (0.3.2版本开始，名称变更为Run)
 - Break, 代表跳出Sequential的执行 
 - Error, 代表出现错误
 - SerialSkip, 代表可以连续跳过串行子后端，在`Sequential`中，等价于Break
@@ -43,7 +43,7 @@ class FilterContinue : public Filter {
  public:
   status forward(dict data) override { return Filter::status::Continue; }
 };
-IPIPE_REGISTER(Filter, FilterContinue, "Continue,continue,run");
+IPIPE_REGISTER(Filter, FilterContinue, "Continue,run");
 ```
 
 

@@ -42,9 +42,9 @@ PyTorch的GPU运算均提交到当前线程绑定的`当前流`上。PyTorch尽�
 - 通常来说，`当前流`是都是默认流，而在同一个流上提交的任务会按提交时间串行执行；
 - 对于涉及到将GPU数据拷贝到CPU或者另外一块GPU设备的操作， PyTorch默认地在操作中插入[`当前流`的同步操作](https://github.com/pytorch/pytorch/blob/v1.13.0/aten/src/ATen/native/cuda/Copy.cu#L252)
 
-为了在多线程环境使得PyTorch充分利用GPU资源，我们需要打破以上惯例：
+为了在多线程环境使得PyTorch充分利用GPU资源，我们可以利用以上特性：
 - 计算后端线程绑定到独立的CUDA流；
-- 在线程转换时进行流同步
+- 在需要时时进行流同步
    
 
 
