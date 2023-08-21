@@ -109,19 +109,23 @@ test_from_raw_file(forward_function, os.path.join("assets/norm_jpg/"),
 *从0.3.1b3版本开始生效*
 
 ```python
-def throughout(model_path, precision='fp16', num_clients=10, total_number=10000, post_processor=None)
+def throughout(model_path, precision='fp16', num_clients=10, total_number=10000, **kwargs)
 ```
 > 给定模型文件路径[onnx or tensorrt]，测试该模型在torchpipe吞吐，torchpipe的默认配置max=4，instance=2
 
 :::tip 参数
 - **model_path** - 测试模型的路径，支持onnx和tensorrt模型，onnx模型需后缀名为.onnx，测试时会自动转为tensorrt模型，tensorrt模型需要后缀名为.trt
 - **precision** - 支持fp32、fp16、int8、best(int8+fp16)。
-- **num_clients** - 客户端数目/并发路数。
-- **total_number** 总共的数据量。
-- **post_processor** - 模型需要的postprocessor算子。
+- **num_clients** - 客户端数目/并发路数，默认为10。
+- **total_number** 总共的数据量，默认为10000。
+- **post_processor** - 模型需要的postprocessor算子，默认无。
+- **max** - 模型batch最大输入，默认为4。
+- **instance_num** - 模型实例数目，默认为2。
+- **batching_timeout** - 模型凑batch的超时时间，默认为5ms。
+- **precision_fp32** - 设置部分层的精度为fp32，主要作用于多精度混合加速，默认不设置。
+- **precision_fp32_output** - 设置部分层输出精度为fp32，主要作用于多精度混合加速，默认不设置。
 
 :::
-
 
 
 <details><summary>示例代码</summary>
