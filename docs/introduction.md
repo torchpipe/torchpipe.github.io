@@ -1,25 +1,32 @@
 ---
 id: introduction
-title: 1. 介绍
+title: 1. Introduction
 type: explainer
 ---
 
-torchpipe是为工业界和学术界所准备的一个图像音视频业务上线部署加速的工具集，torchpipe可以轻松集成到现有的线上服务的工作流程中，助力使用者能更加快速便捷部署包括但不限视觉、语音模型，一站式完成更多模型应用落地。
+To improve the peak throughput of deep learning serving, there are several challenges to overcome. In practical business applications, users typically need to deploy end-to-end services containing multiple nodes (such as model inference, general logic nodes, and remote calls) and provide services to the outside world in the form of online serving. This requires support for the following features:
+- Multi-instance, dynamic batch processing, and bucketing for a single computing node
+- Pipeline scheduling for multiple nodes
+- Logical control flow between nodes
 
-在实际业务应用中，通常需要将多个模型（包括其他计算节点或远程调用）的端到端业务逻辑部署在一起，以在线Serving的形式对外提供服务。为实现端到端深度学习系统的最佳性能和最佳体验的平衡，torchpipe框架支持：
-- 单节点的多实例、动态批处理和动态尺度调整
-- 多节点的流水线调度，
-- 节点间的逻辑控制流
-可当服务调用量增加时，整个业务方案通常面临着多节点交织时从算法侧提供解决方案。
+There are some industry practices, such as [triton inference server](https://github.com/triton-inference-server/server/blob/main/docs/user_guide/architecture.md#ensemble-models), [Alibaba Mama high_service(in chinese)](https://mp.weixin.qq.com/s/Fd2GNXqO3wl3FrA7Wli3jA), and [Meituan Vision GPU Inference Service Deployment Architecture Optimization Practice(in chinese)](https://zhuanlan.zhihu.com/p/605094862).
+
+One common complaint from users of the Triton Inference Server is that in a system with multiple intertwined nodes, a lot of business logic needs to be completed on the client side and then called through RPC to the server, which can be cumbersome. For performance reasons, unconventional methods such as shared memory, ensemble, and [BLS](https://github.com/triton-inference-server/python_backend#business-logic-scripting) must be considered.
+
+To address this issue, TorchPipe provides a thread-safe function interface for the PyTorch frontend and a fine-grained backend extension for users, by delving into PyTorch's C++ calculation backend and CUDA stream management, as well as modeling domain-specific languages for multiple nodes.
 
 
-![jpg](.././static/images/EngineFlow-light.png)
-<center>torchpipe框架图</center> 
+![jpg](.././static/images/EngineFlow-light-english.png)
+<center>torchpipe framework diagram</center> 
 
-**torchpipe框架优势**：
- - 性能（吞吐量/延迟）上达到业务角度上的最优，减少广泛存在的负优化和节点间性能损耗。
- - 凭借细粒度泛型后端，便于硬件扩展，弱化硬件厂商生态迁移难度。
- - 简单而高性能的建模包括多模型融合在内的一些过于复杂的业务系统。工业界典型场景有智慧城市中多达10个模型节点的AI系统A、B，以及如果要极限优化，会涉及到子图独立调度、分桶调度、智能化组batch的OCR系统。
- - 最大限度摆脱 Python 运行时、GIL、异构硬件、虚拟化和多进程带来的性能损耗。
+**Features of the torchpipe framework:**
+- Achieves near-optimal performance (peak throughput/TP99) from a business perspective, reducing widespread negative optimization and performance loss between nodes.
+- With a fine-grained generic backend, it is easy to expand hardware and weaken the difficulty of hardware vendor ecosystem migration.
+- Simple and high-performance modeling, including complex business systems such as multi-model fusion. Typical industrial scenarios include AI systems A and B with up to 10 model nodes in smart cities, and OCR systems that involve subgraph independent scheduling, bucket scheduling, and intelligent batch grouping for extreme optimization.
+- Maximizes the elimination of performance loss caused by Python runtime, GIL, heterogeneous hardware, virtualization, and multi-process.
 
-与许多其他服务化框架不同，我们将系统与 RPC 及负载均衡部分解耦，关注于 C++ 和 Python 接口的并发安全和流水线调度。
+Unlike many other service-oriented frameworks, we decouple the system from RPC and focus on concurrent safety and pipeline scheduling of C++ and Python interfaces.
+
+
+
+

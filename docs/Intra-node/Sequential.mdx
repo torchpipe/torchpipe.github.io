@@ -8,30 +8,27 @@ type: explainer
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-
 # Sequential
 
-`Sequential` 能串联多个后端。 也就是说，`Sequential[DecodeTensor,ResizeTensor,cvtColorTensor,SyncTensor]` 和 `Sequential[DecodeMat,ResizeMat]` 是有效后端。
+`Sequential` can link multiple backends together. In other words, `Sequential[DecodeTensor,ResizeTensor,cvtColorTensor,SyncTensor]` and `Sequential[DecodeMat,ResizeMat]` are valid backends.
 
-在 `Sequential[DecodeMat,ResizeMat]` 的前向执行中，数据（dict）会依次经过下列流程：
-- 执行 `DecodeMat`： `DecodeMat`读取`data`, 并将结果赋值给`result`和`color`
-- 条件控制流：尝试将数据中的`result`的值赋值给`data` 并删除`result` 
-- 执行 `ResizeMat` ： `ResizeMat`读取`data`, 并将结果赋值给`result`键值
+During the forward execution of `Sequential[DecodeMat,ResizeMat]`, the data (dict) will go through the following process in sequence:
+- Execute `DecodeMat`: `DecodeMat` reads `data` and assigns the result to `result` and `color`.
+- Conditional control flow: attempts to assign the value of `result` in the data to `data` and deletes `result`.
+- Execute `ResizeMat`: `ResizeMat` reads `data` and assigns the result to the `result` key.
 
-`Sequential`可简写为`S`. API可参考[`Sequential`](../backend-reference/basic#sequential).
+`Sequential` can be abbreviated as `S`. API reference can be found in [`Sequential`](../backend-reference/basic#sequential).
+## Conditional Control Flow Filter {#filter_sequential}
+`Sequential` itself implements support for control flow syntax extensions. In fact, `S[DecodeMat,ResizeMat]` is equivalent to `S[(Continue)DecodeMat,(swap)ResizeMat]`.
 
-## 条件控制流 filter {#filter_sequential}
-`Sequential` 这个后端本身实现了对控制流语法扩展的支持。事实上，`S[DecodeMat,ResizeMat]` 等价于`S[(Continue)DecodeMat,(swap)ResizeMat]`.
+The filters in `()` parentheses can return the following states:
+- Continue, which means that the current sub-backend can be skipped and wait to enter the next sub-backend (renamed to Run since version 0.3.2)
+- Break, which means to exit the execution of `Sequential`
+- Error, which means an error occurred
+- SerialSkip, which means that consecutive serial sub-backends can be skipped, equivalent to Break in `Sequential`
+- SubGraphSkip, which means that consecutive subgraphs can be skipped, equivalent to Break in `Sequential`
 
-`()`括号内的filter可返回以下状态：
-- Continue, 代表可以跳过当前子后端，等待进入下一个子后端 (0.3.2版本开始，名称变更为Run)
-- Break, 代表跳出Sequential的执行 
-- Error, 代表出现错误
-- SerialSkip, 代表可以连续跳过串行子后端，在`Sequential`中，等价于Break
-- SubGraphSkip,  代表可以连续跳过子图，在`Sequential`中，等价于Break
-
-部分内置filter定义如下:
-
+Here are some built-in filter definitions:
 
 <Tabs groupId="filter"  className="unique-tabs">
 <TabItem value="Continue" label="Continue">
@@ -77,19 +74,15 @@ class Filter {
 
 </TabItem>
 </Tabs>
+For more information on filters, please refer to [the detailed filter documentation](../Inter-node/filter).
+Based on this, as will be discussed in the next section on [extending and compiling custom backends](./extensible_backend), users can easily define their own conditional control flow.
+## Response of Conditional Control Flow to Input Range Changes
+Suppose there is a backend `S[DecodeTensor,(swap)TensorrtTensor,TensorrtSync]`, where the input range of `DecodeTensor` is [1,1], and the range of `TensorrtTensor` is [1,4]. According to the [Sequential rule for calculating input range](../backend-reference/basic#sequential), the input range of Sequential is [1,4].
 
-更多请查看[filter更详细的说明](../Inter-node/filter).
-据此，类似于下一节将要介绍的[扩展和编译自定义后端](./extensible_backend)，用户可以方便的定义自己的条件控制流。
+If four data enter this Sequential at the same time, but one of them fails to decode, then
+- One data returns `status::Break` in `swap`, while the others return `status::Continue`.
+- `Sequential` continues to send the remaining three data to the next stage, while the data in `Break` state terminates the execution in Sequential.
 
-## 条件控制流在输入范围变化时的反应
-假设有如下后端 `S[DecodeTensor,(swap)TensorrtTensor,TensorrtSync]`,其中`DecodeTensor`的输入范围是[1,1],
-而`TensorrtTensor`的范围刚好是[1,4]. 根据[Sequential计算输入范围的规则](../backend-reference/basic#sequential)，Sequential的输入范围是[1,4].
-
-如果同时有四个数据进入此Sequential，但是其中一个解码失败，那么此时
-- 一个数据在`swap`中返回`status::Break`，其余返回`status::Continue`.
-- `Sequential`将三个数据继续送入下一个阶段, 而`Break`状态的数据终止Sequential中的执行
-
-以上是遇到部分数据`Break`时的反应；类似的，遇到部分数据`Skip`，也会类似地局部性处理数据。然而，当一个数据`Error`时，Sequential会认为任务整体的状态是`Error`. 如果这与使用者的本意相违背，使用者可以尝试将子后端拆分到不同的Sequential中，以避免互相影响。注意，`Error`状态一般是极其稀有的，预料外的状态。
-
+The above describes the response when encountering `Break` for some data; similarly, when encountering `Skip` for some data, the data will be locally processed in a similar way. However, when a data is in `Error` state, Sequential will consider the overall task status as `Error`. If this contradicts the user's intention, the user can try to split the sub-backends into different Sequentials to avoid mutual interference. Note that the `Error` state is generally extremely rare and unexpected. 
 
  

@@ -1,10 +1,10 @@
 ---
 id: rpc
-title: Key Performance Indicators for Services
+title: Performance indicators for services
 type: explainer
 ---
 
-# Key Performance Indicators for Services
+Performance indicators for services
 
 When evaluating the performance of a service, there are several key indicators to consider. These indicators can help us understand the performance of the service in terms of latency, throughput, error rate, and other aspects. Here are some commonly used key performance indicators:
 
