@@ -28,6 +28,11 @@ torchpipe代码正在开源准备中。这里是其（中文）文档站点
 The torchpipe code is being prepared for open sourcing. Here is its (Chinese) documentation site.
 
 
+## updates
+- Some parts of the documentation have been translated into English:
+https://torchpipe.github.io/en/
+
+
 
 ## 修改方法
 

@@ -27,13 +27,11 @@
     "message": "torchpipe相关的扩展工具"
   },
   "sidebar.main.category.3. Single Node Scheduling": {
-    "message": "3. 单节点并行化
-",
+    "message": "3. 单节点并行化",
     "description": "The label for category 3. Single Node Scheduling in sidebar main"
   },
   "sidebar.main.category.3. Single Node Scheduling.link.generated-index.title": {
-    "message": "单节点并行化
-",
+    "message": "单节点并行化",
     "description": "The generated-index page title for category 3. Single Node Scheduling in sidebar main"
   },
   "sidebar.main.category.3. Single Node Scheduling.link.generated-index.description": {
