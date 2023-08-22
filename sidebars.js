@@ -102,11 +102,11 @@ const sidebars = {
     },
     {
       type: "category",
-      label: "4. Multi-node pipeline",
+      label: "4. Multi-node Pipeline",
       items: ["Inter-node/next","Inter-node/filter","Inter-node/context","Inter-node/graphtraversal", "Inter-node/logical_nodes" ],
       link: {
         type: "generated-index",
-        title: "Multi-node pipeline",
+        title: "Multi-node Pipeline",
         description: "This chapter utilizes inter-node scheduling and parallel computing to effectively parallelize task scheduling and logical control flow, thereby improving processing speed.",
         slug: "/Inter-node",
       },

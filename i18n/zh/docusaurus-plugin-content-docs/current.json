@@ -42,13 +42,13 @@
     "message": "后端API 参考文档",
     "description": "The label for category 后端API 参考文档 in sidebar main"
   },
-  "sidebar.main.category.4. Multi-node pipeline": {
+  "sidebar.main.category.4. Multi-node Pipeline": {
     "message": "4. 多节点调度"
   },
-  "sidebar.main.category.4. Multi-node pipeline.link.generated-index.title": {
+  "sidebar.main.category.4. Multi-node Pipeline.link.generated-index.title": {
     "message": "多节点调度"
   },
-  "sidebar.main.category.4. Multi-node pipeline.link.generated-index.description": {
+  "sidebar.main.category.4. Multi-node Pipeline.link.generated-index.description": {
     "message": "本章利用节点间的调度和并行计算，有效地并调度任务, 生成逻辑控制流，提高处理速度。"
   },
   "sidebar.main.category.FAQ": {
