@@ -1,15 +1,14 @@
 ---
 id: context
-title: "context: 自动map语法糖"
+title: "context: Automatic `map` Syntax Sugar"
 type: explainer
 ---
 
-在上节的多分支示例中，两个分支都可能被跳过。为了记录每个分支的状态，以及将结果都汇总到最终的结果，需要很多的键值和复杂的map配置。
+In the multi-branch example in the previous section, both branches may be skipped. To record the status of each branch and aggregate the results into the final result, many key-value pairs and complex `map` configurations are required.
 
-在实际业务中，我们发现这样会很麻烦。 本节介绍一种共享上下文的最佳实践。
+In practical business scenarios, we find that this can be very cumbersome. This section introduces a best practice for sharing context.
 
-
-## 自定义全局共享结构体
+## Custom Global Shared Struct
 
 ```mermaid
 flowchart TD
@@ -23,7 +22,7 @@ flowchart TD
     b_2 --> r_2
 ```
 
-在r_1中定义一个可以记录所有分支结果的结构体, 写入数据的"context"键值中：
+Define a struct in `r_1` that can record the results of all branches and write it to the `context` key:
 ```cpp
 struct OurStruct{
     bool a_skiped = false;
@@ -36,19 +35,18 @@ struct OurStruct{
 
 ```
 
-在每个分支中，只处理自己那部分的数据。这样，我们仅需要一个键值"context"就可以容纳所有数据。
-:::caution 数据竞争
-除非只读，多分支禁止访问同一个context相同部分。
+In each branch, only process its own part of the data. In this way, we only need one key-value pair `context` to accommodate all data.
+:::caution Data Race
+Unless it is read-only, multiple branches are prohibited from accessing the same part of the `context`.
 :::
 
-## map中的context语法糖
 
 
-上图中，如果b_2没有配置map，那么它将与b_1共享同一个数据(dict)。如果a_2_1没有配置map，它将获得a_1数据的拷贝。只要没有配置map，节点总能访问到context. 然而当使用了map时，会新创建一个全新的dict并将指定键值复制过来，此时不一定会含有context项。
 
-:::info 语法糖
-对于map配置，如果数据源中有context属性，而map没有配置context的映射，那么map将自动添加context的映射。
+## `context` Syntax Sugar in `map`
+
+In the figure above, if `b_2` does not configure `map`, it will share the same data (`dict`) with `b_1`. If `a_2_1` does not configure `map`, it will get a copy of the data from `a_1`. As long as `map` is not configured, the node can always access `context`. However, when `map` is used, a brand new `dict` will be created and the specified key-value pairs will be copied over, which may not necessarily contain the `context` item.
+
+:::info Syntax Sugar
+For `map` configuration, if the data source has a `context` attribute and `map` does not have a mapping for `context`, `map` will automatically add a mapping for `context`.
 :::
-
-## 小结
- 

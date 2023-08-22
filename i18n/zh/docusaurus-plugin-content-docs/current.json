@@ -26,29 +26,31 @@
   "sidebar.main.category.5. tools.link.generated-index.description": {
     "message": "torchpipe相关的扩展工具"
   },
-  "sidebar.main.category.3. Intra-node Parallelism": {
-    "message": "3. 单节点的并行化",
-    "description": "The label for category 3. Intra-node Parallelism in sidebar main"
+  "sidebar.main.category.3. Single Node Scheduling": {
+    "message": "3. 单节点并行化
+",
+    "description": "The label for category 3. Single Node Scheduling in sidebar main"
   },
-  "sidebar.main.category.3. Intra-node Parallelism.link.generated-index.title": {
-    "message": "单节点的并行化",
-    "description": "The generated-index page title for category 3. Intra-node Parallelism in sidebar main"
+  "sidebar.main.category.3. Single Node Scheduling.link.generated-index.title": {
+    "message": "单节点并行化
+",
+    "description": "The generated-index page title for category 3. Single Node Scheduling in sidebar main"
   },
-  "sidebar.main.category.3. Intra-node Parallelism.link.generated-index.description": {
+  "sidebar.main.category.3. Single Node Scheduling.link.generated-index.description": {
     "message": "单个节点内部的线程安全，多实例并行，batching.",
-    "description": "The generated-index page description for category 3. Intra-node Parallelism in sidebar main"
+    "description": "The generated-index page description for category 3. Single Node Scheduling in sidebar main"
   },
   "sidebar.main.category.后端API 参考文档": {
     "message": "后端API 参考文档",
     "description": "The label for category 后端API 参考文档 in sidebar main"
   },
-  "sidebar.main.category.4. Inter-node Scheduling": {
+  "sidebar.main.category.4. Multi-node pipeline": {
     "message": "4. 多节点调度"
   },
-  "sidebar.main.category.4. Inter-node Scheduling.link.generated-index.title": {
+  "sidebar.main.category.4. Multi-node pipeline.link.generated-index.title": {
     "message": "多节点调度"
   },
-  "sidebar.main.category.4. Inter-node Scheduling.link.generated-index.description": {
+  "sidebar.main.category.4. Multi-node pipeline.link.generated-index.description": {
     "message": "本章利用节点间的调度和并行计算，有效地并调度任务, 生成逻辑控制流，提高处理速度。"
   },
   "sidebar.main.category.FAQ": {

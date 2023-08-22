@@ -24,7 +24,7 @@ import TabItem from '@theme/TabItem';
 `Sequential` 这个后端本身实现了对控制流语法扩展的支持。事实上，`S[DecodeMat,ResizeMat]` 等价于`S[(Continue)DecodeMat,(swap)ResizeMat]`.
 
 `()`括号内的filter可返回以下状态：
-- Continue, 代表可以跳过当前子后端，等待进入下一个子后端
+- Continue, 代表可以跳过当前子后端，等待进入下一个子后端 (0.3.2版本开始，名称变更为Run)
 - Break, 代表跳出Sequential的执行 
 - Error, 代表出现错误
 - SerialSkip, 代表可以连续跳过串行子后端，在`Sequential`中，等价于Break
@@ -92,4 +92,4 @@ class Filter {
 以上是遇到部分数据`Break`时的反应；类似的，遇到部分数据`Skip`，也会类似地局部性处理数据。然而，当一个数据`Error`时，Sequential会认为任务整体的状态是`Error`. 如果这与使用者的本意相违背，使用者可以尝试将子后端拆分到不同的Sequential中，以避免互相影响。注意，`Error`状态一般是极其稀有的，预料外的状态。
 
 
-## 小结
+ 

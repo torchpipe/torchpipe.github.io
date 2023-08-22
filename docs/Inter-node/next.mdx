@@ -1,21 +1,20 @@
 ---
 id: next
-title: "多个节点的链接"
+title: "Links to multiple nodes:"
 type: explainer
 ---
+When using `Sequential` to serialize multiple backends, there are some issues:
+- When switching input ranges, smaller backends cannot be fully executed in parallel.
+- When the required hardware resources of the backend change, the hardware resources cannot be fully utilized.
 
-采用`Sequential`的方式串行起多个后端面临着一些问题：
-- 输入范围切换时，范围较小的后端无法完全并行执行
-- 后端所需的硬件资源变化时，硬件资源不能被充分被利用
+`PipelineV3` is the default pipeline scheduling backend, which addresses the above issues and meets two additional requirements:
+- Flexible data key value changes between backends
+- Support for more complex directed acyclic graphs
 
-`PipelineV3`作为默认的流水线调度后端，处理了以上问题并满足两个额外的需求：
-- 后端与后端之间灵活的数据键值的变化
-- 更复杂的有向无环图的支持
+This section mainly introduces how to link multiple nodes into a directed acyclic graph.
 
-在本节中，主要介绍多个节点如何链接为一个有向无环图。
-
-## 串行节点
-在上一章节中遇到的[`Sequential`](../Intra-node/Sequential.mdx)`[DecodeMat,ResizeMat]`后端，用多节点的方式表示为：
+## Serial Nodes
+The [`Sequential`](../Intra-node/Sequential.mdx)`[DecodeMat,ResizeMat]` backend encountered in the previous section can be represented in a multi-node manner as follows:
 ```toml
 # irrelevant parameters are ignored 
 [decode]
@@ -25,20 +24,24 @@ next="resize"
 [resize]
 ```
 
-`decode->resize`组成了由两个节点构成的有向无环图，其中decode是根节点，resize是子节点。
 
-与Sequential类似，根节点默认[filter](../Intra-node/Sequential.mdx#filter_sequential)=`Continue`, 子节点默认filter=`swap`.
 
-:::info 数据流向
-原始输入`dict`数据进入节点`decode`后，它的`result`键值被写入了结果。
-通过resize节点的filter `swap`时，结果被置换到了`data`键值中；随后此`dict`进入了resize节点，并在resize节点的后端中被写入`result`键值。
+
+
+The `decode->resize` forms a directed acyclic graph consisting of two nodes, where `decode` is the root node and `resize` is the child node.
+
+Similar to `Sequential`, the root node defaults to [filter](../Intra-node/Sequential.mdx#filter_sequential) = `Continue`, and the child node defaults to filter = `swap`.
+
+:::info Data Flow
+The original input `dict` data enters the `decode` node, and its `result` key value is written into the result.
+When the `swap` filter of the resize node is executed, the result is swapped into the `data` key value. Then, this `dict` enters the resize node and is written into the `result` key value in the resize node's backend.
 :::
+```
+## Multiple Branches
 
-## 多分支
+If a node has multiple subsequent nodes, they can be separated by commas in the `next` field.
 
-如果一个节点有多个后续节点，可在`next`中通过逗号分开。
-
-考虑如下多节点系统
+Consider the following multi-node system:
 
 ```mermaid
 flowchart TD
@@ -48,7 +51,7 @@ flowchart TD
     B --> D
 ```
  
-节点关系可表示为
+The node relationship can be represented as:
 
 ```toml
 # irrelevant parameters are ignored 
@@ -62,40 +65,38 @@ next="output"
 [output]
 ```
 
-:::info 数据流向
-原始输入`dict`数据被节点A处理后，B和C都将向A节点请求数据。为了避免访问到被改变的数据，B和C都会从`A`拷贝一份数据副本。
+:::info Data Flow
+The original input `dict` data is processed by node `A`, and both nodes `B` and `C` request data from node `A`. To avoid accessing modified data, both nodes `B` and `C` make a copy of the data from node `A`.
 :::
 
-## map: 从前序节点收集数据 {#map}
-
+## map: Collecting Data from Preceding Nodes {#map}
 ```toml
 # irrelevant parameters are ignored 
 [output]
 # highlight-next-line
 map="B[result:B_result],C[result:data]"
 ```
+The `output` configuration uses `map` to map the `result` of node B to its own `B_result`, and the `result` of node C to `data`. When `map` is present, the default filter is `Continue/run`, which means that no further processing is done on the input data.
 
-output通过`map`配置将B节点的result映射到了自己的B_result， 将C节点的result映射到了data. 当map存在时，默认filter为`Continue/run`, 也就是不再对输入数据做任何处理。
+`map` can also map multiple key-value pairs from preceding nodes to itself, such as `map="B[1:0,1:1,2:data]"`.
 
-`map`亦可将前序节点的多个键值映射到自身，如 `map="B[1:0,1:1,2:data]"`
-
-如果不产生歧义，map可省略节点名：`map=“[result:data]”`。
+If there is no ambiguity, the node name can be omitted in `map`, such as `map="[result:data]"`.
 
 :::note
-- 组合出来的数据必须包含`data`. 
-- `map`与`next`一样，都对源节点产生了引用，如果某个节点被两个或两个以上后续节点引用，那么在后续节点向该节点请求数据时，需要拷贝其数据。
+- The combined data must include `data`.
+- Like `next`, `map` also creates a reference to the source node. If a node is referenced by two or more subsequent nodes, its data must be copied when requested by the subsequent nodes.
     ```mermaid
     flowchart LR
         A --> B
         B --> C
         C -->|"map=B[result:data],C[result:box]"| D
     ```
-    如上图，B节点被C节点通过next引用，被D节点通过map引用。C节点在向B节点请求数据时，会拷贝B节点的数据，避免对B节点的数据进行的更改影响到D节点。
-- 通过map请求数据时，一定会拷贝源数据。
+    As shown in the above figure, node B is referenced by node C through `next` and by node D through `map`. When node C requests data from node B, it copies the data to avoid affecting node D if any changes are made to the data in node B.
+- When requesting data through `map`, the source data is always copied.
 :::
 
-:::warning 冗余连接
-- torchpipe支持的图仅仅指示了节点间的计算顺序。如下所示，`B --> D` 的连接在此意义下是冗余的，不推荐添加此连接，容易造成混乱。 在未来版本中冗余连接将被禁止。
+:::warning Redundant Connections
+- The graph supported by torchpipe only indicates the calculation order between nodes. As shown below, the connection `B --> D` is redundant in this sense and is not recommended. It can easily cause confusion. In future versions, redundant connections will be prohibited.
 
     ```mermaid
     flowchart LR
@@ -107,8 +108,7 @@ output通过`map`配置将B节点的result映射到了自己的B_result， 将C�
     
 :::
 
-:::info 数据流向
-`output`节点有两个前序节点`B, C`，它通过map，生成一份新的数据拷贝；最终，将自己的数据再更新到原始输入`dict`数据中。
+:::info Data Flow
+The `output` node has two preceding nodes, `B` and `C`. It generates a new data copy through `map` and finally updates its own data to the original input `dict` data.
 :::
-## 小结
  

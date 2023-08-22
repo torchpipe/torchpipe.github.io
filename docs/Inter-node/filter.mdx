@@ -1,23 +1,23 @@
 ---
 id: filter
-title: "filter: 有向无环图中的条件控制流"
+title: "filter: Conditional Control Flow in Directed Acyclic Graphs (DAGs)"
 type: explainer
 ---
 
-正如在Sequential引入[filter](../Intra-node/Sequential.mdx#filter_sequential)时介绍过的，filter是节点或者后端间的逻辑控制指令，拥有以下状态：
+As introduced in [filter](../Intra-node/Sequential.mdx#filter_sequential) in Sequential, `filter` is a logical control instruction between nodes or backends, with the following states:
 Continue, Skip, SerialSkip, SubGraphSkip, Break, Error.
 
-## 默认多节点调度器对filter返回值的解析
+## Default Multi-Node Scheduler Interpretation of `filter` Return Values
 
-在多节点调度中，filter返回值分别代表：
-- Continue, 代表可以执行当前节点的后端
-- Skip, 代表跳过当前节点的后端，但是不代表这个节点没有结果。节点的结果就是被filter处理过的`dict`
-- Break, 代表跳出整个有向无环图的执行， 被filter处理过的`dict`就是最终结果
-- Error, 代表出现错误
-- SerialSkip, 代表可以跳过最大串行子图
-- SubGraphSkip,  代表可以跳过最大独立子图。
+In multi-node scheduling, the return values of `filter` represent:
+- `Continue`: the backend of the current node can be executed.
+- `Skip`: the backend of the current node can be skipped, but it does not mean that the node has no result. The result of the node is the `dict` processed by `filter`.
+- `Break`: the execution of the entire DAG is terminated, and the `dict` processed by `filter` is the final result.
+- `Error`: an error occurred.
+- `SerialSkip`: the largest serial subgraph can be skipped.
+- `SubGraphSkip`: the largest independent subgraph can be skipped.
 
-考虑如下的有向无环图
+Consider the following directed acyclic graph:
 
 ```mermaid
 flowchart TD
@@ -31,25 +31,25 @@ flowchart TD
     b_2 --> r_2
 ```
 
-某些场景下，我们想直接跳过左边的分支（a_1分支）或者右边的分支（b_1分支）。
+In some scenarios, we want to skip the left branch (a_1 branch) or the right branch (b_1 branch) directly.
 
-如果a_1的filter返回SubGraphSkip时, 将跳过以a_1为根节点的最大独立子图（a_1, a_2_1, a_2_2）。
-如果b_1的filter返回SerialSkip时, 将跳过以b_1为根节点的最大串行子图（b_1, b_2）。
+If the `filter` of a_1 returns `SubGraphSkip`, the largest independent subgraph rooted at a_1 (a_1, a_2_1, a_2_2) will be skipped.
+If the `filter` of b_1 returns `SerialSkip`, the largest serial subgraph rooted at b_1 (b_1, b_2) will be skipped.
 
-独立指的是：
-- 子图中的非根节点的前序节点都包含在子图中。
+Independence means:
+- All preceding nodes of non-root nodes in the subgraph are included in the subgraph.
 
-"跳过"包含两层含义：
-- 将子图根节点的next更改为子图叶子节点的next的并集
-- 将对子图非根节点的引用转发到根节点，也就是整个子图折叠到子图根节点这一个点。
+"Skipping" has two meanings:
+- Change the `next` of the subgraph root node to the union of the `next` of the subgraph leaf nodes.
+- Forward the references to non-root nodes in the subgraph to the root node, that is, the entire subgraph is collapsed into a single point, the subgraph root node.
 
-:::info 子图的折叠
-当子图被折叠时，子图中的非根节点被隐藏。此时后续节点通过map寻求从他们获取数据，将自动变更为从子图根节点获取数据。
+:::info Folding of Subgraphs
+When a subgraph is folded, the non-root nodes in the subgraph are hidden. At this time, subsequent nodes seek to obtain data from them through `map`, which will automatically change to obtaining data from the subgraph root node.
 :::
 
-## 自定义filter
+## Custom `filter`
 
-我们可以自定义filter. 比如:
+We can customize `filter`. For example:
 
 ```cpp
 #include "filter.hpp"
@@ -68,22 +68,21 @@ class your_filter : public Filter {
 IPIPE_REGISTER(Filter, your_filter, "your_filter");
 ```
 
-通过[AOT编译](../Intra-node/extensible_backend.mdx#compile)即可使用自定义的filter. 
-
+Custom `filter` can be obtained through [AOT compilation](../Intra-node/extensible_backend.mdx#compile).
 ```toml
 [a_1]
 filter="your_filter"
 ```
 
-注意自定义filter请勿与内置filter重名。
-## 内置filter {#default_filters}
-|                                                                                                                                                                   | 功能                                  |   |
-|-------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------|---|
-| Continue/continue/run <br />Skip/skip <br />SerialSkip/serial_skip/serialskip <br />SubGraphSkip/subgraph_skip/subgraphskip, <br />Break/break, <br />Error/error | 无条件返回对应状态值                  |   |
-| swap                                                                                                                                                              | 没有result返回Break, 否则返回Continue |   |
-| or                                                                                                                                                                | 没有result返回Continue, 否则返回Skip  |   |
+Please do not use the same name as built-in filters for custom filters.
+
+## Built-in Filters {#default_filters}
+|                                                                                                                                                          | Function                                                            |   |
+|----------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------|---|
+| Continue/run <br />Skip/skip <br />SerialSkip/serial_skip/serialskip <br />SubGraphSkip/subgraph_skip/subgraphskip, <br />Break/break, <br />Error/error | Returns the corresponding status value unconditionally              |   |
+| swap                                                                                                                                                     | Returns `Break` if there is no result, otherwise returns `Continue` |   |
+| or                                                                                                                                                       | Returns `Continue` if there is no result, otherwise returns `Skip`  |   |
 
 
 
-## 小结
  

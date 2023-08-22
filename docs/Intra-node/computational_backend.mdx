@@ -1,6 +1,6 @@
 ---
 id: computational_backend
-title: 计算后端
+title: Computational Backend
 type: explainer
 ---
 
@@ -9,48 +9,44 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
 
-# 计算后端
-在深度学习的服务中，如果仅支持模型加速远远不够。为此，我们内置了一些常用的细粒度后端。
+# Computational Backend
 
-## 内置后端
+In deep learning services, it is not enough to only support model acceleration. Therefore, we have built-in some commonly used fine-grained backends.
 
-<Tabs groupId="cv-torch"  className="unique-tabs">
-<TabItem value="python" label="opencv相关图像处理">
+## Built-in Backends
+
+<Tabs groupId="cv-torch" className="unique-tabs">
+<TabItem value="python" label="OpenCV-related Image Processing">
  
 
-| 名称                                                           | 说明                               |
-|----------------------------------------------------------------|------------------------------------|
-| [DecodeMat](../backend-reference/opencv#decodemat)             | jpg解码                            |
-| [cvtColorMat](../backend-reference/opencv#cvtcolormat)         | 颜色空间转换                       |
-| [ResizeMat](../backend-reference/opencv#resizemat)             | resize                             |
-| [PillowResizeMat](../backend-reference/opencv#pillowresizemat) | 严格保持和pillow的结果一致的resize |
-| [更多...](../backend-reference/opencv.mdx)                     |                                    |
+| Name                                                           | Description                                   |
+|----------------------------------------------------------------|-----------------------------------------------|
+| [DecodeMat](../backend-reference/opencv#decodemat)             | JPEG decoding                                 |
+| [cvtColorMat](../backend-reference/opencv#cvtcolormat)         | Color space conversion                        |
+| [ResizeMat](../backend-reference/opencv#resizemat)             | Image resizing                                |
+| [PillowResizeMat](../backend-reference/opencv#pillowresizemat) | Resize that strictly matches Pillow's results |
+| [More...](../backend-reference/opencv.mdx)                     |                                               |
 
  </TabItem>
-<TabItem value="torch" label="pytorch相关后端">
+<TabItem value="torch" label="PyTorch-related Backends">
 
- 
-
-| 名称                                                                | 说明                               |
-|---------------------------------------------------------------------|------------------------------------|
-| [DecodeTensor](../backend-reference/torch#decodetensor)             | GPU上jpg解码                       |
-| [cvtColorTensor](../backend-reference/torch#cvtcolortensor)         | 颜色空间转换                       |
-| [ResizeTensor](../backend-reference/torch#resizetensor)             | resize                             |
-| [PillowResizeTensor](../backend-reference/torch#pillowresizetensor) | 严格保持和pillow的结果一致的resize |
-| [更多...](../backend-reference/torch.mdx)                           |                                    |
-
-
+| Name                                                                | Description                                   |
+|---------------------------------------------------------------------|-----------------------------------------------|
+| [DecodeTensor](../backend-reference/torch#decodetensor)             | JPEG decoding on GPU                          |
+| [cvtColorTensor](../backend-reference/torch#cvtcolortensor)         | Color space conversion                        |
+| [ResizeTensor](../backend-reference/torch#resizetensor)             | Image resizing                                |
+| [PillowResizeTensor](../backend-reference/torch#pillowresizetensor) | Resize that strictly matches Pillow's results |
+| [More...](../backend-reference/torch.mdx)                           |                                               |
 </TabItem>
 </Tabs>
 
- 
-默认的后端为`Identity`:
+ The default backend is `Identity`:
 
-| 名称                                              | 初始化参数 | 输入/类型  | 输出/类型    | 备注                           |
-|---------------------------------------------------|-----------|------------|--------------|------------------------------|
-| [`Identity`](../backend-reference/basic#identity) | 无         | `data/any` | `result/any` | 功能为将`data`的值赋给`result` |
+| Name                                              | Initialization Parameters | Input/Type | Output/Type  | Remarks                                  |
+|---------------------------------------------------|---------------------------|------------|--------------|------------------------------------------|
+| [`Identity`](../backend-reference/basic#identity) | None                      | `data/any` | `result/any` | Assigns the value of `data` to `result`. |
 
-使用示例：
+Usage Example:
 <Tabs groupId="language"  className="unique-tabs">
 <TabItem value="python" label="Python">
 
@@ -58,22 +54,24 @@ import TabItem from '@theme/TabItem';
 ```python
 import torchpipe as tp
 import numpy as np
+
+# Set up configuration for single-node scheduler and DecodeMat backend
 config = {
-    # 单节点调度器参数： 
-    "instance_num":2,
-    # 计算后端：
-    "backend":"DecodeMat",
+    "instance_num": 2,
+    "backend": "DecodeMat",
 }
 
-# 初始化
+# Initialize models
 models = tp.pipe(config)
 
+# Read image data from file
 with open("../test/assets/norm_jpg/dog.jpg", "rb") as f:
     data = f.read()
-## 前向
-input = {"data":data}
-models(input) # <== 可多线程调用
-result : np.ndarray = input["result"] 
+
+# Perform forward pass on input data
+input = {"data": data}
+models(input)
+result: np.ndarray = input["result"]
 assert(result.shape == (576, 768, 3))
 ```
 
@@ -85,19 +83,21 @@ assert(result.shape == (576, 768, 3))
 #include "opencv2/core.hpp"
 
 int main(void) {
-  std::unordered_map<std::string, std::string> config = {// 单节点调度器参数：
-                                                         {"instance_num", "2"},
-                                                         // 计算后端：
-                                                         {"backend", "DecodeMat"}};
-  // 初始化
+  // Single node scheduler parameters:
+  std::unordered_map<std::string, std::string> config = {
+    {"instance_num", "2"}, // Number of instances
+    {"backend", "DecodeMat"} // Compute backend
+  };
+
+  // Initialization
   ipipe::Interpreter model(config);
 
-  // 准备数据
+  // Prepare data
   auto input = std::make_shared<std::unordered_map<std::string, ipipe::any>>();
   (*input)[ipipe::TASK_DATA_KEY] = std::string(...);
 
-  // 前向
-  model(input);  // <== 可多线程调用
+  // Forward
+  model(input); // <== Can be called in multiple threads
   cv::Mat result = ipipe::any_cast<cv::Mat>(input->at(ipipe::TASK_RESULT_KEY));
   return 0;
 };
@@ -105,12 +105,3 @@ int main(void) {
 
 </TabItem>
 </Tabs>
-
-
-
-
-
-
-
- 
-## 小结

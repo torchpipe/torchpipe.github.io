@@ -68,7 +68,7 @@ const sidebars = {
     },
     {
       type: "category",
-      label: "3. Intra-node Parallelism",
+      label: "3. Single Node Scheduling",
       items: [
         "Intra-node/model_parallel",
         "Intra-node/computational_backend",
@@ -95,18 +95,18 @@ const sidebars = {
       ],
       link: {
         type: "generated-index",
-        title: "Intra-node Parallelism",
+        title: "Single Node Scheduling",
         description: "In this section we utilizes intra-node parallelism to improve processing speed",
         slug: "/Intra-node",
       },
     },
     {
       type: "category",
-      label: "4. Inter-node Scheduling",
+      label: "4. Multi-node pipeline",
       items: ["Inter-node/next","Inter-node/filter","Inter-node/context","Inter-node/graphtraversal", "Inter-node/logical_nodes" ],
       link: {
         type: "generated-index",
-        title: "Inter-node Scheduling",
+        title: "Multi-node pipeline",
         description: "This chapter utilizes inter-node scheduling and parallel computing to effectively parallelize task scheduling and logical control flow, thereby improving processing speed.",
         slug: "/Inter-node",
       },

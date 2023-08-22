@@ -1,60 +1,60 @@
 ---
 id: cuda_stream
-title: "CUDA: 流和并发"
+title: "CUDA: Streams and Concurrency"
 type: recipe
 ---
 
-# CUDA: 流和并发
 
-CUDA提供了一致的抽象，来控制并发访问，以便用户最大化、完整地利用单块GPU设备的资源能力。 
+# CUDA: Streams and Concurrency
 
+CUDA provides a consistent abstraction to control concurrent access, allowing users to maximize and fully utilize the resource capabilities of a single GPU device.
 
+To effectively utilize GPU devices, we aim to:
+- Increase the number of business requests that can be handled by a single hardware resource
+- Maximize GPU utilization (assuming associated resource usage is low and latency is met)
 
-为了最有效的使用GPU设备，我们希望：
-- 单位硬件资源能承载更多的业务请求量
-- GPU尽可能满载（前提：关联资源使用量小，时延达标）
+To achieve this goal, let's briefly analyze the programming model of CUDA.
 
-为了达到此目的，我们简单分析下CUDA的编程模型。
-## 硬件
+## Hardware
 
-Cuda Core是显卡主要的运算单元。 
-采用Pascal及以上架构的显卡拥有上千的CUDA核心，对应着多组`SM`(Streaming Multiprocessor)，可共用于一个任务，也可承载不同的运算任务。
-从volta架构开始，NVIDIA引入了专为深度学习设计的Tensor Core. 
+Cuda Core is the main computing unit of the graphics card. Graphics cards with Pascal architecture or higher have thousands of CUDA cores, corresponding to multiple `SM` (Streaming Multiprocessor) units, which can be shared for a single task or used for different computing tasks.
 
-在Turing架构的 Tesla T4中，一共有40个SM, 共享6MB的L2缓存。
+Starting from the Volta architecture, NVIDIA introduced Tensor Cores specifically designed for deep learning.
+
+In the Tesla T4 with Turing architecture, there are a total of 40 SMs that share 6MB of L2 cache.
 
 ![gpu_t4](https://tvm.d2l.ai/_images/gpu_t4.svg)
 
-一个`SM`由64个FP32 算数单元，和8个Tensor Core组成。
+An `SM` consists of 64 FP32 arithmetic units and 8 Tensor Cores.
 
 ![sm](https://tvm.d2l.ai/_images/gpu_sm.svg)
 
 
 
 
-对于模型的算子级优化，需要关注较为底层的优化。而对于业务使用场景，既需要算子级优化（选取针对性的*计算后端*负责），也需要整体视角的分析。
+For operator-level optimization of models, it is necessary to focus on more low-level optimization. However, for business use cases, both operator-level optimization (selecting a targeted *computational backend*) and overall analysis are required.
 
-参考链接：
+Reference links:
 - [GPU Architecture](https://tvm.d2l.ai/chapter_gpu_schedules/arch.html)(图片取自此处)
 
-## 软件
+## Software
 
-### CUDA流
-CUDA流表示一个GPU操作队列，所有提交给GPU的任务，均指定了执行流。存在一个默认流，也就是`stream 0`, 作为默认的队列。`提交任务`这个操作本身可以是异步的，对流进行同步化，则意味着需要阻塞cpu线程，直至所有已经提交至该队列中的任务执行完毕。
-不同流之间的任务可以借助硬件的不同单元并行执行或者时分并发执行。 
+### CUDA Streams
+A CUDA stream represents a GPU operation queue, and all tasks submitted to the GPU are specified with an execution stream. There is a default stream, `stream 0`, which serves as the default queue. The `submit task` operation itself can be asynchronous, and synchronizing the stream means that the CPU thread needs to be blocked until all tasks submitted to the queue have been completed.
 
-### CUDA上下文(CUDA Context)
-CUDA-Stream/CUDA-Context可以类比于线程/进程：多线程分配调用的GPU资源同属一个CUDA Context下，有自己的隔离的地址空间，资源不能跨Context共享。
+Tasks between different streams can be executed in parallel using different hardware units or time-division concurrency.
 
-默认情况下，一个进程中，在初次调用CUDA runtime软件库中的任何一个API时，会自动初始化当前进程中唯一的一个CUDA上下文。
+### CUDA Context
+CUDA Streams/CUDA Context can be compared to threads/processes: multiple threads that allocate and call GPU resources belong to the same CUDA Context, which has its own isolated address space, and resources cannot be shared across contexts.
 
-GPU在同一时刻只能切换到一个context，而默认情况下一个进程有一个上下文，故多个进程使用GPU，无法同时利用硬件。
+By default, when any API in the CUDA runtime software library is called for the first time in a process, the current process's unique CUDA context is automatically initialized.
 
-### 虚拟化
-由于GPU无法同时执行跨CUDA context的任务，导致硬件利用率可能不高，此时可采用一些虚拟化手段。典型的如NVIDIA官方的MPS（Multi Process Service），它实际上启动了一个独立进程去转发所有的任务。采用此方法的坏处是隔离性收到了一定破坏：一旦此进程失效，所有关联任务都将受到影响。
+The GPU can only switch to one context at a time, and by default, a process has one context, so multiple processes using the GPU cannot utilize the hardware simultaneously.
 
-## 小结
-为了充分利用GPU的性能，可以采取一些措施：
-- GPU任务合理分配到多个流，并只在恰当时机同步；
-- 将单个显卡的任务限制在单个进程中，去克服CUDA上下文分时特性带来的资源利用率可能不足的问题。
+### Virtualization
+Because the GPU cannot execute tasks across CUDA contexts simultaneously, hardware utilization may not be high. In this case, virtualization methods can be used. A typical example is NVIDIA's official MPS (Multi Process Service), which actually starts an independent process to forward all tasks. The disadvantage of using this method is that isolation is somewhat compromised: once this process fails, all associated tasks will be affected.
 
+## Summary
+To fully utilize the performance of the GPU, some measures can be taken:
+- Run multiple parallel instances to perform calculations.
+- Limit the tasks of a single graphics card to a single process to overcome the problem of insufficient resource utilization caused by the time-sharing feature of CUDA context.
