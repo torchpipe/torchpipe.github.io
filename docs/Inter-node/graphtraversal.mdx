@@ -1,127 +1,140 @@
 ---
 id: graphtraversal
-title: "图的跳转"
+title: "Graph Traversal"
 type: explainer
 ---
 
-## 多级结构化
-考虑在计算机视觉中的如下任务：
+## Multi-level Structuring
+Consider the following task in computer vision:
 
 ```mermaid
 flowchart LR
-    A[解码] --> B[目标检测]
-    B --> C[分类C]
-    subgraph 二级子图
-    C --> D1[其他D1]
-    C --> D2[其他D2]
+    A[Decode] --> B[Object Detection]
+    B --> C[Classification C]
+    subgraph Second Level Subgraph
+    C --> D1[Other D1]
+    C --> D2[Other D2]
     D1 --> E
     D2 --> E
     end
-    E --> F[合并结果F]
+    E --> F[Merge Results F]
     
 ```
+At first glance, it seems to form a complete directed acyclic graph, but in reality, the following problems exist:
 
-乍看之下似乎它形成了完整的有向无环图，然而实际中存在如下问题：
-- A. 目标检测产生了多个子目标（子上下文）进入了CDE，多个子目标又在F中发生了合并
-- B. 子目标在CDE中应该是相互独立的，不应该相互等待跑完某个节点再去跑下一个节点
+- A. Object detection produces multiple sub-targets (sub-contexts) that enter CDE, and multiple sub-targets are merged in F.
+- B. Sub-targets in CDE should be independent of each other and should not wait for each other to finish running a node before moving on to the next node.
 
-关于A，我们认为是上下文发生了变化；子上下文流经了CED构成的独立的图。关于B，我们认为同级别的多个上下文在节点上不一定需要进行同步。
+Regarding A, we believe that the context has changed; the sub-context flows through the independent graph formed by CED. Regarding B, we believe that multiple sub-contexts at the same level do not necessarily need to be synchronized at the node.
 
-CDE形成了事实上的子图，然而我们发现很难用子图的视角进行通用的设计。本质上我们要处理一个以有向无环图为节点的有向无环图，并且可以是递归的。
+CDE forms a subgraph in fact, but we find it difficult to design from a subgraph perspective. Essentially, we need to deal with a directed acyclic graph with directed acyclic graphs as nodes, which can be recursive.
 
-我们需要用户将图拆为多个部分，进行图间跳转。
+We need users to split the graph into multiple parts and perform graph traversal between them.
 
-## 图的拆分
-原始图可以拆成两部分。
-主干：
+## Graph Splitting
+The original graph can be split into two parts.
+
+Main Branch:
+
 
 ```mermaid 主图
 flowchart LR
-    A[解码] --> B[目标检测]
-    B --> MapReduce[MapReduce后端]
+    A[Decode] --> B[Object Detection]
+    B --> MapReduce[MapReduce Backend]
     MapReduce --> F
 ```
-其中[MapReduce](#mapreduce)是一个功能性的后端，它将数据分裂为子上下文，送入以下图：
+Where [MapReduce](#mapreduce) is a functional backend that splits data into sub-contexts and sends them to the following graph:
+
+
 
 ```mermaid 
 flowchart LR
-    C[分类C] --> D1[其他D1]
-    C[分类C] --> D2[其他D2]
+    C[Classification C] --> D1[Other D1]
+    C[Classification C] --> D2[Other D2]
     D1 --> E
     D2 --> E
 ```
-然后将E中的多个子上下文合并起来。
+Then, multiple sub-contexts in E are merged together.
 
-整体如下所示，跳转目标被当作了一个节点：
+The overall graph is shown below, with the jump target treated as a node:
 
 ```mermaid 
 flowchart LR
-    A[解码] --> B[目标检测]
+    A[Decode] --> B[Object Detection]
     B --> MapReduce
     MapReduce --> F
 
    
 
-    subgraph MapReduce [MapReduce节点]
-    C[分类C] --> D1[其他D1]
-    C[分类C] --> D2[其他D2]
+    subgraph MapReduce [MapReduce Node]
+    C[Classification C] --> D1[Other D1]
+    C[Classification C] --> D2[Other D2]
     D1 --> E
     D2 --> E
     end
 
-   
 
     
 ```
 
 
 ## Jump
-跳转到另外一个节点（需要是根节点）
+Jump to another node (must be a root node).
 
-:::caution 上下文切换
-对于不连通的两个图，多节点调度系统不共享节点的数据上下文。
+
+:::caution
+Context Switching For disconnected graphs, a multi-node scheduling system does not share node data contexts. 
 :::
 
-### 初始化
+### Initialization
 
-|        | 说明                                        | 备注 |
-|--------|-------------------------------------------|------|
-| `jump` | 需要跳转到的目标图的根节点节点名；只能有一个 |      |
+|        | Description                                                                | Note |
+|--------|----------------------------------------------------------------------------|------|
+| `jump` | The name of the root node of the target graph to jump to; only one allowed |      |
 
 
 ### min()/max()
 [1, UINT32_MAX]
 
 ## MapReduce
-MapReduce是Jump的子类，重新实现了split和merge操作。
-MapReduce将`一个`输入数据拆分为`多个`（split操作）, 跳转到其他图后进行计算，待所有计算完成后，将`多个`数据合并为`一个`(merge操作)。 
-### 初始化
-
-|         | 说明                                  | 备注                                         |
-|---------|-------------------------------------|--------------------------------------------|
-| `split` | 待分裂的键值，多个以逗号分开           | 默认值: "data", 为空时把自身作为分裂后的对象 |
-| `merge` | 待合并的键值，多个以逗号分开           | 默认值: "result"，不能为空                    |
-| `jump`  | 需要跳转到的目标图的根节点；只能有一个 | 继承自基类Jump                               |
+MapReduce is a subclass of Jump that re-implements split and merge operations. MapReduce splits one input data into multiple sub-contexts (split operation), jumps to another graph for computation, and then merges multiple sub-contexts into one (merge operation) after all computations are completed.
 
 
-### 前向计算
+
+### Initialization
+
+
+|         | Description                                                                | Note                                                       |
+|---------|----------------------------------------------------------------------------|------------------------------------------------------------|
+| `split` | The key value to be split, separated by commas                             | Default value: "data", empty string means splitting itself |
+| `merge` | The key value to be merged, separated by commas                            | Default value: "result", cannot be empty                   |
+| `jump`  | The name of the root node of the target graph to jump to; only one allowed | Inherited from the base class Jump                         |
+
+
+### Forward Computation
+
 #### map
-拷贝输入数据`dict`，将`split键值`对应的数据进行拆分。要求原始数据中split键值对应的数据类型是`std::vector<T>`.
+
+Copy the input data `dict` and split the data corresponding to the `split` key value. It is required that the data type corresponding to the `split` key value in the original data is `std::vector<T>`.
+
 #### reduce
-根据`merge`参数进行结果合并，合并后的类型是`std::vector<any>`
+Merge the results according to the `merge` parameter, and the type of the merged result is `std::vector<any>`.
+
+
 
 :::caution
-如果一个子任务失败（结果中没有`result`）,那么以这种方式进行合并`result`时，将抛出异常，导致相关联的子任务都异常。一般来说，这种行为是可以接受的；但是如果需要允许子任务无`result`时，不影响关联子任务，可以考虑如下措施：
-- 自定义后端重新实现`merge`操作。
-- 使用context语法糖（MapReduce不会在执行split/merge时自动拷贝context）
+If a sub-task fails (no `result` in the output), an exception will be thrown when merging the results in this way, causing all associated sub-tasks to fail. Generally, this behavior is acceptable; however, if it is necessary to allow sub-tasks without `result` that do not affect associated sub-tasks, the following measures can be considered:
+- Re-implement the `merge` operation with a custom backend.
+- Use context syntax (MapReduce does not automatically copy context when performing split/merge).
 :::
 
 ### min()/max()
 [1, UINT32_MAX]
 
-## split和merge自定义扩展
 
-默认的split和merge操作不一定能满足要求，我们可继承Jump进行自定义扩展：
+## Customizing Split and Merge Operations
+
+The default split and merge operations may not meet all requirements. We can inherit from Jump to customize these operations:
 
 ```cpp
 #include "Jump.hpp"
@@ -137,30 +150,28 @@ class YourMapReduce : public ipipe::Jump{
     return data[0];// <== Revise this implementation.
   }
 
-  // 如果有自定义初始化参数需要接收，实现以下函数：
+  //If there are custom initialization parameters, implement the following function:
   virtual bool post_init(const std::unordered_map<std::string, std::string>& config,
                          dict dict_config) override{
     return true;
   }
 };
 ```
-## 限制
-目前跳转到多个节点是不支持的，多个节点合并也是不支持的，也就是目标图的根节点和叶子节点数量都需要是1.
+## Limitations
+Currently, jumping to multiple nodes and merging multiple nodes is not supported. This means that the number of root nodes and leaf nodes in the target graph must be 1.
 
-以下图如果用户不增加中间节点，是没法处理的。
+The following graph cannot be processed without adding intermediate nodes.
 
 ```mermaid
 flowchart LR
-    A[解码] --> B[目标检测]
+    A[Decoding] --> B[Object Detection]
     B --> E
-    B --> C[分类C]
-    subgraph 多根/叶子节点的二级子图
-    C --> D[其他D]
+    B --> C[Classification C]
+    subgraph Subgraph with Multiple Roots/Leaves
+    C --> D[Other D]
     E
     end
-    E --> F[合并结果F]
+    E --> F[Merge Result F]
     D --> F
 ```
 
-## 小结
- 

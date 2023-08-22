@@ -1,10 +1,11 @@
 ---
 id: logical_nodes
-title: "逻辑节点"
+title: "Logic Nodes"
 type: explainer
 ---
 
-在一些场景中，有时需要在不同分支或者不同逻辑控制流条件下进入某些节点，但不希望共享其后端。
+In some scenarios, it is necessary to enter certain nodes under different branches or logical control flow conditions, but without sharing their backends.
+
 
 ```mermaid
 stateDiagram-v2
@@ -18,9 +19,11 @@ stateDiagram-v2
     TextRecognition --> Final
 ```
 
-在上图的文本识别案例中，我们希望TextRecognition和TextRecognition.2节点共享相同的后端实例。以**点+别名**的形式，用户可以定义物理节点的逻辑节点。逻辑节点可以单独设置与它原有的物理节点不同的逻辑配置(next/filter/map)。
+In the text recognition example above, we want the TextRecognition and TextRecognition.2 nodes to share the same backend instance. Using the node **name + alias** format, users can define logical nodes for physical nodes. Logical nodes can have separate logical configurations (next/filter/map) from their original physical nodes.
 
-## 示例
+
+
+## Example
 
 ```toml
 [in]
@@ -37,7 +40,8 @@ backend="C10Exception"
 map="rec[result:data],rec.2[result:data.2]"
 ```
 
-不难测试发现：
+It is not difficult to test and find that:
+
 ```python
 model  = torchpipe.pipe("assets/toml/logical.toml")
 
