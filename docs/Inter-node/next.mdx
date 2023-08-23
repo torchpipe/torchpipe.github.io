@@ -36,7 +36,7 @@ Similar to `Sequential`, the root node defaults to [filter](../Intra-node/Sequen
 The original input `dict` data enters the `decode` node, and its `result` key value is written into the result.
 When the `swap` filter of the resize node is executed, the result is swapped into the `data` key value. Then, this `dict` enters the resize node and is written into the `result` key value in the resize node's backend.
 :::
-```
+
 ## Multiple Branches
 
 If a node has multiple subsequent nodes, they can be separated by commas in the `next` field.
