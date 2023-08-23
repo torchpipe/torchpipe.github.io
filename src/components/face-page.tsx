@@ -18,16 +18,21 @@ const noteStyle: React.CSSProperties = {
   // textDecoration: 'underline',
   // height: '100',
 }
+// const noteStyle2: React.CSSProperties = {
+//   // fontSize: '.9em',
+//   // fontWeight: 600,
+//   color: '#f9e6a9',  //c084fc b671fc a34cfb
+//   // textAlign: 'center',
+//   // paddingBottom: '13px',
+//   // textDecoration: 'underline',
+//   // height: '100',
+//   border: '1px solid #f9e6a9',
+// }
+
 const noteStyle2: React.CSSProperties = {
-  // fontSize: '.9em',
-  // fontWeight: 600,
-  color: '#9333ea',  //c084fc b671fc a34cfb
-  // textAlign: 'center',
-  // paddingBottom: '13px',
-  // textDecoration: 'underline',
-  // height: '100',
-  border: '1px solid #9333ea',
-}
+  color: 'var(--note-color)',
+  border: '1px solid var(--note-color)',
+};
 
 export default function FacePage(): JSX.Element {
   const command = "pip install torchpipe";
@@ -60,10 +65,10 @@ export default function FacePage(): JSX.Element {
               <span className={styles.callout__text}>get source code from gitlab!</span>
               <ChevronRightIcon className={styles.callout__icon} aria-hidden="true" />
             </a>
-            <h1 className={styles.slogan}>
+            <h2 className={styles.slogan}>
               <span><Translate id="home.tagline0">Serving Inside Pytorch</Translate></span>
               <span className={styles.slogan__highlight}><Translate id="home.tagline1">with Multiple Threads</Translate></span>
-            </h1>
+            </h2>
             <p className={styles.description}>
               <Translate id="siteConfig.tagline">{siteConfig.tagline}</Translate>
               {/* torchpipe try to help eliminating the gap between model training and ensemble pipeline serving. */}

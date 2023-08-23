@@ -13,7 +13,7 @@ There are some industry practices, such as [triton inference server](https://git
 
 One common complaint from users of the Triton Inference Server is that in a system with multiple intertwined nodes, a lot of business logic needs to be completed on the client side and then called through RPC to the server, which can be cumbersome. For performance reasons, unconventional methods such as shared memory, ensemble, and [BLS](https://github.com/triton-inference-server/python_backend#business-logic-scripting) must be considered.
 
-To address this issue, TorchPipe provides a thread-safe function interface for the PyTorch frontend and a fine-grained backend extension for users, by delving into PyTorch's C++ calculation backend and CUDA stream management, as well as modeling domain-specific languages for multiple nodes.
+To address these issues, TorchPipe provides a thread-safe function interface for the PyTorch frontend and a fine-grained backend extension for users, by delving into PyTorch's C++ calculation backend and CUDA stream management, as well as modeling domain-specific languages for multiple nodes.
 
 
 ![jpg](.././static/images/EngineFlow-light-english.png)
@@ -22,7 +22,7 @@ To address this issue, TorchPipe provides a thread-safe function interface for t
 **Features of the torchpipe framework:**
 - Achieves near-optimal performance (peak throughput/TP99) from a business perspective, reducing widespread negative optimization and performance loss between nodes.
 - With a fine-grained generic backend, it is easy to expand hardware and weaken the difficulty of hardware vendor ecosystem migration.
-- Simple and high-performance modeling, including complex business systems such as multi-model fusion. Typical industrial scenarios include AI systems A and B with up to 10 model nodes in smart cities, and OCR systems that involve subgraph independent scheduling, bucket scheduling, and intelligent batch grouping for extreme optimization.
+- Simple and high-performance modeling, including complex business systems such as multi-model fusion. Typical industrial scenarios include AI systems with up to 10 model nodes in smart cities, and OCR systems that involve subgraph independent scheduling, bucket scheduling, and intelligent batch grouping for extreme optimization.
 - Maximizes the elimination of performance loss caused by Python runtime, GIL, heterogeneous hardware, virtualization, and multi-process.
 
 Unlike many other service-oriented frameworks, we decouple the system from RPC and focus on concurrent safety and pipeline scheduling of C++ and Python interfaces.

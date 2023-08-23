@@ -4,7 +4,6 @@ title: Performance indicators for services
 type: explainer
 ---
 
-Performance indicators for services
 
 When evaluating the performance of a service, there are several key indicators to consider. These indicators can help us understand the performance of the service in terms of latency, throughput, error rate, and other aspects. Here are some commonly used key performance indicators:
 

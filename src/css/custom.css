@@ -1,16 +1,59 @@
- 
+
+
+@font-face {
+  font-family: 'Comfortaa';
+  font-weight: 300;
+  font-style: normal;
+  src: url('/fonts/Comfortaa-Light.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Comfortaa';
+  font-weight: 400;
+  font-style: normal;
+  src: url('/fonts/Comfortaa-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Comfortaa';
+  font-weight: 500;
+  font-style: normal;
+  src: url('/fonts/Comfortaa-Medium.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Comfortaa';
+  font-weight: 600;
+  font-style: normal;
+  src: url('/fonts/Comfortaa-SemiBold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Comfortaa';
+  font-weight: 700;
+  font-style: normal;
+  src: url('/fonts/Comfortaa-Bold.ttf') format('truetype');
+}
+
 :root {
   --ifm-background-color: #f8fafc;/*f8fafc #ffffff*/ 
   --ifm-background-surface-color: #f1f5f9;/*f1f5f9 #17447F*/
   --ifm-background-surface-color-dark: #e2e8f0;
   --ifm-footer-background-color: #f8fafc;
-  --ifm-color-primary: #9333ea; /*9333ea 2F88FF*/
-  --ifm-color-primary-dark: #8519e7; /* 8519e7  */
+  --ifm-color-primary: #9333ea; 
+  --ifm-color-primary-dark: #8519e7;  
   --ifm-color-primary-darker: #7e17dc;
   --ifm-color-primary-darkest: #6813b5;
   --ifm-color-primary-light: #a14ded;
   --ifm-color-primary-lighter: #a85aee;
   --ifm-color-primary-lightest: #b776f1;
+  /* --ifm-color-primary: #b776f1;
+  --ifm-color-primary-dark: #a86de0;
+  --ifm-color-primary-darker: #9a62cf;
+  --ifm-color-primary-darkest: #7d4baa;
+  --ifm-color-primary-light: #c48bf9;
+  --ifm-color-primary-lighter: #d0a2f9;
+  --ifm-color-primary-lightest: #e1c2fa; */
   --ifm-font-color-base: #334155;
   --ifm-code-font-size: 95%;
   /* --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1); */
@@ -18,6 +61,33 @@
   /* --search-local-hit-background	: #334155; */
   /* --search-local-hit-color : #6813b5; */
   /* --search-local-modal-background	: #6813b5; */
+
+  --note-color: var(--ifm-color-primary);
+  --ifm-font-family-base: 'Comfortaa', sans-serif;
+
+  scroll-behavior: smooth;
+  /* --ifm-font-weight-bold: 500; */
+}
+
+/* You can override the default Infima variables here. */
+:root_ {
+  --ifm-link-hover-decoration: none;
+  --ifm-link-hover-color: var(--ifm-color-emphasis-900);
+  --ifm-color-primary: #f2b138;
+  --ifm-color-primary-dark: #f0a61c;
+  --ifm-color-primary-darker: #eea010;
+  --ifm-color-primary-darkest: #c4840d;
+  --ifm-color-primary-light: #f4bc54;
+  --ifm-color-primary-lighter: #f5c162;
+  --ifm-color-primary-lightest: #f7d28c;
+  --ifm-code-font-size: 95%;
+  --ifm-font-family-base: 'Comfortaa', sans-serif;
+  --custom-border-radius: 8px;
+  --custom-border-radius-md: 12px;
+  --ifm-code-border-radius: var(--custom-border-radius);
+  --ifm-button-border-radius: var(--custom-border-radius);
+  --ifm-font-weight-bold: 500;
+  scroll-behavior: smooth;
 }
 
 html[data-theme="dark"] {
@@ -25,6 +95,13 @@ html[data-theme="dark"] {
   --ifm-background-surface-color: #1f2937;
   --ifm-background-surface-color-dark: #374151;
   --ifm-footer-background-color: #111827;
+  /* --ifm-color-primary: #f0a61c;
+  --ifm-color-primary-dark: #eea010;
+  --ifm-color-primary-darker: #c4840d;
+  --ifm-color-primary-darkest: #f4bc54;
+  --ifm-color-primary-light: #f5c162;
+  --ifm-color-primary-lighter: #f7d28c;
+  --ifm-color-primary-lightest: #f7d28c; */
   --ifm-color-primary: #c084fc;
   --ifm-color-primary-dark: #b671fc;
   --ifm-color-primary-darker: #ad5ffb;
@@ -35,81 +112,27 @@ html[data-theme="dark"] {
   --ifm-font-color-base: #94a3b8;
   /* --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3); */
   --docusaurus-highlighted-code-line-bg: rgba(105, 105, 105, 0.3);
+} 
+
+/* 在 light 模式下应用 light 样式 */
+@media (prefers-color-scheme: light) {
+  .note {
+    color: var(--note-color-light);
+    border: 1px solid var(--note-color-light);
+  }
 }
 
-:root_v2 {
-  --ifm-background-color: #f8fafc;/*f8fafc */
-  --ifm-background-surface-color: #f1f5f9;/*f1f5f9 #17447F*/
-  --ifm-background-surface-color-dark: #e2e8f0;
-  --ifm-footer-background-color: #f8fafc;
-  --ifm-color-primary: #3F73FF; /*9333ea 2F88FF FFA500*/
-  --ifm-color-primary-dark: #2F5CFF; /* 8519e7  */
-  --ifm-color-primary-darker: #1F45FF;
-  --ifm-color-primary-darkest: #0F2EFF;
-  --ifm-color-primary-light: #4F8AFF;
-  --ifm-color-primary-lighter: #5FA1FF;
-  --ifm-color-primary-lightest: #6FB8FF;
-  --ifm-font-color-base: #334155;
-  --ifm-code-font-size: 95%;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
-  /* --search-local-hit-background	: #334155; */
-  /* --search-local-hit-color : #6813b5; */
-  /* --search-local-modal-background	: #6813b5; */
+/* 在 dark 模式下应用 dark 样式 */
+@media (prefers-color-scheme: dark) {
+  .note {
+    color: var(--note-color-dark);
+    border: 1px solid var(--note-color-dark);
+  }
 }
 
+ 
 
-:root_v3 {
-  --ifm-background-color: #f8fafc;/*f8fafc */
-  --ifm-background-surface-color: #f1f5f9;/*f1f5f9 #17447F*/
-  --ifm-background-surface-color-dark: #e2e8f0;
-  --ifm-footer-background-color: #f8fafc;
-  --ifm-color-primary: #E57373; /*9333ea 2F88FF FFA500*/
-  --ifm-color-primary-dark: #B71C1C; /* 8519e7  */
-  --ifm-color-primary-darker: #8B0000;
-  --ifm-color-primary-darkest: #6A1B9A;
-  --ifm-color-primary-light: #FFCDD2;
-  --ifm-color-primary-lighter: #FFEBEE;
-  --ifm-color-primary-lightest: #FFF1F1;
-  --ifm-font-color-base: #334155;
-  --ifm-code-font-size: 95%;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
-  /* --search-local-hit-background	: #334155; */
-  /* --search-local-hit-color : #6813b5; */
-  /* --search-local-modal-background	: #6813b5; */
-}
-/* For readability concerns, you should choose a lighter palette in dark mode. */
-html_v3[data-theme="dark"] {
-  --ifm-background-color: #111827;
-  --ifm-background-surface-color: #1f2937;
-  --ifm-background-surface-color-dark: #374151;
-  --ifm-footer-background-color: #111827;
-  --ifm-color-primary: #E57373; /*9333ea 2F88FF FFA500*/
-  --ifm-color-primary-dark: #B71C1C; /* 8519e7  */
-  --ifm-color-primary-darker: #8B0000;
-  --ifm-color-primary-darkest: #6A1B9A;
-  --ifm-color-primary-light: #FFCDD2;
-  --ifm-color-primary-lighter: #FFEBEE;
-  --ifm-color-primary-lightest: #FFF1F1;
-  --ifm-font-color-base: #94a3b8;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
-}
 
-/* For readability concerns, you should choose a lighter palette in dark mode. */
-html_v2[data-theme="dark"] {
-  --ifm-background-color: #111827;
-  --ifm-background-surface-color: #1f2937;
-  --ifm-background-surface-color-dark: #374151;
-  --ifm-footer-background-color: #111827;
-  --ifm-color-primary: #FFA500; /*9333ea 2F88FF*/
-  --ifm-color-primary-dark: #2F5CFF; /* 8519e7  */
-  --ifm-color-primary-darker: #1F45FF;
-  --ifm-color-primary-darkest: #0F2EFF;
-  --ifm-color-primary-light: #4F8AFF;
-  --ifm-color-primary-lighter: #5FA1FF;
-  --ifm-color-primary-lightest: #6FB8FF;
-  --ifm-font-color-base: #94a3b8;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
-}
 
 code[data-code='required'] {
   font-size: 12px;
@@ -195,4 +218,15 @@ details code {
 }
 .footer__links {
   margin-bottom: 4.5rem;
+}
+
+
+
+
+
+
+
+.menu__list-item-collapsible {
+  /* font-weight: bold; */
+  padding: 0.25rem 0;
 }

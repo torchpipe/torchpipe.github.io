@@ -6,11 +6,10 @@ type: reference
 
 # 修改代码
 
-代码位于 https://g.hz.netease.com/deploy/torchpipe/-/tree/develop
 
 修改代码方式：
-- 直接提交commit至develop分支
 - 提交 merge request 至 develop 分支
+- 重大修改可提前在issue上进行讨论
 
 为了保证服务端的稳定性，我们对c++有所要求：
 - 所有的代码需要是异常安全的

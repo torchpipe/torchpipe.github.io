@@ -1,33 +1,32 @@
 ---
 id: modify_the_code
-title:  修改代码
+title: Code Modification
 type: reference
 ---
 
-# 修改代码
+ 
+GitHub Copilot: Code Modification:
 
-代码位于 https://g.hz.netease.com/deploy/torchpipe/-/tree/develop
+To modify the code, please follow these steps:
+- Submit a merge request to the develop branch.
+- For major changes, please discuss them in an issue beforehand.
 
-修改代码方式：
-- 直接提交commit至develop分支
-- 提交 merge request 至 develop 分支
+To ensure the stability of the server, we have certain requirements for C++:
+- All code must be exception-safe.
+- Manual program exits are not allowed; exceptions should be thrown instead.
 
-为了保证服务端的稳定性，我们对c++有所要求：
-- 所有的代码需要是异常安全的
-- 不允许人为退出程序，而是以抛出异常代替
+For complex modifications, please consider testing:
+- Prepare the runtime environment by referring to [Torchpipe installation](../installation).
+- Run existing tests:
 
-对于复杂的修改，请考虑进行测试：
-
-- 准备运行环境，请参考[torchpipe的安装](../installation.mdx)
-- 运行已有测试：
 ```bash
 cd test
 pip install -r requirements.txt 
 pytest .
 ```
 
-需要时请考虑补充[python测试](https://g.hz.netease.com/deploy/torchpipe/-/tree/develop/test)。
+GitHub Copilot: If necessary, please consider supplementing with [Python tests](https://g.hz.netease.com/deploy/torchpipe/-/tree/develop/test).
 
-:::note 代码格式（optinal）
-请配置格式化插件以便[.clang-format](https://g.hz.netease.com/deploy/torchpipe/-/blob/develop/.clang-format)生效。
+:::note Code Formatting (optional)
+Please configure a formatting plugin to enable [.clang-format](https://g.hz.netease.com/deploy/torchpipe/-/blob/develop/.clang-format).
 :::

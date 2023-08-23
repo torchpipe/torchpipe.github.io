@@ -6,6 +6,6 @@ type: reference
 
 # 修改文档
 
-文档位于https://g.hz.netease.com/deploy/torchpipe-docs
-- 对于简单的修改，请直接提交commit至master分支
-- 否则，提交merge request
+文档位于https://github.com/torchpipe/torchpipe.github.io
+
+- 提交merge request至main分支

@@ -1,11 +1,10 @@
 ---
 id: modify_the_doc
-title:  修改文档
+title:  Documentation Modification
 type: reference
 ---
 
-# 修改文档
+GitHub Copilot: The documentation is located at https://github.com/torchpipe/torchpipe.github.io.
 
-文档位于https://g.hz.netease.com/deploy/torchpipe-docs
-- 对于简单的修改，请直接提交commit至master分支
-- 否则，提交merge request
+To modify the documentation, please:
+- Submit a merge request to the main branch.
