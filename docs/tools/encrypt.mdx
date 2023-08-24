@@ -29,8 +29,8 @@ python -m torchpipe.utils.encrypt a.onnx a.onnx.encrypted
 
 
 
-输出的以`.encrypted`为后缀的文件可用于[TensorrtTensor](../backend-reference/torch#tensorrttensor).
+The output file with the `.encrypted` suffix can be used with [TensorrtTensor](../backend-reference/torch#tensorrttensor).
 
-## 加密安全性
-我们在源码中使用了对称加密，以及一些选帧策略，混淆策略进行加密。随着版本等因素变化，加密策略会相应变化。请在编译`torchpipe`时指定密钥`IPIPE_KEY`(大于8位，16位最佳)。 我们只提供基础的加密功能。可以自行重新实现整个加解密部分，实现更安全的保护。
+## Encryption Security
 
+We use symmetric encryption, as well as some frame selection and obfuscation strategies for encryption in our source code. The encryption strategy may change with version updates and other factors. Please specify the key `IPIPE_KEY` (greater than 8 bits, 16 bits is optimal) when compiling `torchpipe`. We only provide basic encryption functionality. You can implement the entire encryption and decryption part yourself to achieve more secure protection.

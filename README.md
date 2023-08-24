@@ -32,13 +32,13 @@ The torchpipe code is being prepared for open sourcing. Here is its documentatio
 
 
 
-## edit
+## Edit
 
 - **Chinese version located at：[./i18n/zh/docusaurus-plugin-content-docs/current](./i18n/zh/docusaurus-plugin-content-docs/current)**
 
 
-## compile
-See [./compile.md](./compile.md)
+## Compile
+See [./compile.md(in chinese now)](./compile.md)
 
 ### Icons
 
