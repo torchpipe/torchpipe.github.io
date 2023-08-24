@@ -38,7 +38,7 @@ The torchpipe code is being prepared for open sourcing. Here is its documentatio
 
 
 ## compile
-See [./docs/compile.md](./docs/compile.md)
+See [./compile.md](./compile.md)
 
 ### Icons
 
