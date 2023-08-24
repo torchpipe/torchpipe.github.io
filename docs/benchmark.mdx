@@ -1,6 +1,6 @@
 ---
 id: benchmark
-title: 性能报告
+Performance Report
 type: recipe
 ---
 
@@ -9,46 +9,40 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
 
+# Performance Report
 
-# 性能报告
-
-_本文主要列举`torchpipe`的基础性能测试实验。`triton inference server`是我们的主要参照物，然而我们的目的并非与其进行性能竞赛。 框架与框架之间的性能差异有时候很难进行直接的对比， 部分实验中我们采取了合理的非公平对比，用来帮助使用者理解两种框架的特点。_
+_This article mainly lists the basic performance test experiments of `torchpipe`. `Triton Inference Server` is our main reference, but our goal is not to compete with it in terms of performance. The performance differences between frameworks are sometimes difficult to compare directly, and in some experiments, we adopt reasonable unfair comparisons to help users understand the characteristics of the two frameworks._
 
 :::note
-需要 **[服务性能的关键评价指标](preliminaries/rpc)** 章节作为铺垫。
+The chapter on **[Key Performance Evaluation Metrics for Services](preliminaries/rpc)** is required as a prelude.
 :::
 
-测试机器情况参见尾注*.
+See the footnote* for details on the test machine.
 
-## 本地函数 vs `RPC`调用
-`torchpipe` 以线程安全的本地调用为主要使用方式，并绑定`pytorch`前端接口。这是他的一大特色。当与 `triton` 这些与`RPC`强耦合*的框架进行性能对比时并不容易。为此，我们准备采取合理的不公平对比。虽然如此，我们尽可能合理地优化了测试流程，如将所有数据准备都在初始化时提前完成并重复利用。
+## Local Function vs. `RPC` Call
+`torchpipe` mainly uses thread-safe local calls and binds to the `pytorch` front-end interface. This is one of its major features. It is not easy to compare its performance with frameworks such as `triton` that are strongly coupled with `RPC`. Therefore, we are prepared to adopt reasonable unfair comparisons. Nevertheless, we have optimized the test process as reasonably as possible, such as completing all data preparation in advance during initialization and reusing it.
 
-在实验中我们发现，包含序列化/反序列化的大数据量的RPC调用中，triton和thrift有一定的性能差距。这使得我们很难直接对调度和计算部分进行对比。为此，我们采取对照的方式，首先测定纯粹RPC服务的性能作为对比基数。
-
+In the experiment, we found that there is a certain performance gap between `triton` and `thrift` in RPC calls with large amounts of data that include serialization/deserialization. This makes it difficult for us to directly compare the scheduling and computing parts. Therefore, we adopt a comparative approach and first measure the performance of pure RPC services as a comparison baseline.
 :::info
-当纯RPC服务的吞吐比纯粹计算后端服务的吞吐高一个量级的时候，可以认为RPC对于整个的服务的影响不大；否则，RPC部分可能产生显著的影响。
+When the throughput of pure RPC services is one order of magnitude higher than that of pure compute backend services, it can be considered that the impact of RPC on the entire service is not significant; otherwise, the RPC part may have a significant impact.
 :::
 <!-- https://zhuanlan.zhihu.com/p/497350730 -->
-
-- 强耦合*： `triton` 提供了C语言本地接口，然而并非面向用户的推荐方式。
+- Strong Coupling*: `triton` provides a C language local interface, but it is not the recommended way for users.
 ## Hello, World!
 
-我们发送一条`HelloWorld`讯息并寻求返回相同字符串。
+We send a `HelloWorld` message and seek to return the same string.
 
-经过测试，我们发现triton对于TYPE_STRING类型的处理并不友好，相同的数据，以TYPE_STRING格式发送以及以TYPE_UINT8格式发送，速度差异较为明显，所以以下实验，我们发送‘HelloWorld’的时候，均采用了triton推荐的UINT8类型进行发送，即将其转换为ASCII码对应的UINT8类型。
+After testing, we found that `triton`'s handling of `TYPE_STRING` is not friendly. The speed difference between sending the same data in `TYPE_STRING` format and `TYPE_UINT8` format is quite significant. Therefore, in the following experiments, when we send 'HelloWorld', we use the `UINT8` type recommended by `triton` for sending, which converts it to the corresponding `UINT8` type of ASCII code.
 
+### Idle Performance
 
-### 空载性能 
+This section is only used as a reference background for speed. The performance difference in this section does not have a significant impact on actual business (compute-intensive backend).
 
-这部分只作为速度的参照背景使用。 这部分的性能差距在实际业务中（计算密集型后端）影响并不大。
+`thrift` uses a multi-threaded mode with `python` as the client/server language.
 
-thrift采用了多线程模式, 以`python`为客户端/服务端语言。
-<!-- <Tabs  className="helloworld">
-<TabItem value="1" label="空载性能"> -->
+Client 1/Compute Backend Instance 1/Timeout 0/Max Batch 1
 
-客户端1/计算后端实例1/超时时间0/max_batch1
-
-|                   | python后端         | c++后端           |
+|                   | python backend     | c++ backend       |
 |:-----------------:|:-------------------|:------------------|
 |    torchpipie     | QPS: 65227 <br />  | QPS: 70671 <br /> |
 | torchpipie+thrift | QPS: 10020 <br />  | QPS: 10444        |
@@ -56,20 +50,17 @@ thrift采用了多线程模式, 以`python`为客户端/服务端语言。
 |    triton-cli     | QPS: 7342 <br />   | -                 |
 
 
-相对于rpc框架本身数十万以上的并发要求， `torchpipe` 和 `triton`本身的qps并不高。视觉领域的服务是计算密集型的，通常并不能算一种`高并发`服务，实际单卡QPS一般在100-2000之间；以上实测空载性能上限满足要求。
+Compared to the tens of thousands of concurrent requirements of the RPC framework itself, the QPS of `torchpipe` and `triton` themselves are not high. Visual domain services are compute-intensive and usually cannot be considered as `high-concurrency` services. The actual single-card QPS is generally between 100-2000; the above measured idle performance upper limit meets the requirements.
+ 
 
-<!-- 
-</TabItem>
-<TabItem value="2" label="多客户端衰减情况"> -->
+### Multi-Client Pressure Test
+This section is only used as a reference background for speed. The performance difference in this section does not have a significant impact on actual business (compute-intensive backend).
 
-### 多客户端加压
-这部分只作为速度的参照背景使用。 这部分的性能差距在实际业务中（计算密集型后端）影响并不大。
+The difference is alleviated under client pressure.
 
-客户端加压的情况下，差距缓解。
+Client 10/Compute Backend Instance 1/Timeout 0/Max Batch 1
 
-客户端10/计算后端实例1/超时时间0/max_batch1
-
-|                   | python后端          | c++后端            |
+|                   | python backend      | c++ backend        |
 |:-----------------:|:--------------------|:-------------------|
 |    torchpipie     | QPS: 46655 <br />   | QPS: 55949 <br />  |
 | torchpipie-thrift | QPS: 13221          | QPS: 14977  <br /> |
@@ -81,64 +72,61 @@ thrift采用了多线程模式, 以`python`为客户端/服务端语言。
 
  
 
-### 凑batch过程自适应客户端数目
-当流量不足以覆盖max_batch时，系统在等待凑batch的过程中，将以超时为代价。此节测试了这种情况下自适应客户端的情况。 
+### Adaptive Number of Clients for Batch Aggregation
+When the traffic is not enough to cover `max_batch`, the system will use timeout as a cost during the process of aggregating batches. This section tests the adaptive client situation under this condition.
 
-本节使用torchpipie 和 triton 的python后端。
+This section uses the Python backend of `torchpipe` and `triton`.
+
+Compute Backend Instance 1/Timeout 10ms/Max Batch 4
+
+| Number of Clients |   torchpipe    |     triton     |
+|:-----------------:|:--------------:|:--------------:|
+|         1         | **TP50: 0.25** | **TP50: 10.5** |
+|         2         |  TP50: 10.25   |  TP50: 10.57   |
+|         4         |   TP50: 0.34   |   TP50: 0.5    |
+|        10         |   TP50: 0.82   |   TP50: 0.97   |
+
+The experiment verified that the conservative adaptive strategy adopted by `torchpipe` can reduce the waiting time for batch aggregation in certain situations.
+
+### Efficiency of Batch Aggregation when `max_batch`=1
+Test the system efficiency when the maximum batch size is 1. The batch aggregation process should be ignored theoretically at this time.
+
+This section uses the Python backend of `torchpipe` and `triton`.
+
+Compute Backend Instance 1/Timeout 10ms/Max Batch 1
+
+| Number of Clients | torchpipie |   triton   |
+|:-----------------:|:----------:|:----------:|
+|         1         | TP50: 0.09 | TP50: 0.23 |
+|        10         | TP50: 0.64 | TP50: 1.26 |
+
+
  
-计算后端实例1/超时时间10ms/max_batch4
-
-| 客户端数目 |   torchpipe    |     triton     |
-|:----------:|:--------------:|:--------------:|
-|     1      | **TP50: 0.25** | **TP50: 10.5** |
-|     2      |  TP50: 10.25   |  TP50: 10.57   |
-|     4      |   TP50: 0.34   |   TP50: 0.5    |
-|     10     |   TP50: 0.82   |   TP50: 0.97   |
-
-实验验证了torchpipie采取的保守的自适应策略，能在一定情况下，减少白白等待凑batch的时间。
-
-### max_batch=1时的凑batch效率
-测试最大batchsize为1时的系统效率。理论上此时应该忽略掉凑batch过程。
-
-本节使用torchpipie 和 triton 的python后端。
 
 
-计算后端实例1/超时时间10ms/max_batch1
+## Concurrency Performance of Python Backend (CPU)
+`torchpipe` natively supports multi-threading, but this mode has significant flaws for Python compute backends due to the impact of the GIL lock.
 
-| 客户端数目 | torchpipie |   triton   |
-|:----------:|:----------:|:----------:|
-|     1      | TP50: 0.09 | TP50: 0.23 |
-|     10     | TP50: 0.64 | TP50: 1.26 |
+| Type                         | Mode                      | Remarks                                                                                                  |
+|------------------------------|---------------------------|----------------------------------------------------------------------------------------------------------|
+| GPU Backend                  | Multi-threading           | Virtualization is required under multiple processes, and there are problems with shared memory transfer. |
+| CPU Backend without GIL lock | Multi-threading available | -                                                                                                        |
+| CPU Backend with GIL lock    | Multi-process/RPC         | Use the `multiprocessing/Joblib` library in the Python backend, or bridge third-party RPC frameworks.    |
+
+The following table verifies the effectiveness of multi-process mode in handling GIL lock (the backend performs a cumulative operation of 1-100000 in Python):
+
+Client 10/Compute Backend Instance 10/Timeout 0/Max Batch 1
+
+| torchpipe (Python backend) |  triton  | torchpipe-multiprocess |
+|:--------------------------:|:--------:|:----------------------:|
+|          QPS: 233          | QPS: 814 |        QPS: 872        |
 
 
 
-### 小结
-<!-- </TabItem>
-</Tabs> -->
+## Comparison of Pure CPU Backend Efficiency
+This section tests the performance of JPEG decoding. The input data is the original, undecoded JPEG image, and the output is a `uint8` tensor of size 640x444x3.
 
-
-## python后端（cpu）并发性能
-`torchpipe`原生支持多线程模式，然而由于GIL锁的影响，此种模式对于python计算后端注定有比较大的缺陷；
-
-| 类型                 | 模式       | 备注                                                                      |
-|--------------------|----------|---------------------------------------------------------------------------|
-| GPU后端              | 多线程     | 多进程下需要虚拟化，存在共享显存传递的问题                                 |
-| 不涉及GIL锁的CPU后端 | 可多线程   | -                                                                         |
-| 涉及GIL锁的CPU后端   | 多进程/RPC | 在python后端中使用`multiprocessing/Joblib`库，或者桥接第三方RPC框架 <br /> |
-
-
-以下表格验证了多进程模式处理GIL锁的有效性（后端进行了python的1-100000的累加操作）：
-
-客户端10/计算后端实例10/超时时间0/max_batch1
-
-| torchpipie(python后端) |  triton  | torchpipie-multiprocess |
-|:----------------------:|:--------:|:-----------------------:|
-|        QPS: 233        | QPS: 814 |        QPS: 872         |
-
-
-## 纯cpu后端效率对比
-本节测试jpg解码性能。输入数据为未解码的原始jpg图片，输出为大小为640x444x3的uint8的tensor.
-在本节实验中，我们显式排除RPC框架本身带来的性能差距：客户端发送给我们`Hello, world!`这一数据，我们在服务端自己准备jpg数据，调用
+In this section of the experiment, we explicitly exclude the performance difference brought by the RPC framework itself: the client sends us the data `Hello, world!`, we prepare the JPEG data ourselves on the server, and call
 
 <Tabs groupId="language"  className="unique-tabs">
 <TabItem value="python" label="python后端">
@@ -158,84 +146,73 @@ cv::Mat imdecode(cv::InputArray buf, int flags)
 </Tabs>
 
  
-解码，然后返回`Hello, world!`到客户端。
+to decode, and then return `Hello, world!` to the client.
 
-客户端1/计算后端实例1/超时时间0/max_batch1
+Client 1/Compute Backend Instance 1/Timeout 0/Max Batch 1
 
-| torchpipie-thrift(c++后端) | torchpipie-thrift(python后端) | torchpipie-thrift-multiprocess | triton-cli |
-|:--------------------------:|:-----------------------------:|:------------------------------:|:----------:|
-|          QPS: 426          |           QPS: 406            |             QPS: -             |  QPS: 339  |
+| torchpipe-thrift (C++ backend) | torchpipe-thrift (Python backend) | torchpipe-thrift-multiprocess | triton-cli |
+|:------------------------------:|:---------------------------------:|:-----------------------------:|:----------:|
+|            QPS: 426            |             QPS: 406              |            QPS: -             |  QPS: 339  |
 
+Client 10/Compute Backend Instance 10/Timeout 0/Max Batch 1
 
-客户端10/计算后端实例10/超时时间0/max_batch1
+| torchpipe-thrift (C++ backend) | torchpipe-thrift (Python backend) | torchpipe-thrift-multiprocess | triton-cli |
+|:------------------------------:|:---------------------------------:|:-----------------------------:|:----------:|
+|           QPS: 1599            |             QPS: 1334             |            QPS: -             |    1440    |
 
-| torchpipie-thrift(c++后端) | torchpipie-thrift(python后端) | torchpipie-thrift-multiprocess | triton-cli |
-|:--------------------------:|:-----------------------------:|:------------------------------:|:----------:|
-|         QPS: 1599          |           QPS: 1334           |             QPS: -             |    1440    |
+The experimental results are consistent with expectations: the efficiency under various methods is similar. Finally, with ten clients, `torchpipe-thrift (C++ backend)` > `triton-cli` > `torchpipe-thrift (Python backend)`.
 
-实验结果与预期相符：各种方式下的效率相近。最终，在十客户端下，
-`torchpipie-thrift(c++后端)` > `triton-cli` > `torchpipie-thrift(python后端)`.
+## ResNet50
 
+This section tests the efficiency of using TensorRT to process the ResNet50 model under normal circumstances. The client input is a 224x224x3 image data, and the output is 1x1000. As a control, we also provide a comparison of pure RPC efficiency: in this case, the server prepares the data in advance without performing any calculations.
+### Basic Test
 
+Client 1/Compute Backend Instance 1/Timeout 0/Max Batch 1
 
-## resnet50
-本节测试通常情况下，使用tensorrt处理resnet50模型的效率。
-客户端输入为224x224x3的图片数据，输出为1x1000。
-作为对照，我们补充了纯粹RPC效率的对比：此时服务端预先准备好数据，而不做任何计算。
+| torchpipe-thrift-rpc | triton-rpc | torchpipe-thrift | triton-cli | Remarks |
+|:--------------------:|:----------:|:----------------:|:----------:|:-------:|
+|      QPS: 7519       | QPS: 1819  |     QPS: 381     |  QPS: 358  |         |
 
-### 基础测试
+Client 10/Compute Backend Instance 10/Timeout 0/Max Batch 1
 
-客户端1/计算后端实例1/超时时间0/max_batch1
-
-| torchpipie-thrift-rpc | triton-rpc | torchpipie-thrift | triton-cli | 备注 |
-|:---------------------:|:----------:|:-----------------:|:----------:|:----:|
-|       QPS: 7519       | QPS: 1819  |     QPS: 381      |  QPS: 358  |      |
-
-
-客户端10/计算后端实例10/超时时间0/max_batch1
-
-| torchpipie-thrift-rpc | triton-rpc | torchpipie-thrift | triton-cli | 备注 |
-|:---------------------:|:----------:|:-----------------:|:----------:|:----:|
-|      QPS: 11938       | QPS: 3355  |     QPS: 720      |  QPS: 722  |      |
+| torchpipe-thrift-rpc | triton-rpc | torchpipe-thrift | triton-cli | Remarks |
+|:--------------------:|:----------:|:----------------:|:----------:|:-------:|
+|      QPS: 11938      | QPS: 3355  |     QPS: 720     |  QPS: 722  |         |
 
 
 
 
+### Batch Aggregation
 
-### 凑batch
+Client 10/Compute Backend Instance 2/Timeout 5/Max Batch 4
 
-客户端10/计算后端实例2/超时时间5/max_batch4
-
-| torchpipie-thrift | triton-cli | 备注 |
-|:-----------------:|:----------:|:----:|
-|     QPS: 907      |  QPS: 898  |  -   |
-
+| torchpipe-thrift | triton-cli | Remarks |
+|:----------------:|:----------:|:-------:|
+|     QPS: 907     |  QPS: 898  |    -    |
 
 
 
-## 实际使用测试
+## Real-world Testing
 
-triton推荐的使用方式是采用rpc的方式进行调用，torchpipe的推荐使用方式是采用本地调用，上面的章节为了相对公平，我们为torchpipe包装了thrift框架进行rpc调用，本节，我们采用实际的推荐调用方式来进行框架的对比测试。
+In real-world scenarios, Triton often needs to chain multiple nodes/models through RPC calls to the server, while TorchPipe is used for local calls. Let's take a look at the performance comparison between the two methods.
 
+### Basic Test
 
-### 基础测试
+In the following test, both Triton and TorchPipe contain only one ResNet18 model, which is accelerated by FP32 TensorRT. The input data is shape: 3x224x224.
 
-在如下的测试中，triton和torchpipe均只含有一个resnet18模型，模型均采用FP32的tensorrt加速，输入数据为shape:3x224x224的数据。
+Client 1/Compute Backend Instance 1/Timeout 0/Max Batch 1
 
-客户端1/计算后端实例1/超时时间0/max_batch1
-
-| torchpipie | triton-rpc | 备注 |
-|:----------:|:----------:|:----:|
-|  QPS: 559  |  QPS: 462  |      |
-
-
-客户端10/计算后端实例1/超时时间0/max_batch1
-
-| torchpipie | triton-rpc | 备注 |
-|:----------:|:----------:|:----:|
-| QPS: 1303  |  QPS: 907  |      |
+| torchpipie | triton-rpc | Remarks |
+|:----------:|:----------:|:-------:|
+|  QPS: 559  |  QPS: 462  |         |
 
 
+Client 10/Compute Backend Instance 1/Timeout 0/Max Batch 1
 
-实验结果表明，在实际使用中，我们的torchpipe相对于triton会有比较明显的提升。
+| torchpipie | triton-rpc | Remarks |
+|:----------:|:----------:|:-------:|
+| QPS: 1303  |  QPS: 907  |         |
 
+
+
+As expected, TorchPipe's local calling method has certain advantages in single-card scenarios.

@@ -215,7 +215,7 @@ cv::Mat imdecode(cv::InputArray buf, int flags)
 
 ## 实际使用测试
 
-triton推荐的使用方式是采用rpc的方式进行调用，torchpipe的推荐使用方式是采用本地调用，上面的章节为了相对公平，我们为torchpipe包装了thrift框架进行rpc调用，本节，我们采用实际的推荐调用方式来进行框架的对比测试。
+实际使用中，triton经常需要以RPC调用服务端的方式串联多个节点/模型，而torchpipe的使用方式是本地调用，我们来看看两种方式下的性能对比情况。
 
 
 ### 基础测试
@@ -237,79 +237,5 @@ triton推荐的使用方式是采用rpc的方式进行调用，torchpipe的推�
 
 
 
-实验结果表明，在实际使用中，我们的torchpipe相对于triton会有比较明显的提升。
+与预期一致，torchpipe的本地调用方式在单卡情况下有一定的优势。
 
-
-<!-- 
-
-**\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*以下 WIP\*\*\*\*\*\*\*\*\*\*\*\********
-
-## RPC 效率
-
-本节测试RPC在大量数据时的效率情况，测试输入是原始图像bytes数据，输出是解码后的图片，大小为600x444x3(uint8). 表格中`仅输入`代表返回到客户端的结果为`Hello World!`.
-客户端1/计算后端实例1/超时时间0/max_batch1
-
-|           | thrift(python) |  triton   | triton-cli |
-|:---------:|:--------------:|:---------:|:----------:|
-|  仅输入   |   QPS:  8297   | QPS: 4992 |    QPS:    |
-| 输入+输出 |    QPS: 396    | QPS: 304  |    QPS:    |
-|  仅输出   |    QPS: 407    | QPS: 314  |    QPS:    |
-
-## CPU计算后端
-
-### triton和thrift框架对比
-
-客户端准备224x224数据，框架使用python后端，不做任何事，直接返回一个float数值。
-
-客户端1/计算后端实例1/超时时间0/max_batch1
-
-| torchpipie-thrift(python后端) |  triton   | triton-cli |
-|:-----------------------------:|:---------:|:----------:|
-|           QPS: 8681           | QPS: 4856 |    QPS:    |
-
-```
-Concurrency: 1, throughput: 5849.45 infer/sec, latency 168 usec
-Concurrency: 4, throughput: 15894.9 infer/sec, latency 249 usec
-Concurrency: 7, throughput: 15688.9 infer/sec, latency 443 usec
-Concurrency: 10, throughput: 15074.8 infer/sec, latency 660 usec
-```
-
-
-
-## GPU计算后端
-
-
-
-
-
-## BLS 
-改写官方的[BLS Example](https://github.com/triton-inference-server/python_backend/blob/main/examples/bls/README.md).
-
-| torchpipie-thrift | triton | 备注 |
-|:-----------------:|:------:|:----:|
-|       QPS:        |  QPS:  |  -   |
-
-
-## Ensemble 
-
-测试[triton ensemble 例子](https://github.com/Njorda/triton-ensemble).
-
-客户端1/计算后端实例1/超时时间0/max_batch1
-
-| torchpipie-thrift |  triton  | torchpipie-gpu-thrift |
-|:-----------------:|:--------:|:---------------------:|
-|     QPS: 291      | QPS: 157 |         QPS:          |
-
-```python
-Concurrency: 1, throughput: 179.601 infer/sec, latency 5559 usec
-Concurrency: 4, throughput: 231.93 infer/sec, latency 17239 usec
-Concurrency: 7, throughput: 231.654 infer/sec, latency 30182 usec
-Concurrency: 10, throughput: 240.704 infer/sec, latency 41562 usec
-``` -->
-
-
-## 小结
-
-
-<!-- import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem'; -->

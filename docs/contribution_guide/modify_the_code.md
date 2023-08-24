@@ -5,7 +5,7 @@ type: reference
 ---
 
  
-GitHub Copilot: Code Modification:
+Code Modification:
 
 To modify the code, please follow these steps:
 - Submit a merge request to the develop branch.
@@ -25,7 +25,7 @@ pip install -r requirements.txt
 pytest .
 ```
 
-GitHub Copilot: If necessary, please consider supplementing with [Python tests](https://g.hz.netease.com/deploy/torchpipe/-/tree/develop/test).
+If necessary, please consider supplementing with [Python tests](https://g.hz.netease.com/deploy/torchpipe/-/tree/develop/test).
 
 :::note Code Formatting (optional)
 Please configure a formatting plugin to enable [.clang-format](https://g.hz.netease.com/deploy/torchpipe/-/blob/develop/.clang-format).

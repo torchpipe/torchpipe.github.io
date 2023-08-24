@@ -30,7 +30,7 @@ const sidebars = {
         //"quick_start_professional",
         {
           type: "category",
-          label: "贡献指南",
+          label: "Contribution Guidelines",
           items: ["contribution_guide/modify_the_code", 
                   "contribution_guide/modify_the_doc",
                   "contribution_guide/statement",
