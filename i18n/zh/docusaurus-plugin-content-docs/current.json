@@ -3,17 +3,17 @@
     "message": "Next",
     "description": "The label for version current"
   },
-  "sidebar.main.category.2. Preliminaries": {
+  "sidebar.main.category.2. Preliminary": {
     "message": "2. 预备知识",
-    "description": "The label for category 2. Preliminaries in sidebar main"
+    "description": "The label for category 2. Preliminary in sidebar main"
   },
-  "sidebar.main.category.2. Preliminaries.link.generated-index.title": {
+  "sidebar.main.category.2. Preliminary.link.generated-index.title": {
     "message": "预备知识",
-    "description": "The generated-index page title for category 2. Preliminaries in sidebar main"
+    "description": "The generated-index page title for category 2. Preliminary in sidebar main"
   },
-  "sidebar.main.category.2. Preliminaries.link.generated-index.description": {
+  "sidebar.main.category.2. Preliminary.link.generated-index.description": {
     "message": "您可以快速浏览或跳过本部分，在需要时再回头查看。",
-    "description": "The generated-index page description for category 2. Preliminaries in sidebar main"
+    "description": "The generated-index page description for category 2. Preliminary in sidebar main"
   },
   "sidebar.main.category.5. tools": {
     "message": "5. 工具",

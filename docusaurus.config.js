@@ -243,9 +243,7 @@ const config = {
         //     ],
         //   },
         // ],
-        // Released under the MIT License.
-        copyright: `&copy; ${new Date().getFullYear()} nisp. All rights reserved <br /> this page is modified from <a href='https://lerna.js.org/'>lerna</a> and built with <a href='https://docusaurus.io/'>docusaurus</a>. `,
-        // copyright: `All rights reserved <br />  Copyright &copy; ${new Date().getFullYear()}, nisp.`,
+        copyright: `&copy; 2021-${new Date().getFullYear()} nisp. All rights reserved <br /> this page is modified from <a href='https://lerna.js.org/'>lerna</a> and built with <a href='https://docusaurus.io/'>docusaurus</a>. `,
       },
       prism: {
         theme: lightCodeTheme,

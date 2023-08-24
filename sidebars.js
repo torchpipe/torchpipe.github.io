@@ -52,7 +52,7 @@ const sidebars = {
     "introduction",
     {
       type: "category",
-      label: "2. Preliminaries",
+      label: "2. Preliminary",
       items: [
         "preliminaries/cuda_stream",
         "preliminaries/pytorch_libtorch",
@@ -61,7 +61,7 @@ const sidebars = {
       ],
       link: {
         type: "generated-index",
-        title: "Preliminaries",
+        title: "Preliminary",
         description: "Feel free to skim or skip over this section and refer back to it as needed.",
         slug: "/preliminaries",
       },

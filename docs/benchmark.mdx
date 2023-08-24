@@ -17,7 +17,6 @@ _This article mainly lists the basic performance test experiments of `torchpipe`
 The chapter on **[Key Performance Evaluation Metrics for Services](preliminaries/rpc)** is required as a prelude.
 :::
 
-See the footnote* for details on the test machine.
 
 ## Local Function vs. `RPC` Call
 `torchpipe` mainly uses thread-safe local calls and binds to the `pytorch` front-end interface. This is one of its major features. It is not easy to compare its performance with frameworks such as `triton` that are strongly coupled with `RPC`. Therefore, we are prepared to adopt reasonable unfair comparisons. Nevertheless, we have optimized the test process as reasonably as possible, such as completing all data preparation in advance during initialization and reusing it.
