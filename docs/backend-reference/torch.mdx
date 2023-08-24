@@ -1,165 +1,160 @@
 ---
 id: torch
-title: torch相关后端
+title: Torch-related backends
 type: reference
 displayed_sidebar: api
 
 ---
 
-# torch相关后端
+## Overview
 
-## 速览
-
-
-|名称|主要初始化参数|输入[类型]|输出[类型]|备注|
-|---|---|---|---|---|
-| [DecodeTensor](#decodetensor) | `color(default=rgb)` |`data[str/bytes]`|result[at::Tensor]<br /> color[str]| |
-| [cvtColorTensor](#cvtcolortensor) |color|data[at::Tensor]<br /> color[str]|result[at::Tensor]| |
-|[ResizeTensor](#resizetensor)|resize_h,resize_w|data[at::Tensor]|result[at::Tensor]||
-| [PillowResizeTensor](#pillowresizetensor)| resize_h,resize_w|data[at::Tensor]|result[at::Tensor]| CV_8UC3 |
-| [ResizePadTensor](#resizepadtensor)| max_h,max_w,pad_value|data[at::Tensor] |- result[at::Tensor]<br />- inverse_trans<br />[std::function<std::pair<float, float>(float x, float y)>]   ||
-| [TensorrtTensor](#tensorrttensor)| `model`,`instance_num`,<br />`max`,`precision`,<br />`mean`,`std`,`model::cache` |  |    |tensorrt推理引擎|
-| [Tensor2Mat](#tensor2mat)| |data[at::Tensor] |result[cv::Mat]   ||
-| [SyncTensor](#synctensor)|`SyncTensor[]` |data[any] |result[any]   ||
-| [Torch](#torch)|`device_id` `Torch[]` |data[at::Tensor/vecotr<at::Tensor>] |result[same as data]   |从0.3.2b0开始生效|
-| [SaveTensor](#savetensor)|save_dir |data[at::Tensor] |result[at::Tensor]   ||
-| [LoadTensor](#loadtensor)|tensor_name ||result[at::Tensor]   ||
-| C10Exception| ||   |抛出c10::Error异常,用于模拟torch内部异常|
-
-
-
-
-## DecodeTensor
-- 调用`nvjpeg`进行gpu解码，长宽限制为(`h*w<5000*5000`). 输出数据的形状为13hw.
-- 如果解码出的图片为空，则输出无`result`键值；
-
-
-## cvtColorTensor
-- 初始化时的`color`为目标颜色空间；输入中读取的`color`为数据的颜色空间；两者不同时，将进行颜色空间转换, 否则，返回输入值；
-- color 目前支持“rgb” 和 “bgr”
-- 输入要求为`13hw`.
-
-## ResizeTensor
-- 调用`at::upsample_bilinear2d`进行resize操作；
-- resize_h 和 resize_w 需要为整数，有效范围为[1, 1024 * 1024]
-- 输入要求为`13hw`.
-- 输出`13hw`, float型数据.
-
-
-## PillowResizeTensor
-- 输入的`at::Tensor`，元素类型需要是`at::kByte`，形状为13hw
-- resize_h 和 resize_w 需要为整数，有效范围为[1, 1024 * 1024]
-- 严格保持和pillow的双线性插值结果一致（在大量数据上进行了验证）
-
-## ResizePadTensor
-- 保持长宽比resize, 左上角对齐，以常数`pad_value`进行pad.
-- 输出的`at::Tensor`类型是float，形状13hw
-- max_h 和 max_w 需要为整数，有效范围为[1, 1024 * 1024]
-- pad_value 支持整数,浮点数，多个数值以逗号分开。
-- inverse_trans: 用于将新坐标映射到原始坐标.
-
-## Tensor2Mat
-- 将`at::Tensor`转为`cv::Mat`，保持数据类型不变
-- 输入形状hw3或者13hw
-- 类似于[SyncTensor](#SyncTensor), 会同步当前流
-:::caution
-请插入流管理操作：
-`Sequential[Tensor2Mat,SyncTensor]` 或者`SyncTensor[Tensor2Mat]`，
-否则`Tensor2Mat`将使用默认cuda流。
-:::
-
-## SyncTensor
-用于torch相关后端的流同步
-- SyncTensor::backend: default=Identity
-- 使用方式：
-    - `SyncTensor[BackendTensor]`
-    - [Sequential](./basic#sequential)[ATensor,BTensor,SyncTensor]
-    - 以上的嵌套，如`SyncTensor[Sequential[ATensor,SyncTensor[BTensor],CTensor,SyncTensor]]`
-- 嵌套模式下仅有一次流同步真正被执行。
-- 在pytorch环境直接使用（不经过调度后端）时，本后端将不生效，以便兼容[pytorch cuda语义](../preliminaries/pytorch_libtorch)。经过默认调度后端时，初始化和前向可认为在同一个独立线程中完成。
-- 别名: **TensorSync**
-
-<details><summary>实现细节</summary>
-
-- [调度系统](../Intra-node/schedule.mdx)将确保后端实例的初始化和前向在同一个独立的线程中执行。Torch感知到处于此独立线程模式，才会激活自身功能。
-- SyncTensor会在初始化时判断当前线程是否[绑定到了默认流](../preliminaries/pytorch_libtorch)。是的话，将激活自身功能：在初始化时将该线程切换到独立的流，并在前向时进行流同步。
-- Sequential 容器可确保其子后端初始化的顺序和前向的顺序相反， 比如 `Sequential[SyncTensor[A],SyncTensor[B]]`, 会倒序初始化, 正序前向： 
-```mermaid
-flowchart LR
-  BI["SyncTensor[B].init"] --> AI["SyncTensor[A].init"]
-  AI --> AF["SyncTensor[A].forward"]
-  AF --> BF["SyncTensor[B].forward "]
-```
-  SyncTensor[A] 在 初始化时已经不是默认流，则它不用设置新的流， forward时也不用负责流的同步, 此时 SyncTensor[B] 设置了新的流，则由 SyncTensor[B] 负责流的同步;
-- Mat2Tensor, Tensor2Mat 后端自带当前流的同步功能；然而其无法改变线程绑定的流，仍需要通过 `S[Tensor2Mat,...,SyncTensor]` 切换到独立流，否则会影响性能。
-
-</details>
-
-## Torch
-- 用于torch相关后端的流同步
-- 设备的切换（0.3.2b0版本开始生效）
-
-- Torch[]: 必须提供
-- device_id: 默认为-1；表示不切换设备. 内部相当于调用了`c10::cuda::set_device(device_id)` 或者 `torch.cuda.set_device(device_id)`.
-- 使用方式：
-    - `Torch[BackendTensor]`
-- 在pytorch环境直接使用（不经过调度后端）时，本后端将不生效，以便兼容[pytorch cuda语义](../preliminaries/pytorch_libtorch)。经过默认调度后端时，初始化和前向可认为在同一个独立线程中完成。
+| Name                                      | Main Initialization Parameters                                                   | Input[Type]                       | Output[Type]                                                                                              | Note                                                                    |
+|-------------------------------------------|----------------------------------------------------------------------------------|-----------------------------------|-----------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------|
+| [DecodeTensor](#decodetensor)             | `color(default=rgb)`                                                             | `data[str/bytes]`                 | result[at::Tensor]<br /> color[str]                                                                       |                                                                         |
+| [cvtColorTensor](#cvtcolortensor)         | color                                                                            | data[at::Tensor]<br /> color[str] | result[at::Tensor]                                                                                        |                                                                         |
+| [ResizeTensor](#resizetensor)             | resize_h,resize_w                                                                | data[at::Tensor]                  | result[at::Tensor]                                                                                        |                                                                         |
+| [PillowResizeTensor](#pillowresizetensor) | resize_h,resize_w                                                                | data[at::Tensor]                  | result[at::Tensor]                                                                                        | CV_8UC3                                                                 |
+| [ResizePadTensor](#resizepadtensor)       | max_h,max_w,pad_value                                                            | data[at::Tensor]                  | - result[at::Tensor]<br />- inverse_trans<br />[std::function<std::pair<float, float>(float x, float y)>] |                                                                         |
+| [TensorrtTensor](#tensorrttensor)         | `model`,`instance_num`,<br />`max`,`precision`,<br />`mean`,`std`,`model::cache` |                                   |                                                                                                           | TensorRT inference engine                                               |
+| [Tensor2Mat](#tensor2mat)                 |                                                                                  | data[at::Tensor]                  | result[cv::Mat]                                                                                           |                                                                         |
+| [SyncTensor](#synctensor)                 | `device_id` `SyncTensor::backend`                                                | data[at::Tensor]                  | result[at::Tensor]                                                                                        | CUDA Stream Synchronization Facility                                    |
+| [Torch](#torch)                           | `device_id` `Torch::backend`                                                     | data[at::Tensor]                  | result[at::Tensor]                                                                                        |                                                                         |
+| [SaveTensor](#savetensor)                 | save_dir                                                                         | data[at::Tensor]                  | result[at::Tensor]                                                                                        |                                                                         |
+| [LoadTensor](#loadtensor)                 | tensor_name                                                                      |                                   | result[at::Tensor]                                                                                        |                                                                         |
+| C10Exception                              |                                                                                  |                                   |                                                                                                           | Throws c10::Error exception, used to simulate internal Torch exceptions |
 
  
 
-## SaveTensor
-- save_dir：文件保存目录，需要提前创建；
-- 文件名后缀是`.pt`，名称唯一
 
+## DecodeTensor
+- Calls `nvjpeg` for GPU decoding, with a limit of `h*w<5000*5000`. The output data shape is 13hw.
+- If the decoded image is empty, there will be no `result` key value output.
+
+## cvtColorTensor
+- The `color` parameter initialized at the beginning is the target color space. The `color` read from the input is the color space of the data. If they are different, a color space conversion will be performed. Otherwise, the input value will be returned.
+- `color` currently supports "rgb" and "bgr".
+- The input must be in the shape of 13hw.
+
+## ResizeTensor
+- Calls `at::upsample_bilinear2d` for resizing.
+- `resize_h` and `resize_w` must be integers, with a valid range of [1, 1024 * 1024].
+- The input must be in the shape of 13hw.
+- The output is 13hw, with float data type.
+
+## PillowResizeTensor
+- The input `at::Tensor` type must be `at::kByte`, with a shape of 13hw.
+- `resize_h` and `resize_w` must be integers, with a valid range of [1, 1024 * 1024].
+- Strictly maintains consistency with the bilinear interpolation results of Pillow (verified on a large amount of data).
+
+## ResizePadTensor
+- Maintains aspect ratio during resizing, aligns to the top left corner, and pads with a constant `pad_value`.
+- The output `at::Tensor` type is float, with a shape of 13hw.
+- `max_h` and `max_w` must be integers, with a valid range of [1, 1024 * 1024].
+- `pad_value` supports integers, floating-point numbers, and multiple values separated by commas.
+- `inverse_trans`: used to map new coordinates to original coordinates.
+
+## Tensor2Mat
+- Converts `at::Tensor` to `cv::Mat`, while keeping the data type unchanged.
+- The input shape must be hw3 or 13hw.
+- Similar to [SyncTensor](#SyncTensor), it synchronizes the current stream.
+:::caution
+Please insert stream management operations:
+`Sequential[Tensor2Mat,SyncTensor]` or `SyncTensor[Tensor2Mat]`,
+otherwise `Tensor2Mat` will use the default CUDA stream.
+:::
+
+
+
+## SyncTensor
+
+- SyncTensor::backend: default=Identity
+- Usage:
+    - `SyncTensor[BackendTensor]`
+    - [Sequential](./basic#sequential)[ATensor,BTensor,SyncTensor]
+    - Nested mode only executes stream synchronization once.
+- When used directly in the pytorch environment (without going through the scheduling backend), this backend will not take effect in order to be compatible with [pytorch cuda semantics](../preliminaries/pytorch_libtorch). When going through the default scheduling backend, initialization and forward can be considered to be completed in the same independent thread.
+- Aliases: **TensorSync**, **Torch** (effective from version 0.3.1b2)
+
+<details><summary>Implementation details</summary>
+
+- [The scheduling system](../Intra-node/schedule.mdx) ensures that the initialization and forward of the backend instance are executed in the same independent thread. Torch perceives that it is in this independent thread mode before activating its own functionality.
+- Torch will determine whether the current thread is [bound to the default stream](../preliminaries/pytorch_libtorch) during initialization. If so, it will activate its own functionality: switch the thread to an independent stream during initialization and perform stream synchronization during forward.
+- The Sequential container ensures that the initialization order of its sub-backends is opposite to the forward order, such as `Sequential[Torch[A],Torch[B]]`, which initializes in reverse order and forwards in order:
+```mermaid
+flowchart LR
+  BI["Torch[B].init"] --> AI["Torch[A].init"]
+  AI --> AF["Torch[A].forward"]
+  AF --> BF["Torch[B].forward "]
+```
+  Torch[A] is not the default stream during initialization, so it does not need to set a new stream or be responsible for stream synchronization during forward. At this time, Torch[B] sets a new stream, so Torch[B] is responsible for stream synchronization.
+- Mat2Tensor and Tensor2Mat backends have their own stream synchronization functions for the current stream. However, they cannot change the stream bound by the thread and still need to switch to an independent stream through `S[Tensor2Mat,...,Torch]`, otherwise it will affect performance.
+
+</details>
+
+
+## Torch
+Similar to [SyncTensor](#synctensor), but with additional cross-card functionality. Effective from version 0.3.2b1.
+- Torch::backend: default=Identity
+- device_id: Default is -1, which sets the current device to this ID. During initialization, it is equivalent to calling `c10::cuda::set_device(device_id)` or `torch.cuda.set_device(device_id)`. During forward propagation, the input data type must be `at::Tensor` or `vector<at::Tensor>`. This backend will move the data to the specified graphics card.
+
+## SaveTensor
+- save_dir: Directory for file saving, which needs to be created in advance.
+- The file name suffix is `.pt`, and the name is unique.
 
 ## TensorrtTensor
-tensorrt推理引擎
+TensorRT inference engine.
 
-### 初始化
+### Initialization
 
-以下是初始化参数：
+The following are initialization parameters:
 
-||说明|备注|
-|---|---|---|
-|model|模型路径|支持 <br />- 以 .onnx 结尾的onnx文件<br />- 以 .trt 结尾的tensorrt engine文件 <br />- 以 .onnx.encrypted 和 .trt.encrypted 结尾的[加密](../tools/encrypt.mdx)文件|
-|instance_num |实例数目 |如果tensorrt engine的profile数目不足以建立足够的实例数，将反序列化多个engine. |
-|[postprocessor](#后处理扩展) |自定义后处理 |自定义网络输出c++批后处理;默认操作是拆分batch维度； 需要实现为 PostProcessor 的子类并注册 |
+| Parameter    | Description         | Note                                                                                                                                                                                       |
+|--------------|---------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| model        | Model path          | Supports <br />- onnx files ending with .onnx<br />- tensorrt engine files ending with .trt <br />- [encrypted](../tools/encrypt.mdx) files ending with .onnx.encrypted and .trt.encrypted |
+| instance_num | Number of instances | If the number of profiles in the tensorrt engine is not enough to establish enough instances, multiple engines will be deserialized.                                                       |
+| [postprocessor](#post-processing-extension) | Custom post-processing | Custom C++ batch post-processing for network output; the default operation is to split the batch dimension; needs to be implemented as a subclass of PostProcessor and registered.         ||
 
-对于onnx模型，有以下额外参数
+For onnx models, there are the following additional parameters:
 
-||说明|备注|
-|---|---|---|
-|min/max | 模型最小/最大输入| 形式上， 可以是`1`, `1x3x224x224`,或者 `1,1`(多输入网络)。 字典序排序;<br />`instance_num > 1`时，可以是以`;`隔开的多组配置|
-|precision | 模型精度| [fp32,fp16,int8,best]. 版本<=0.3.1b1时默认值为fp16，版本>0.3.1b1时默认为[fp16(SM>6.1), fp32(SM<=6.1)]; 如果精度不被支持，将自动退化到受支持的精度|
-|precision::fp32 | 设置部分层的精度为fp32（覆盖precision的设置）| 层的名称，以逗号分开(建议将检测/分类最后一层设置为fp32或者fp16)|
-|precision::fp16 | 设置部分层的精度为fp16（覆盖precision的设置）| 层的名称，以逗号分开(建议将检测/分类最后一层设置为fp32或者fp16)|
-|mean/std|图像前处理中的减均值除方差操作参数|该操作将插入tensorrt网络。需要大于`1+1e-5`（>0.3.1b2）|
-|model::cache|自动缓存模型文件路径|支持 .trt 和 .trt.encrypted 后缀的文件名。 如果文件不存在，将自动保存该文件；否则将直接加载此文件。|
-
-对于使用tensorrt量化onnx模型，有如下参数：
-
-||说明|备注|起始版本|
-|---|---|---|---|
-|calibrate_input | 校准的输入目录| 使用torch.save 或者SaveTensor后端保存的tensor，形状为1chw||
-|calibrate_cache | 可选。校准缓存，例如"resnet18.cache"，如果存在，将跳过calibrate_input| 校准可能很昂贵，可缓存于文件。如果网络结构发生变化或输入数据集发生变化，则还应重新校准网络。|>=0.3.0b4|
+| Parameter               | Description                                                                       | Note                                                                                                                                                                                                                               |
+|-------------------------|-----------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| min/max                 | Minimum/maximum input of the model                                                | In form, it can be `1`, `1x3x224x224`, or `1,1` (for multi-input networks). Sorted in lexicographic order;<br />When `instance_num > 1`, it can be multiple configurations separated by `;`.                                       |
+| precision               | Model precision                                                                   | [fp32,fp16,int8,best]. The default value for versions <=0.3.1b1 is fp16, and for versions >0.3.1b1 it is [fp16(SM>6.1), fp32(SM<=6.1)]; If the precision is not supported, it will automatically degrade to a supported precision. |
+| precision::fp32         | Set the precision of some layers to fp32 (overrides the precision setting)        | Layer name(s) (can provide only part of the name), separated by commas.                                                                                                                                                            |
+| precision::fp16         | Set the precision of some layers to fp16 (overrides the precision setting)        | Layer name(s) (can provide only part of the name), separated by commas.                                                                                                                                                            |
+| precision::output::fp32 | Set the output precision of some layers to fp32 (overrides the precision setting) | Layer name(s) (can provide only part of the name), separated by commas; (>=0.3.1b2)                                                                                                                                                |
+| precision::output::fp16 | Set the output precision of some layers to fp16 (overrides the precision setting) | Layer name(s) (can provide only part of the name), separated by commas; (>=0.3.1b2)                                                                                                                                                |
+| mean/std                | Subtract mean and divide variance parameters in image preprocessing               | This operation will be inserted into the tensorrt network. Needs to be greater than `1+1e-5` (>=0.3.1b2)                                                                                                                           |
+| model::cache            | Automatically cache model file path                                               | Supports file names with .trt and .trt.encrypted suffixes. If the file does not exist, it will be automatically saved; otherwise, this file will be loaded directly.                                                               |
 
 
 
-参见[示例](https://g.hz.netease.com/deploy/torchpipe/-/tree/master/examples/int8).
+For quantizing onnx models using tensorrt, the following parameters are available:
+
+| Parameter       | Description                                                                                               | Note                                                                                                                                             | Starting Version |
+|-----------------|-----------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------|------------------|
+| calibrate_input | Calibration input directory                                                                               | Tensors saved using torch.save or SaveTensor backend, with a shape of 1chw.                                                                      |                  |
+| calibrate_cache | Optional. Calibration cache, for example "resnet18.cache". If it exists, calibrate_input will be skipped. | Calibration can be expensive and can be cached to a file. If the network structure or input dataset changes, the network should be recalibrated. | >=0.3.0b4        |
 
 
-### 前向计算
 
-||说明|备注|
-|---|---|---|
-|TASK_DATA_KEY|网络为单输入输出时，类型为at::Tensor/torch.Tensor, 网络为多输入输出时， 类型为vector/List. |字典序排列|
-|TASK_RESULT_KEY(输出)|输出类型参照输入类型，  postprocessor 可自定义输出|字典序排列|
+See [example](https://g.hz.netease.com/deploy/torchpipe/-/tree/master/examples/int8). 
 
+
+### Forward Computation
+
+  |                          | Description                                                                                                                                                     | Note                          |
+  |--------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------|
+  | TASK_DATA_KEY            | When the network has a single input and output, the type is at::Tensor/torch.Tensor. When the network has multiple inputs and outputs, the type is vector/List. | Sorted in lexicographic order |
+  | TASK_RESULT_KEY (Output) | The output type is the same as the input type, and the postprocessor can customize the output.                                                                  | Sorted in lexicographic order |
+
+ 
 ### min()/max()
-输入范围将从tensorrt模型中读取。
+The input range will be read from the TensorRT model.
 
-### 后处理扩展
-为了便于batch化后处理，TensorrtTensor引入了后处理扩展。基类为:
+### Postprocessing Extension
+To facilitate batch postprocessing, TensorrtTensor introduces postprocessing extensions. The base class is:
+
 ```cpp
 template <typename T=at::Tensor>
 class PostProcessor {
@@ -184,7 +179,7 @@ class PostProcessor {
         single_result.push_back(item[i].unsqueeze(0));
       }
       if (single_result.size() == 1) {
-        (*inputs[i])[TASK_RESULT_KEY] = single_result[0];  // batch=1 的时候，返回单个值
+        (*inputs[i])[TASK_RESULT_KEY] = single_result[0];  // When `batch==1`, a single value is returned. 
       } else
         (*inputs[i])[TASK_RESULT_KEY] = single_result;
     }
@@ -194,15 +189,17 @@ class PostProcessor {
 };
 ```
 
-用户继承`PostProcessor<at::Tensor>`并实现前向接口后，可采用[AOT编译](../Intra-node/extensible_backend.mdx#编译)的方式编译后使用。
-内置后处理：
+After inheriting from `PostProcessor<at::Tensor>` and implementing the forward interface, you can compile and use it using [AOT compilation](../Intra-node/extensible_backend.mdx#编译).
+Built-in postprocessing: 
 
-||功能|备注|
-|-|-|-|
-|cpu|将数据拷贝到cpu上||
-|softmaxcpu|对二维tensor进行softmax操作后，将数据拷贝到cpu上||
+  |            | Functionality                                               | Note |
+  |------------|-------------------------------------------------------------|------|
+  | cpu        | Copy data to CPU                                            |      |
+  | softmaxcpu | Perform softmax operation on 2D tensor and copy data to CPU |      |
 
-以下是`softmaxcpu`的参考实现：
+
+
+Here is a reference implementation of `softmaxcpu`:
 ```cpp
 class BatchingPostProcSoftmaxCpu : public PostProcessor<at::Tensor> {
  public:
@@ -210,7 +207,7 @@ class BatchingPostProcSoftmaxCpu : public PostProcessor<at::Tensor> {
                const std::vector<at::Tensor>& net_inputs) {
     for (auto& item : net_outputs) {
       if (item.dim() == 2) {
-        item = item.softmax(1).cpu();  // 隐式同步
+        item = item.softmax(1).cpu();  // Implicit Synchronization
       }
     }
     PostProcessor<at::Tensor>::forward(net_outputs, input, net_inputs);
@@ -221,5 +218,5 @@ IPIPE_REGISTER(PostProcessor<at::Tensor>, BatchingPostProcSoftmaxCpu, "softmaxcp
 ```
 
 ## LoadTensor
-用于加载磁盘中的tensor(.pt文件)到文件，可加载由`torch.save()` 保存的文件. 如果想加载为图片，可使用 `S[LoadTensor,Tensor2Mat, SyncTensor]`.
+Used to load tensors (.pt files) from disk, which can be saved using `torch.save()`. If you want to load an image, you can use `S[LoadTensor, Tensor2Mat, SyncTensor]`.
 

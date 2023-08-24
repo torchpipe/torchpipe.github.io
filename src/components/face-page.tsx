@@ -66,7 +66,7 @@ export default function FacePage(): JSX.Element {
               <ChevronRightIcon className={styles.callout__icon} aria-hidden="true" />
             </a>
             <h2 className={styles.slogan}>
-              <span><Translate id="home.tagline0">Serving Inside Pytorch</Translate></span>
+              <span  style={{ marginBottom: '10px' }}><Translate id="home.tagline0">Serving Inside Pytorch</Translate></span>
               <span className={styles.slogan__highlight}><Translate id="home.tagline1">with Multiple Threads</Translate></span>
             </h2>
             <p className={styles.description}>

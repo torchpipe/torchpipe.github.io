@@ -6,25 +6,20 @@ hide_title: true
 slug: /showcase
 ---
 
-import Link from '@docusaurus/Link'
 
-<div className="text--left margin-top--lg margin-bottom--lg">
-    <p>
-    <Link to="https://g.hz.netease.com/deploy/torchpipe-docs/-/edit/master/website/docs/showcase/showcase.mdx">🙏 请添加你的用例</Link>
-    </p>
-</div>
 
-|    名称    | [图](../tools/vis.mdx)                 | 涉及元素                                                                                                  | 备注 |
-|:----------:|----------------------------------------|-----------------------------------------------------------------------------------------------------------|------|
-| [resnet18] | ![](../assets/resnet18_gpu_decode.svg) | [TensorrtTensor](../backend-reference/torch.mdx#tensorrttensor)<br />[filter]<br />[torchpipe.utils.test] |      |
-|  [yolox]   | ![](../assets/yolox.svg)               | [TensorrtTensor](../backend-reference/torch.mdx#tensorrttensor)<br />[torchpipe.utils.cpp_extension.load] |      |
-| [PP-OCRv2] | ![](../assets/ppocr.svg)               | [MapReduce](../Inter-node/graphtraversal.mdx#mapreduce)<br />[Jump]                                       |      |
-|[tensorrt`s native int8]||[TensorrtTensor](../backend-reference/torch.mdx#tensorrttensor)||
+
+|           名称           | [图](../tools/vis.mdx)                 | 涉及元素                                                                                                  | 备注 |
+|:------------------------:|----------------------------------------|-----------------------------------------------------------------------------------------------------------|------|
+|        [resnet18]        | ![](../assets/resnet18_gpu_decode.svg) | [TensorrtTensor](../backend-reference/torch.mdx#tensorrttensor)<br />[filter]<br />[torchpipe.utils.test] |      |
+|         [yolox]          | ![](../assets/yolox.svg)               | [TensorrtTensor](../backend-reference/torch.mdx#tensorrttensor)<br />[torchpipe.utils.cpp_extension.load] |      |
+|        [PP-OCRv2]        | ![](../assets/ppocr.svg)               | [MapReduce](../Inter-node/graphtraversal.mdx#mapreduce)<br />[Jump]                                       |      |
+| [TensorRT's native INT8] |                                        | [TensorrtTensor](../backend-reference/torch.mdx#tensorrttensor)                                           |      |
 
 [resnet18]: https://g.hz.netease.com/deploy/torchpipe/-/tree/master/examples/resnet18
 [yolox]: https://g.hz.netease.com/deploy/torchpipe/-/tree/master/examples/yolox
 [PP-OCRv2]: https://g.hz.netease.com/deploy/torchpipe/-/tree/master/examples/ppocr
-[tensorrt`s native int8]: https://g.hz.netease.com/deploy/torchpipe/-/tree/master/examples/int8
+[TensorRT's native INT8]: https://g.hz.netease.com/deploy/torchpipe/-/tree/master/examples/int8
 
 <!-- 通用链接： -->
 [torchpipe.utils.cpp_extension.load]: ../python/compile.mdx
@@ -32,3 +27,5 @@ import Link from '@docusaurus/Link'
 [torchpipe.utils.test]: ../python/test.mdx
 [Jump]: ../Inter-node/graphtraversal.mdx#jump
 
+
+🙏 请添加你的用例

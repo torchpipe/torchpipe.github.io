@@ -1,28 +1,28 @@
 ---
 id: vis
-title: 配置文件可视化
+title: Configuration Visualizing
 type: explainer
 ---
 
-针对配置文件，我们提供了简单的网页可视化功能。
+We provide a simple web-based visualization feature for configuration files.
+## Environment Setup
 
-## 环境准备
 ```bash
 apt-get update
 apt install graphviz
 pip install pydot gradio
 ```
 
-## 使用方法 {#parameter}
+## Usage {#parameter}
 
  `torchpipe.utils.vis [-h] [--port PORT] [--save] toml`
 
-:::tip 参数
-- **--save** - 是否将图保存为svg图片。图片将保存在当前目录下，与toml文件（后缀不同）
-:::
+:::tip Parameters
+- **--save** - Whether to save the graph as an SVG image. The image will be saved in the current directory with a different file extension than the TOML file.
+::: 
 
 
-## 示例
+## Example
 ```bash
 python -m torchpipe.utils.vis your.toml # --port 2211
 ```

@@ -53,7 +53,6 @@ const config = {
           routeBasePath: '/docs', // 把文档放在网站根部
           sidebarPath: require.resolve("./sidebars.js"),
           // Remove this to remove the "edit this page" links.
-          // editUrl: "https://g.hz.netease.com/deploy/torchpipe-docs/-/tree/master/website/",
           editUrl: ({locale, versionDocsDirPath, docPath}) => {
                   // Link to Crowdin for French docs
                   if (locale == 'en') { 

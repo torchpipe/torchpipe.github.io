@@ -1,16 +1,19 @@
 ---
 id: welcome
-title:  欢迎
+title: Welcome
 type: explainer
 ---
 
-# 欢迎查看 torchpipe 文档！
-torchpipe 是一个开源的深度学习服务端部署的加速框架，适用于主要硬件平台（如 NVIDIA GPU）以及主要通用加速引擎（如 TensorRT），旨在使机器学习工程师能够在任意端到端业务逻辑部署时高效地运行并优化服务性能。
+# Welcome to the TorchPipe Documentation!
 
-随着 torchpipe 官方版本及文档的更新，文档也会不断调整，你可以：
 
-- 学习 torchpipe 文档，快速上手 torchpipe 框架
-- 参与开源共建、追踪文档更新，成为 torchpipe 文档贡献者
-- 加入 torchpipe 社区、结识同行并参与更多讨论及交流
+Torchpipe is a multi-instance pipeline parallel library that acts as a bridge between lower-level acceleration libraries and RPC frameworks, ensuring a strict decoupling from them. It offers a thread-safe function interface for the PyTorch frontend at a higher level, while empowering users with fine-grained backend extension capabilities at a lower level. It maximizes service throughput while meeting latency requirements.
 
-现在，让我们开启 torchpipe 官方文档的学习之旅吧！
+
+This document will be continuously updated along with the code changes. You can:
+
+- Learn the TorchPipe documentation and quickly get started with the TorchPipe library.
+- Participate in open source development, track document updates, and become a contributor to the TorchPipe documentation.
+- Join the TorchPipe community, meet peers, and participate in more discussions and exchanges.
+
+Now, let's start the journey of exploring the official TorchPipe documentation!

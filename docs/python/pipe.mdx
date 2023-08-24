@@ -1,6 +1,6 @@
 ---
 id: pipe
-title: 推理
+title: Inference
 type: reference
 displayed_sidebar: api
 ---
@@ -9,31 +9,30 @@ displayed_sidebar: api
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# 推理
 
 ## *torchpipe.pipe* {#pipe}
 
-### 初始化
-:::tip torchpipe.pipe 的初始化接口为
+### Initialization
+
+:::tip The initialization interface for `torchpipe.pipe` is:
 ```python
 import torchpipe as tp
 models = tp.pipe(config: Union[Dict[str, str] |  Dict[str, Dict[str, str]] | str])
 ```
 :::
 
-
 <Tabs groupId="pipe_init"  className="pipe_init-tabs">
-<TabItem value="str" label="从字典">
+<TabItem value="str" label="From Dictionary">
 
 
 ```python
 class torchpipe.pipe(config: Dict[str, str])
 ```
-:::info **参数**
-- `config: Dict[str, str]`: 配置参数会传入途径的后端进行解析。特定的后端可能会对配置进行[参数展开](../backend-reference/basic#backend-spread).
+:::info **Parameters**
+- `config: Dict[str, str]`: Configuration parameters will be passed to the backend for parsing. Specific backends may perform [parameter expansion](../backend-reference/basic#backend-spread) on the configuration.
 :::
 
-:::info **示例**
+:::info **Example**
 
 ```python
 config = {"backend":"DecodeMat"};
@@ -41,18 +40,18 @@ config = {"backend":"DecodeMat"};
 :::
 
 </TabItem>
-<TabItem value="double_str" label="从双层字典">
+<TabItem value="double_str" label="From Double-Layer Dictionary">
 
 ```python
 class torchpipe.pipe(config: Dict[str, Dict[str, str]])
 ```
-> 用于多个节点配置: `{节点名: Dict[str, str]}`. 节点名不可为`global`或者空。
+> Used for configuring multiple nodes: `{node_name: Dict[str, str]}`. The node name cannot be `global` or empty.
 
-:::info **参数**
-- `config: Dict[str, Dict[str, str]]`: 配置参数会传入途径的后端进行解析。特定的后端可能会对配置进行[参数展开](../backend-reference/basic#backend-spread). 可通过`global`设置全局默认参数。
+:::info **Parameters**
+- `config: Dict[str, Dict[str, str]]`: Configuration parameters will be passed to the backend for parsing. Specific backends may perform [parameter expansion](../backend-reference/basic#backend-spread) on the configuration. Global default parameters can be set through `global`.
 :::
 
-:::info **示例**
+:::info **Example**
 
 ```python
 config = {"decoder":{"backend":"DecodeMat"},
@@ -63,23 +62,22 @@ config = {"decoder":{"backend":"DecodeMat"},
 
 </TabItem>
 
-<TabItem value="from_toml" label="从toml文件">
+<TabItem value="from_toml" label="From TOML File">
 
 ```python
 class torchpipe.pipe(config: str)
 ```
 
-> 从文件解析参数。
+> Parse parameters from file.
 
-
-:::info **参数**
+:::info **Parameters**
 - `config: str`: 以`.toml`为后缀的[toml](https://toml.io/en/)格式文件。
 :::
 
-:::info **示例**
+:::info **Example**
 
 ```toml
-# 值为str，或者可以转化为str，如 int, float. 不接受布尔值。
+# Values can be strings or convertable to strings, such as int and float. Boolean values are not accepted.
 instance_num=2
 [decoder]
 backend="DecodeMat"
@@ -93,9 +91,9 @@ backend="SyncTensor[DecodeTensor]"
 
 </Tabs>
 
-### 前向
+### Inference
 
-:::tip torchpipe.pipe 的前向接口为
+:::tip The forward interface for `torchpipe.pipe` is:
 ```python
 class torchpipe.pipe
   def __call__(self, data: Dict[str, Any] | List[Dict[str, Any]]) -> None
@@ -103,12 +101,12 @@ class torchpipe.pipe
 :::
 
 
-> 线程安全的前向计算
+> Thread-safe forward computation
 
 
 
 <Tabs groupId="pipe_call"  className="pipe_call-tabs">
-<TabItem value="dict" label="单个数据">
+<TabItem value="dict" label="Single Data">
 
 
 ```python
@@ -116,49 +114,49 @@ def __call__(self, data: Dict[str, Any]) -> None
 ```
 
 
-:::info **参数**
-- `"data": Any`: 必须存在的输入，计算后端需要从此键值获取数据, 然后进行[解析](../Intra-node/extensible_backend#py2any)。
-- `"result": Any`: 用于输出，不存在时代表没有计算结果。
-- `"node_name": str`: 当有多个根节点时，用于指定节点名称。
-- 其他键值（[*系统保留键值*](#system-keep)除外）即可作为输入，也可作为输出，由后端决定。
+:::info **Parameters**
+- `"data": Any`: Required input, the calculation backend needs to retrieve data from this key and then perform [parsing](../Intra-node/extensible_backend#py2any).
+- `"result": Any`: Used for output, when it does not exist, it means there is no calculation result.
+- `"node_name": str`: When there are multiple root nodes, it is used to specify the node name.
+- Other key values (except for [*system reserved key values*](#system-keep)) can be used as input or output, which is determined by the backend.
 :::
 
 </TabItem>
-<TabItem value="list" label="多个数据">
+<TabItem value="list" label="Multiple Data">
 
 ```python
 def __call__(self, data: List[Dict[str, Any]]) -> None
 ```
 
-当其中一个数据计算过程抛出异常时，所有结果都不可用。当部分结果没有'result'时，其他结果仍然可用。
+When an exception is thrown during the calculation process of one of the data, all results are not available. When some results do not have 'result', other results are still available.
 
-一般来讲，这个接口不建议用在除了在python中一次性处理超大量数据以外的其他场景。
+Generally speaking, this interface is not recommended for scenarios other than processing a large amount of data at once in Python.
 
-:::info 批量处理数据的替代方式
+:::info Alternative Ways to Batch Process Data
 
-  - 计算流水线保持简单，通过线程池的方式去处理多输入：
+  - Keep the computation pipeline simple by processing multiple inputs through a thread pool:
   ```python
   self.executor =ThreadPoolExecutor(max_workers=15) 
   # forward pass
   future_tasks = self.executor.map(self.forward_for_single_input, data)
   ```
-  每一个`forward_for_single_input`函数定义了数据从输入到最终结果的多个计算步骤。
-  - 对于涉及到检测等上下文分裂的情景，可以通过[MapReduce](../Inter-node/graphtraversal.mdx#mapreduce)进行调度。
+  Each `forward_for_single_input` function defines multiple computation steps for data to go from input to final result.
+  - For scenarios involving context switching such as detection, scheduling can be done through [MapReduce](../Inter-node/graphtraversal.mdx#mapreduce).
 :::
 
 </TabItem>
 </Tabs>
 
-### 系统保留键值 {#system-keep}
+### Reserved Key Values in the System {#system-keep}
 
-||定义|备注|
-|---|---|---|
-|TASK_DATA_KEY|`data`|用于输入之一键值|
-|TASK_RESULT_KEY|`result`|用于输出之一键值|
-|TASK_CONTEXT_KEY|`context`|用于全局共享上下文语法糖|
-|TASK_EVENT_KEY|`event`||
-|"_*"||所有以下划线开始的字符串|
-|TASK_NODE_NAME_KEY|`node_name`||
-|"global"||目前用于表示全局设置|
-|"default"|||
-|"TASK_*_KEY"||以`TASK_`开头以`_KEY`结束的字符串|
+| Key                | Definition  | Remarks                                              |
+|--------------------|-------------|------------------------------------------------------|
+| TASK_DATA_KEY      | `data`      | One of the input key values                          |
+| TASK_RESULT_KEY    | `result`    | One of the output key values                         |
+| TASK_CONTEXT_KEY   | `context`   | Syntax sugar for global sharing                      |
+| TASK_EVENT_KEY     | `event`     |                                                      |
+| "_*"               |             | All strings starting with an underscore              |
+| TASK_NODE_NAME_KEY | `node_name` |                                                      |
+| "global"           |             | Currently used to represent global settings          |
+| "default"          |             |                                                      |
+| "TASK_*_KEY"       |             | Strings starting with `TASK_` and ending with `_KEY` |

@@ -1,53 +1,53 @@
 ---
 id: consistency
-title: "如何处理训练推理的一致性"
+title: "How to Handle Consistency in Training Inference"
 type: explainer
 ---
 
-本节介绍如何保证部署结果与训练结果的一致性以及调试方面的经验。
+This section introduces how to ensure consistency between deployment results and training results, as well as debugging experience.
 
-## 常见不一致点
-- gpu解码和前处理 与 训练时使用的库不一致
+## Common Inconsistencies
+- Inconsistencies between GPU decoding and preprocessing and the libraries used during training.
 
-- 对于使用opencv进行cpu解码和前处理， 通常来说，训练和推理有较大概率结果保持一致；部分环境下，可能因为cpu版本，底层库(libjpeg, libjpeg-turbo), 编译方式(WITH_IPP=ON/OFF) 等因素的差异，导致结果出现一定差异。
+- For CPU decoding and preprocessing using OpenCV, training and inference results are usually consistent. However, in some environments, differences in CPU versions, underlying libraries (libjpeg, libjpeg-turbo), compilation methods (WITH_IPP=ON/OFF), and other factors may cause some differences in results.
 
-- 流程差异；比如对于相同的图片resize，送入uint8类型的图片和送入float类型的图片，结果不同。
+- Differences in processes, such as different results when resizing the same image and sending it as an uint8 type or a float type.
 
-- tensorrt fp16 带来一定差异；fp32有可能带来小数点后四位的差异；部分模型没有办法全部层都做fp16量化，需要用工具进行部分量化。
+- TensorRT fp16 brings some differences; fp32 may bring differences in the fourth decimal place; some models cannot do fp16 quantization for all layers and require tools for partial quantization.
 
-- c++逻辑和python逻辑带来的差异
+- Differences in C++ logic and Python logic. 
 
-## 调试技巧
-对于部署代码，与使用python做原型的代码的输出结果不同时，可以定位不同点的方法有：
+## Debugging Techniques
 
-- 从头到尾逐行/逐节点比较输入输出; 可输出到python侧，也可使用如下后端输出到文件：
-    [SaveMat](../backend-reference/opencv#savemat), [SaveTensor](../backend-reference/torch#savetensor), [Mat2Tensor](../backend-reference/opencv#mat2tensor), [Tensor2Mat](../backend-reference/torch#tensor2mat).
+To locate the differences in inconsistent reasoning output during training, the following methods can be used:
 
-- 局部输入替换。可以跳过有差异的部分节点，比较后续流程。可使用的后端工具有：LoadTensor
+- Compare input and output line by line/node by node from start to finish. The output can be exported to the Python side, or output to a file using the following backends: [SaveMat](../backend-reference/opencv#savemat), [SaveTensor](../backend-reference/torch#savetensor), [Mat2Tensor](../backend-reference/opencv#mat2tensor), [Tensor2Mat](../backend-reference/torch#tensor2mat).
 
-- 使用 `torch_utils.hpp` 中的函数保存tensor：
+- Replace local inputs. The nodes with differences can be skipped and the subsequent processes can be compared. The following backend tools can be used: LoadTensor.
+
+- Save the tensor using the functions in `torch_utils.hpp`: 
 
 ```cpp
 void ipipe::save(std::string name, at::Tensor input)
-// 保存 at::Tensor 到文件。等价于 torch.save(name: str, tensor: torch.Tensor)
+// Save the at::Tensor to a file. Equivalent to torch.save(name: str, tensor: torch.Tensor)
 
-// 参数: 
+// Parameters: 
 
-// name – 文件路径
-// input – 输入的tensor
+// name – file path
+// input – input tensor
 ```
 
-- 采用 [GDB调试](./remote-gdb) 或者 打印的方式检查结果。
+- Use [GDB debugging](./remote-gdb) or print to check the results.
 
 
-## 解决训练推理一致性问题的策略
-- 建议对于一些小的差异定位出来并以局部输入替换的方式跳过后，继续定位后续差异点；最终部署时，部分差异可忽略。
+## Strategies for solving training and reasoning consistency issues
+- It is recommended to locate and skip small differences by replacing local inputs, and then continue to locate subsequent differences. Some differences can be ignored during final deployment.
 
-- 建议上线之前，进行大量的数据测试，防止出现小概率错误导致的结果错误情况，保证最终部署的稳定性。
+- It is recommended to perform extensive data testing before going online to prevent result errors caused by low probability errors and ensure the stability of the final deployment.
 
-- 可以以部署时的相关前处理流程，在线或者离线处理训练时的输入数据。
+- The input data during training can be processed online or offline using the relevant preprocessing flow at the time of deployment.
 
 ## c++ first vs. python first
-由于一些工程和现实原因（更少的工作量实现高性能目标），当前阶段主要依赖于脱离python的静态图达到最理想加速效果， 导致调试不太友好。
+Due to some engineering and practical reasons (less workload to achieve high-performance goals), the current stage mainly relies on static graphs that are independent of Python to achieve the ideal acceleration effect, which makes debugging less friendly.
 
-好的一点是 torchpipe 可以渐进式的分阶段采用，减轻调试的痛苦。
+The good thing is that torchpipe can be gradually adopted in stages, which reduces the pain of debugging.

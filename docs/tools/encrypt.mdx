@@ -1,27 +1,27 @@
 ---
 id: encrypt
-title: 加密
+title: Encryption
 type: explainer
 ---
 
-内部自带了简单的加密相关功能.
+torchpipe comes with built-in simple encryption functionality.
 
 :::tip
-请在编译`torchpipe`时指定密钥`IPIPE_KEY`（(大于8位，16位最佳)）以便启动相关功能：
+Please specify the `IPIPE_KEY` key (greater than 8 characters, 16 characters recommended) when compiling `torchpipe` to enable the relevant functionality:
+
 ```bash
-# 以下密钥只是举例，请勿使用该密钥
+# The following key is just an example. Please do not use this key.
 IPIPE_KEY=9876tfyghyughyuihjk python setup.py bdist_wheel
 # or IPIPE_KEY=9876tfyugkjhyuihjk pip instal -e .
 ```
 :::
 
-## 示例
+## Example
 ```bash
 python -m torchpipe.utils.encrypt a.onnx a.onnx.encrypted
 ```
 
-## 使用方法 {#encrypt-parameter}
-
+## Usage {#encrypt-parameter}
  `usage: encrypt.py [-h] input output`
 
 

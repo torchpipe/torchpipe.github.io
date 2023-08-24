@@ -24,7 +24,8 @@
     "description": "The generated-index page title for category 5. tools in sidebar main"
   },
   "sidebar.main.category.5. tools.link.generated-index.description": {
-    "message": "torchpipe相关的扩展工具"
+    "message": "torchpipe相关的扩展工具",
+    "description": "The generated-index page description for category 5. tools in sidebar main"
   },
   "sidebar.main.category.3. Single Node Scheduling": {
     "message": "3. 单节点并行化",
@@ -38,18 +39,21 @@
     "message": "单个节点内部的线程安全，多实例并行，batching.",
     "description": "The generated-index page description for category 3. Single Node Scheduling in sidebar main"
   },
-  "sidebar.main.category.后端API 参考文档": {
+  "sidebar.main.category.Backend API Reference": {
     "message": "后端API 参考文档",
-    "description": "The label for category 后端API 参考文档 in sidebar main"
+    "description": "The label for category Backend API Reference in sidebar main"
   },
   "sidebar.main.category.4. Multi-node Pipeline": {
-    "message": "4. 多节点调度"
+    "message": "4. 多节点调度",
+    "description": "The label for category 4. Multi-node Pipeline in sidebar main"
   },
   "sidebar.main.category.4. Multi-node Pipeline.link.generated-index.title": {
-    "message": "多节点调度"
+    "message": "多节点调度",
+    "description": "The generated-index page title for category 4. Multi-node Pipeline in sidebar main"
   },
   "sidebar.main.category.4. Multi-node Pipeline.link.generated-index.description": {
-    "message": "本章利用节点间的调度和并行计算，有效地并调度任务, 生成逻辑控制流，提高处理速度。"
+    "message": "本章利用节点间的调度和并行计算，有效地并调度任务, 生成逻辑控制流，提高处理速度。",
+    "description": "The generated-index page description for category 4. Multi-node Pipeline in sidebar main"
   },
   "sidebar.main.category.FAQ": {
     "message": "FAQ",
@@ -63,12 +67,28 @@
     "message": "",
     "description": "The generated-index page description for category FAQ in sidebar main"
   },
-  "sidebar.api.category.Python API 参考文档": {
+  "sidebar.api.category.Python API Reference": {
     "message": "Python API 参考文档",
-    "description": "The label for category Python API 参考文档 in sidebar api"
+    "description": "The label for category Python API Reference in sidebar api"
   },
-  "sidebar.api.category.后端API 参考文档": {
+  "sidebar.api.category.Backend API Reference": {
     "message": "后端API 参考文档",
-    "description": "The label for category 后端API 参考文档 in sidebar api"
+    "description": "The label for category Backend API Reference in sidebar api"
+  },
+  "sidebar.main.category.Quick Start": {
+    "message": "快速上手",
+    "description": "The label for category Quick Start in sidebar main"
+  },
+  "sidebar.main.category.Quick Start.link.generated-index.title": {
+    "message": "快速上手",
+    "description": "The generated-index page title for category Quick Start in sidebar main"
+  },
+  "sidebar.main.category.Quick Start.link.generated-index.description": {
+    "message": "本章节在为刚接触 torchpipe 项目的用户提供快速上手的方法。看完本教程后，新用户应该能够快速上手使用 torchpipe 来优化加速模型部署方案。",
+    "description": "The generated-index page description for category Quick Start in sidebar main"
+  },
+  "sidebar.main.category.Contribution Guidelines": {
+    "message": "贡献指南",
+    "description": "The label for category Contribution Guidelines in sidebar main"
   }
 }

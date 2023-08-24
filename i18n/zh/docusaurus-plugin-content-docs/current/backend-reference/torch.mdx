@@ -20,7 +20,8 @@ displayed_sidebar: api
 | [ResizePadTensor](#resizepadtensor)       | max_h,max_w,pad_value                                                            | data[at::Tensor]                  | - result[at::Tensor]<br />- inverse_trans<br />[std::function<std::pair<float, float>(float x, float y)>] |                                          |
 | [TensorrtTensor](#tensorrttensor)         | `model`,`instance_num`,<br />`max`,`precision`,<br />`mean`,`std`,`model::cache` |                                   |                                                                                                           | tensorrt推理引擎                         |
 | [Tensor2Mat](#tensor2mat)                 |                                                                                  | data[at::Tensor]                  | result[cv::Mat]                                                                                           |                                          |
-| [SyncTensor](#synctensor)                 | `device_id` `SyncTensor::backend`                                                | data[at::Tensor]                  | result[at::Tensor]                                                                                        |                                          |
+| [SyncTensor](#synctensor)                 | `SyncTensor::backend`                                                            | data[at::Tensor]                  | result[at::Tensor]                                                                                        | CUDA流同步设施                           |
+| [Torch](#torch)                           | `device_id` `Torch::backend`                                                     | data[at::Tensor]                  | result[at::Tensor]                                                                                        |                                          |
 | [SaveTensor](#savetensor)                 | save_dir                                                                         | data[at::Tensor]                  | result[at::Tensor]                                                                                        |                                          |
 | [LoadTensor](#loadtensor)                 | tensor_name                                                                      |                                   | result[at::Tensor]                                                                                        |                                          |
 | C10Exception                              |                                                                                  |                                   |                                                                                                           | 抛出c10::Error异常,用于模拟torch内部异常 |
@@ -70,7 +71,6 @@ displayed_sidebar: api
 ## SyncTensor
 
 - SyncTensor::backend: default=Identity
-- device_id: 默认为-1；表示将当前设备设置为这个id. 内部相当于调用了`c10::cuda::set_device(device_id)` 或者 `torch.cuda.set_device(device_id)`.
 - 使用方式：
     - `SyncTensor[BackendTensor]`
     - [Sequential](./basic#sequential)[ATensor,BTensor,SyncTensor]
@@ -96,7 +96,9 @@ flowchart LR
 </details>
 
 ## Torch
-[SyncTensor](#synctensor)的别名。 从0.3.1b2版本开始生效。
+与[SyncTensor](#synctensor)类似，但额外添加了跨卡功能。 从0.3.2b1版本开始生效。
+- Torch::backend: default=Identity
+- device_id: 默认为-1；表示将当前设备设置为这个id. 初始化时内部相当于调用了`c10::cuda::set_device(device_id)` 或者 `torch.cuda.set_device(device_id)`，前向时，要求输入数据类型是`at::Tensor` or `vector<at::Tensor>`; 此后端会将数据搬运到指定显卡上。
 
 ## SaveTensor
 - save_dir：文件保存目录，需要提前创建；

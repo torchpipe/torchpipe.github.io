@@ -1,14 +1,13 @@
 ---
 id: basic
-title: 类型转换
+title: Type Conversion
 type: reference
 displayed_sidebar: api
 ---
-
-# c++/python类型映射
+# C++/Python Type Mapping
 
 ## dict
-我们将python中的dict映射到了c++中的dict:
+We map Python's `dict` to C++'s `dict`:
 ```cpp
 #ifndef CUSTOM_DICT
 using dict = std::shared_ptr<std::unordered_map<std::string, ipipe::any>>;
@@ -17,76 +16,75 @@ using dict = std::shared_ptr<std::unordered_map<std::string, ipipe::any>>;
 #endif
 ```
 
-## c++ 到 python {#cpp2py}
+## C++ to Python {#cpp2py}
 
-### 基础类型转换
+### Basic Type Conversion
 
 
-|cpp|python|备注|
-|---|---|---|
-|`std::string`|`bytes`||
-|`cv::Mat`|`numpy.ndarray`||
-|`at::Tensor`|`torch.Tensor`||
-|`int`|`int`||
-|`float`|`float`||
-|`double`|`float`||
-|`unsigned int`|`int`||
-|`char`|`str`|继承自pybind11|
-|`unsigned char`|`int`||
-|`bool`|`bool`||
-### 容器转换
-对于容器或者嵌套容器,转换规则如下(T为以上表格中的[基础类型](#基础类型转换))：
+| cpp             | python          | Remarks                  |
+|-----------------|-----------------|--------------------------|
+| `std::string`   | `bytes`         |                          |
+| `cv::Mat`       | `numpy.ndarray` |                          |
+| `at::Tensor`    | `torch.Tensor`  |                          |
+| `int`           | `int`           |                          |
+| `float`         | `float`         |                          |
+| `double`        | `float`         |                          |
+| `unsigned int`  | `int`           |                          |
+| `char`          | `str`           | Inherited from Pybind11. |
+| `unsigned char` | `int`           |                          |
+| `bool`          | `bool`          |                          |
+### Container Conversion
 
-|cpp|python|备注|
-|---|---|---|
-|`std::unordered_map<std::string, T>`|`dict[str, T]`||
-|`std::unordered_set<T>`|`set[T]`|`T`需要是可哈希的|
-|`std::vector<T>`|`list[T]`| `T`不是代数类型|
-|`std::vector<T>`|`numpy.ndarray[T]`| `T`为代数类型且不为bool|
-|`std::vector<std::vector<T>>`|`list[numpy.ndarray[T]]`| `T`为代数类型且不为bool|
-|`std::map<std::string, T>`|不支持||
-|`std::set<T>`|不支持||
+For containers or nested containers, the conversion rules are as follows (where T is the [basic type](#basic-type-conversion) from the above table):
 
-### 类型嵌套
-将`any`转换为python类型还支持以下的类型嵌套
+| cpp                                  | python                   | Remarks                               |
+|--------------------------------------|--------------------------|---------------------------------------|
+| `std::unordered_map<std::string, T>` | `dict[str, T]`           |                                       |
+| `std::unordered_set<T>`              | `set[T]`                 | `T` must be hashable                  |
+| `std::vector<T>`                     | `list[T]`                | `T` is not an algebraic type          |
+| `std::vector<T>`                     | `numpy.ndarray[T]`       | `T` is an algebraic type and not bool |
+| `std::vector<std::vector<T>>`        | `list[numpy.ndarray[T]]` | `T` is an algebraic type and not bool |
+| `std::map<std::string, T>`           | Not supported            |                                       |
+| `std::set<T>`                        | Not supported            |                                       |
 
-|cpp|python|备注|
-|---|---|---|
-|`std::vector<any>`|`list[Any]`|可无穷层嵌套|
-|`std::unordered_map<std::string, any>`|`dict[str, Any]`|可无穷层嵌套, 将忽略'data'键值|
+### Nested Types
 
-### c++ wrapper
-对于非容器，但是以上转换失败的类型，会返回一个自定义类型到`python`：
+The conversion of `any` to Python types also supports the following nested types:
 
-|cpp|python|备注|
-|---|---|---|
-|`any`|`torchpipe.any`||
+| cpp                                    | python           | Remarks                                              |
+|----------------------------------------|------------------|------------------------------------------------------|
+| `std::vector<any>`                     | `list[Any]`      | Can be nested infinitely                             |
+| `std::unordered_map<std::string, any>` | `dict[str, Any]` | Can be nested infinitely, 'data' key will be ignored |
+
+### C++ Wrapper
+
+For non-containers that fail to convert using the above rules, a custom type will be returned to Python:
+
+| cpp   | python          | Remarks |
+|-------|-----------------|---------|
+| `any` | `torchpipe.any` |         |
  
 
+## Python to C++ {#py2cpp}
 
-## python 到 c++ {#py2cpp}
+### Basic Type Conversion {#p2c-basic}
 
-### 基础类型转换 {#p2c-basic}
+| python          | cpp           | Remarks |
+|-----------------|---------------|---------|
+| `str`           | `std::string` |         |
+| `bytes`         | `std::string` |         |
+| `numpy.ndarray` | Not supported |         |
+| `torch.Tensor`  | `at::Tensor`  |         |
+| `bool`          | `bool`        |         |
+| `float`         | `double`      |         |
+| `int`           | `int`         |         |
+### Container Conversion
 
+For containers or nested containers, the conversion table is as follows (where T is the [basic type](#p2c-basic) from the above table):
 
-|python|cpp|备注|
-|---|---|---|
-|`str`|`std::string`||
-|`bytes`|`std::string`||
-|`numpy.ndarray`|不支持||
-|`torch.Tensor`|`at::Tensor`||
-|`bool`|`bool`||
-|`float`|`double`||
-|`int`|`int`||
-
-### 容器转换
-对于容器或者嵌套容器,对照表如下(T为以上表格中的[基础类型](#p2c-basic))：
-
-|python|cpp|备注| 
-|---|---|---|
-|`dict[str, T]`|`std::unordered_map<std::string, T>`||
-|`set[T]`|`std::unordered_set<T>`|`T`需要是可哈希的，也就是`T != torch.Tensor`	|
-|`list[T]`|`std::vector<T>`||
-
-当python端的容器为空时，c++侧是无法感知具体类型的。此时，框架会以兼容的方式自动处理此类情况， 所以，使用时毋需额外关注此类情景。
-
+| python         | cpp                                  | Remarks                                        |
+|----------------|--------------------------------------|------------------------------------------------|
+| `dict[str, T]` | `std::unordered_map<std::string, T>` |                                                |
+| `set[T]`       | `std::unordered_set<T>`              | `T` must be hashable, i.e. `T != torch.Tensor` |
+| `list[T]`      | `std::vector<T>`                     |                                                |
+When the container on the Python side is empty, the C++ side cannot perceive the specific type. In this case, the framework will automatically handle such situations in a compatible way, so there is no need to pay extra attention to this scenario when using it.

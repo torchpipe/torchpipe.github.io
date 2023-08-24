@@ -1,11 +1,11 @@
 ---
 id: training
-title: "训练的集成"
+title: "Training Integration"
 type: explainer
 ---
 
 :::caution
-这部分功能迭代中。
+This feature is currently under development.
 :::
 
 为了对齐部署和训练的前处理过程，很自然的想法是将torchpipe加入训练流程流水线。然而这并不是容易的，主要是因为这将涉及到多卡数据的问题。事实上，目前鲜有将torchvision的gpu前处理加入训练流水线的实践。一个可供参考的例子是[kornia的training API](https://kornia.readthedocs.io/en/latest/get-started/training.html).然而它是非常重的，重构了整个流程。

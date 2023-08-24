@@ -1,65 +1,73 @@
 ---
 id: remote-gdb
-title: "如何进行远程调试"
+title: "How to do remote debugging"
 type: explainer
 ---
 
-### 说明
+### Description
 
-在程序开发过程中，经常需要我们去配置各种开发环境，并且如果本地与线上存在环境依赖的不同，还可能导致出现一些不知原因的bug，比较推荐使用的便是**Docker**。
+During the process of program development, it is often necessary to configure various development environments. If there are differences in environment dependencies between local and online, it may cause some unknown bugs. It is recommended to use **Docker**.
 
-在日常开发过程中，项目代码往往存放在远程的主机中，我们通常利用本地机器通过SSH连接到远程主机进行开发。
+In the daily development process, project code is often stored on a remote host. We usually use SSH to connect to the remote host from our local machine for development.
 
-那么，如何进入到远程主机docker内部进行代码调试呢？本节以使用较为广泛的**vscode**为例，介绍如何通过vscode远程到docker容器内部进行c++/python部分的开发/调试工作。其他的IDE，感兴趣的用户可以自行Google。
+So, how can we enter the remote host's Docker container for code debugging? In this section, we will take the widely used **vscode** as an example to introduce how to use vscode to remotely access the Docker container for c++/python development/debugging. For other IDEs, interested users can Google it.
 
-要完成这个主要有两步骤：
-步骤一、配置远程主机的docker
-步骤二、配置vscode
+To complete this, there are two main steps:
+Step 1: Configure the Docker on the remote host
+Step 2: Configure vscode
 
-下面详细介绍每一步的具体操作！
+The specific operations for each step are detailed below!
 
-
-### 步骤一：远程主机docker配置
-#### 1. 启动docker
-为了能够让vscode能够ssh连接到docker中，我们需要在启动docker容器的时候为其分配端口号。具体的启动方式如下：（8022为宿主端口，可修改，防止冲突。22为docker内的固定端口，默认即可）
+### Step 1: Configure Docker on the remote host
+#### 1. Start Docker
+To allow vscode to SSH into the Docker container, we need to assign a port number when starting the Docker container. The specific startup method is as follows: (8022 is the host port, which can be modified to avoid conflicts. 22 is the fixed port inside Docker and can be left as default.)
 
 ```bash
 docker_image_name=nvcr.io/nvidia/pytorch:22.12-py3
 docker run -it --gpus all --ipc=host --ulimit memlock=-1 --ulimit stack=67108864 -p 8022:22 -v `pwd`:/workspace  --name="any_names"  --cap-add=SYS_PTRACE $docker_image_name  bash
 ```
 
-#### 2. docker内增加密码
+#### 2. Add password inside Docker
 `passwd`
 
-#### 3. 安装openssh
+#### 3. Install openssh
+
 ```bash
 apt-get update
 apt-get install -y  openssh-server  openssh-client vim
 ```
 
-#### 4. 修改系统配置
+#### Modify system configuration
+
+
+
+
 ```bash
 vim /etc/ssh/sshd_config
 ```
-修改以下三句：
+
+Edit the following three lines:
 ```
 Port 22
 PermitRootLogin yes
 PubkeyAuthentication yes
 ```
-启动服务： `/etc/init.d/ssh start` 或者 `/etc/init.d/ssh restart`
 
-启动服务后可以进行连接验证：`ssh -p 22 root@127.0.0.1`，如果启动失败，会报Connection refused的错误，成功则会让你输入密码，并有Welcome字样提示。
+Start the service: `/etc/init.d/ssh start` or `/etc/init.d/ssh restart`
 
+After starting the service, you can perform connection verification: `ssh -p 22 root@127.0.0.1`. If the startup fails, it will report a "Connection refused" error. If successful, it will prompt you to enter a password and display a "Welcome" message.
 
-#### 5. docker内安装调试工具
+#### 5. Install debugging tools inside Docker
+
 ```bash
 apt-get install gdb
 ```
 
-#### 6. 编译torchpipe为debug模式
+#### Compile torchpipe in debug mode
 
-进入到torchpipe目录
+
+Change directory to torchpipe:
+
 
 ```python
 ## debug模式，
@@ -69,62 +77,63 @@ DEBUG=1 NCATCH_SUB=1 pip3 install -e .
 ```
 
 
-### 步骤二：vscode配置
+### Step 2: Configure vscode
 
-#### 1. vscode连接远程docker
 
-按如下方式配置ssh的config文件，**注意User为root**，启动vscode，安装Remote-SSH插件，配置config如下：
+#### 1. Connect vscode to remote Docker
+
+Configure the ssh config file as follows, **note that User is root**, start vscode, install the Remote-SSH plugin, and configure the config as follows:
 
 ```
-Host docker_debug  #docker_debug为名字，随便起
-    HostName xxxx #服务器IP地址
+Host docker_debug  #docker_debug can be any name
+    HostName xxxx #server IP
     User root
-    Port 8022 #步骤一中启动docker容器的时候设定的服务器的端口号
+    Port 8022 #the port number in Step 1
 ```
 
-:::tip 国内用户
-如果觉得网速过慢，参考 [离线安装vscode server](https://zhuanlan.zhihu.com/p/426876766) 及其置顶评论。
+:::tip For users in China
+ f you find the network speed too slow, please refer to [Offline installation of vscode server](https://zhuanlan.zhihu.com/p/426876766) and its top comments. 
 :::
-#### 2. vscode安装扩展
-在扩展商店内：
-
-- 搜索 c++ 安装相应语言扩展
-
-- 搜索 python 安装相应语言扩展
-
-#### 3. vscode配置
-
-点击 `run  - open configurations`， 按照如下场景完成配置文件launch.json的配置。
 
 
-##### 3.1 情境一：仅调试Python部分代码
 
-**配置文件：**
+#### 2. Install Extensions in VS Code
+In the extension marketplace:
+
+- Search for and install the corresponding language extension for C++
+
+- Search for and install the corresponding language extension for Python
+
+#### 3. Configure VS Code
+Click `run - open configurations`, and complete the configuration of the launch.json file according to the following scenario.
+
+##### 3.1 Scenario One: Debugging Only Python Code
+
+**Configuration File:**
 
 ```
 {
-        "name": "Python: Current File",
-        "type": "python",
-        "request": "launch",
-        "program": "${file}", // 或者修改为指定的某个文件
-        "console": "integratedTerminal",
-        "justMyCode": true,
-        "cwd": "${workspaceFolder}/examples", //修改为合适的目录，如果没有全路径指定文件
-        "env": {
-            "DEBUG": "1",  //用于调试jit编译的c++代码
-            "LD_LIBRARY_PATH": "${LD_LIBRARY_PATH}:/path/to/you/want",//用于加载额外的动态库
-        }
+    "name": "Python: Current File",
+    "type": "python",
+    "request": "launch",
+    "program": "${file}", // or modify to specify a certain file
+    "console": "integratedTerminal",
+    "justMyCode": true,
+    "cwd": "${workspaceFolder}/examples", // modify to appropriate directory if file is not specified with full path
+    "env": {
+        "DEBUG": "1", // used for debugging jit-compiled c++ code
+        "LD_LIBRARY_PATH": "${LD_LIBRARY_PATH}:/path/to/you/want", // used for loading additional dynamic libraries
+    }
 }
 ```
 
-**调试步骤：**
-选择要跑的文件，利用鼠标设置断点，启动"Python: Current File"即可进行调试！
-**注：** 如果程序中出现找不到相对路径的bug， 可以按照这样修改cwd配置。"cwd": "${fileDirname}"
+**Debugging Steps:**
+Select the file to run, set breakpoints using the mouse, and start "Python: Current File" to begin debugging!
+**Note:** If there is a bug in the program where the relative path cannot be found, you can modify the cwd configuration like this: "cwd": "${fileDirname}"
 
-**附加方法：不启动IDE，快速调试Python方法：**
+**Additional Method: Quick Python Debugging Without Starting IDE:**
 
-
-如果是很简单的python代码，也可以直接使用pdb进行调试，无需启动IDE，在需要停止的地方加上如下代码设置断点。
+If it is a simple Python code, you can also use pdb for debugging without starting the IDE. Set breakpoints at the desired location with the following code.
 
 ```
 import pdb;
@@ -133,13 +142,12 @@ pdb.set_trace()
 ```
 
 
+##### 3.2 Scenario 2: Debugging Only C++ Code
 
-##### 3.2 情境二：仅调试C++部分代码
-
-**配置文件**
+**Configuration File**
 
 ```json
-// 根据 ``which python`` 的结果修改 "program": "/opt/conda/bin/python"
+// Modify "program": "/opt/conda/bin/python" according to the result of "which python"
 {
     "version": "0.2.0",
     "configurations": [
@@ -162,21 +170,19 @@ pdb.set_trace()
 }
 ```
 
-**调试步骤：**
+**Debugging Steps:**
 
-可以直接执行你的python文件， 如python3 a.py , 然后启动 (gdb) Attach 绑定这个python进程; 如果python进程过快退出，可睡眠一段时间，即可进行调试
+You can directly execute your Python file, such as python3 a.py, and then start "(gdb) Attach" to bind to the Python process. If the Python process exits too quickly, you can sleep for a period of time to begin debugging.
 
+##### 3.3 Scenario 3: Debugging Python and C++ Together
 
+[Reference: Example debugging mixed Python C++ in VS Code](https://nadiah.org/2020/03/01/example-debug-mixed-python-c-in-visual-studio-code/)
 
-##### 3.3 情境三：python和C++联调
+**Configuration File**
 
-[参考链接:https://nadiah.org/2020/03/01/example-debug-mixed-python-c-in-visual-studio-code/](https://nadiah.org/2020/03/01/example-debug-mixed-python-c-in-visual-studio-code/)
+Simply configure both of the above configuration files.
 
-**配置文件**
-
-直接将上面两个配置文件都配置上就行了。
 ```
-
 {
     "version": "0.2.0",
     "configurations": [
@@ -210,35 +216,32 @@ pdb.set_trace()
         }
     ]
 }
-
 ```
 
-**调试步骤：**
 
-1. 首先启动"Python: Current File",等断点停了之后，
-2. 启动“(gdb) Attach”，就可以完成python和C++联调了。
+**Debugging Steps:**
+
+1. First, start "Python: Current File". Wait until the breakpoint is hit.
+2. Start "(gdb) Attach" to complete the debugging process for Python and C++.
 
 
-**附加方法：不启动IDE，快速调试方法：**
+**Additional Method: Quick Debugging Without Starting IDE**
 
-如果不想启动IDE，可以用gdb命令行快速启动调试
+If you do not want to start the IDE, you can use the gdb command line to quickly start debugging.
 
 ```bash
-## gdb 调试
+## Debugging with gdb
 gdb python
-# set environment DEBUG=1 # <= 如果需要jit编译c++代码，可以以此编译为debug模式
+# set environment DEBUG=1 # <= If you need to JIT compile C++ code, you can compile it in debug mode with this command.
 run your.py
-
 ```
 
-宕机后追踪堆栈: bt
+Trace the stack after a crash: bt
 
 
 
-
-#### 4. vscode头文件补全(可选)
-修改 项目配置 `./.vscode/c_cpp_properties.json`
-补充相应头文件路径
+#### 4. VSCode Header File Autocomplete (Optional)
+Update the project configuration in `./.vscode/c_cpp_properties.json` by adding the appropriate header file paths.
 ```json
 {
     "configurations": [
@@ -258,7 +261,6 @@ run your.py
     ],
     "version": 4
 }
-
 ```
 
 

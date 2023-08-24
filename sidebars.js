@@ -23,7 +23,7 @@ const sidebars = {
     "welcome",
     {
       type: "category",
-      label: "快速上手",
+      label: "Quick Start",
       items: [
         "installation",
         "quick_start_new_user",
@@ -43,8 +43,8 @@ const sidebars = {
       ],
       link: {
         type: "generated-index",
-        title: "快速上手",
-        description: "本章节在为刚接触 torchpipe 项目的用户提供快速上手的方法。看完本教程后，新用户应该能够快速上手使用 torchpipe 来优化加速模型部署方案。",
+        title: "Quick Start",
+        description: "本章节在为刚接触 torchpipe 项目的用户提供Quick Start的方法。看完本教程后，新用户应该能够Quick Start使用 torchpipe 来优化加速模型部署方案。",
         slug: "/",
       },
     },
@@ -76,17 +76,17 @@ const sidebars = {
         "Intra-node/extensible_backend",
         {
           type: "category",
-          label: "后端API 参考文档",
+          label: "Backend API Reference",
           // items: ["backend-reference/basic", "backend-reference/opencv", "backend-reference/torch"],
           items: [{type:"ref", id:"backend-reference/basic"}, {type:"ref", id:"backend-reference/opencv"},{type:"ref", id:"backend-reference/torch"},],
         },
         // {
         //   type: "category",
-        //   label: "后端API 参考文档",
+        //   label: "Backend API Reference",
         //   items: ["backend-reference/basic", "backend-reference/opencv", "backend-reference/torch"],
         //   link: {
         //     type: "generated-index",
-        //     title: "后端API 参考文档",
+        //     title: "Backend API Reference",
         //     description: "here is backend-reference",
         //     slug: "/backend-reference",
         //   },
@@ -155,12 +155,12 @@ const sidebars = {
   api: [
     {
       type: "category",
-      label: "Python API 参考文档",
+      label: "Python API Reference",
       items: ["python/pipe","python/compile","python/test"],
     },
     {
       type: "category",
-      label: "后端API 参考文档",
+      label: "Backend API Reference",
       items: ["backend-reference/basic", "backend-reference/opencv", "backend-reference/torch", "backend-reference/log"],
     },
     
@@ -168,7 +168,7 @@ const sidebars = {
     "cpp-python/basic",
     // {
     //   type: "category",
-    //   label: "c++/python类型转换",
+    //   label: "c++/pythonType Conversion",
     //   items: ["cpp-python/basic"],
     // },
     // "installation",

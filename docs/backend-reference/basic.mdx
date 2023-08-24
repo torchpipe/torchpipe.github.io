@@ -1,66 +1,62 @@
 ---
 id: basic
-title: 基础性后端
+title: Basic backends
 type: reference
 displayed_sidebar: api
 ---
 
-# 基础性后端
 
 
  
-## 速览
+Overview
 
-
-|名称|初始化：键值/类型/默认值|前向输入：键值/类型|前向输出：键值/类型|功能|备注|
-|---|---|---|---|---|---|
-| [`Identity`](#identity) |无|`data/any`|`result/any`|`dict["result"]=dict["data"]` |默认后端|
-| [`Sequential`](#sequential) |`Sequential::backend`|`data/any`|| || 
-| [`Jump`](../Inter-node/graphtraversal.mdx#jump) |`jump`||| 跳转到其他（根）节点 || 
-
+| Name                                            | Initialization: Key/Type/Default | Forward Input: Key/Type | Forward Output: Key/Type | Function                      | Note            |
+|-------------------------------------------------|----------------------------------|-------------------------|--------------------------|-------------------------------|-----------------|
+| [`Identity`](#identity)                         | None                             | `data/any`              | `result/any`             | `dict["result"]=dict["data"]` | Default backend |
+| [`Sequential`](#sequential)                     | `Sequential::backend`            | `data/any`              |                          |                               |                 |
+| [`Jump`](../Inter-node/graphtraversal.mdx#jump) | `jump`                           |                         |                          | Jump to other (root) node     |                 |
 
 
 
-## 后端展开规则 {#backend-spread}
-对于后端配置，部分后端有进行展开的能力，比如，对于`backend=A[B]`, 可展开为
-```ini
-backend=A
-"A::backend"=B
+## Backend Expansion Rule {#backend-spread}
+For backend configuration, some backends have the ability to expand, for example, for `backend="A[B]"`, it can be expanded to
+```toml
+backend="A"
+"A::backend"="B"
 ```
 
 ## Identity
-什么都不做，只是将输入赋值给输出。
-
+Does nothing but assigns the input to the output.
  
 ## Sequential {#sequential}
-> 具体示例参见[Sequential](../Intra-node/Sequential.mdx)。
+> For specific examples, please refer to [Sequential](../Intra-node/Sequential.mdx).
 
-### 初始化
-`Sequential::backend`可以指定以逗号分开的多个子后端，如`Sequential::backend=A,B,C[D],E`.
-`Sequential`对子后端以[展开规则](#backend-spread)进行展开后得到：
-```ini
-backend=E
+### Initialization
+`Sequential::backend` can specify multiple sub-backends separated by commas, such as `Sequential::backend=A,B,C[D],E`.
+`Sequential` expands sub-backends according to the [backend expansion rules](#backend-spread) to obtain:
+```toml
+backend="E"
 ```
 
-```ini
-backend=C
-C::backend=D
+```toml
+backend="C"
+C::backend="D"
 ```
 
-```ini
-backend=B
+```toml
+backend="B"
 ```
 
-```ini
-backend=A
+```toml
+backend="A"
 ```
-子后端的初始化将按照逆序进行。
+Sub-backend initialization will be performed in reverse order.
 :::info
-`Sequential`可复合使用，如:<br />
+`Sequential` can be composed, for example:<br />
 `S[S[DecodeTensor,ResizeTensor],(or)S[DecodeMat,ResizeMat,Mat2Tensor,SyncTensor],SyncTensor]`.
 :::
-:::tip 重复后端的参数
-Sequential的子后端可能有重复的情况，此时如果需要对子后端指定不同的参数，可以使用`|`符号：
+:::tip Repeating Backend Parameters
+Sub-backends of `Sequential` may have duplicates. If you need to specify different parameters for sub-backends, you can use the `|` symbol:
 ```toml
 backend="Sequential[a,b,Jump,c,Jump]"
 jump="||node_name_1||node_name_2"
@@ -68,27 +64,8 @@ jump="||node_name_1||node_name_2"
 # jump="a|b|node_name_1|c|node_name_2"
 ```
 :::
+### Forward
+When forwarding, sub-backends are executed in series. If the result of a non-final sub-backend is empty, the execution is terminated and an exception is thrown. If the result of a non-final sub-backend is non-empty, the filter will be executed. The default is `swap`.
 
-### 前向
-前向时将串行执行子后端；如果非最后的子后端的结果为空，则中止执行，抛出异常；如果非最后的子后端的结果非空，将执行filter. 默认为`swap`.
-
-### 输入范围
-如果子后端输入数据范围都是[1,1], 那么`Sequential`的范围是[1,1], 否则，是输入范围非[1,1]的子后端的输入范围的并集. **目前只允许最多有一个子后端满足`max() != 1 && max() != UINT32_MAX`**. 在Sequential中，目前只允许*最多*放一个输入范围非平凡的子后端，这个子后端可以认为是整个Sequential的主要的功能实现者，其他后端是辅助或者功能性后端。
-
-
-
-
-<!-- | [`Parallel`](#parallel) |`Parallel::backend`|`data/any`|| **将max()提升为UINT32_MAX.**<br />用于并行化执行其他后端（需要后端前向接口线程安全，且线程无关）。可用于并行化[全部opencv相关后端](./opencv.mdx);|对于tensor相关后端或者线程不安全的后端，可使用[Jump](../Inter-node/graphtraversal.mdx#jump)进行节点跳转。| 
-## Parallel
-将后端的输入范围从[1, max]提高到[1,UINT32_MAX], 并行执行后端。
-
-
-
-### 初始化
-:::tip 参数
-- **Parallel::backend** - 后端名，默认为Identity，min()必须是1. 只初始化了一次该后端。
-:::
-
-:::caution
-被提升输入范围的后端的前向接口必须是线程安全的，并且状态不依赖于线程本身。[torch相关后端](./torch.mdx)不被支持
-::: -->
+### Input Range
+If the input data range of all sub-backends is [1,1], then the range of `Sequential` is [1,1]. Otherwise, it is the union of the input ranges of sub-backends whose input ranges are not [1,1]. **Currently, only one sub-backend is allowed to satisfy `max() != 1 && max() != UINT32_MAX` at most**. In `Sequential`, currently only one sub-backend with non-trivial input range is allowed at most, and this sub-backend can be regarded as the main functional implementer of the entire `Sequential`, while other backends are auxiliary or functional backends.

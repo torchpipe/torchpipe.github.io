@@ -1,51 +1,48 @@
 ---
 id: log
-title: 日志
+title: Log
 type: reference
 displayed_sidebar: api
 
 ---
-
 :::caution
-本节文档验证中。
+This section of the document is under verification.
 
-- 日志在进程中只初始化一次
-- 日志配置参数直接写在全局参数中
+- The log is only initialized once in the process.
+- Log configuration parameters are directly written in global parameters.
 :::
+## Overview
 
-## 速览
-
-
-|名称|主要初始化参数|备注|
-|---|---|---|---|---|
-| [Logger](#logger) |`Logger::path`,`Logger::maxBytes`<br />`Logger::backupCount`,`Logger::flush_every`<br />`Logger::pattern`  | 默认存在于解释器的环境初始化中(Interpreter::env)，会在解释器初始化时初始化一次.|
+| Name              | Main Initialization Parameters                                                                      | Remarks                                                                                                                                             |
+|-------------------|-----------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
+| [Logger](#logger) | `Logger::path`, `Logger::maxBytes`, `Logger::backupCount`, `Logger::flush_every`, `Logger::pattern` | By default, it exists in the interpreter's environment initialization (Interpreter::env) and is initialized once during interpreter initialization. |
 
 
 
 ## Logger
-实现日志输出功能（包括：控制台输出、文件输出）。
-此后端默认采用控制台输出，如果配置了`Logger::path`参数，将同时输出到path对应的日志文件。
+Implements logging functionality (including console output and file output).
+By default, this backend uses console output. If the `Logger::path` parameter is configured, it will also output to the log file corresponding to `path`.
 
-### 初始化
-:::tip 参数
-- **Logger::path** - 指定日志文件路径，如果不指定路径，默认控制台输出日志，指定后，日志将同时在日志文件以及控制台输出。
-- **Logger::maxBytes** - 指定每个日志文件存储的最大空间， 单位是 Byte，仅当指定日志文件路径后生效，取值范围： 1 - 1073741824 (1G)。
-- **Logger::backupCount** - 指定日志文件的最大存储数量，配合Logger::maxBytes参数使用，取值范围：0 - 1024。当取值为0的时候，代表只在指定文件中循环存储，无备份。取值为1的时候，存储文件为：log.txt,log.1.txt，存在一个备份。
-- **Logger::pattern** 设置 [logger的打印模式](https://internal.dunescience.org/doxygen/classspdlog_1_1pattern__formatter.html)。
-   * debug模式下默认值为 `[%l][%m/%d %H:%M:%S][%s:%#%!]: %v`.
-   * release 下默认值为 `[%l][%m/%d %H:%M:%S][%s:%#]: %v`
-- **Logger::flush_every** - 刷新日志到文件的频率，默认为5，单位秒；设置为0代表会刷新每条日志。
+### Initialization
+
+:::tip Parameters
+- **Logger::path** - Specifies the log file path. If no path is specified, the log will be output to the console by default. If a path is specified, the log will be output to both the log file and the console.
+- **Logger::maxBytes** - Specifies the maximum storage space for each log file, in bytes. This parameter only takes effect when a log file path is specified. Valid values are 1-1073741824 (1G).
+- **Logger::backupCount** - Specifies the maximum number of log files to store, used in conjunction with the `Logger::maxBytes` parameter. Valid values are 0-1024. When the value is 0, it means that only the specified file is stored in a circular manner without backup. When the value is 1, the stored files are: log.txt, log.1.txt, with one backup.
+- **Logger::pattern** - Sets the [print mode of the logger](https://internal.dunescience.org/doxygen/classspdlog_1_1pattern__formatter.html).
+   * The default value in debug mode is `[%l][%m/%d %H:%M:%S][%s:%#%!]: %v`.
+   * The default value in release mode is `[%l][%m/%d %H:%M:%S][%s:%#]: %v`.
+- **Logger::flush_every** - Specifies the frequency at which the log is flushed to the file, in seconds. The default value is 5. Setting it to 0 means that every log will be flushed.
 :::
 
 
-<details><summary>示例</summary>
-
+<details><summary>Example</summary>
 ```toml
 "Logger::path" = "./torchpipe.log"  
-# 可选参数，保存日志文件路径，如果不设置，默认控制台输出日志 
+# Optional parameter, specifies the log file path. If not set, the log will be output to the console by default.
 "Logger::maxBytes" = 1048576 #
-# 可选参数，设置后启用循环保存功能，设置单个日志文件存储最大空间，默认值：无穷大。取值范围： 1 - 1073741824 (1G)。 
+# Optional parameter, enables circular storage when set, specifies the maximum storage space for a single log file. Default value: infinity. Valid values are 1-1073741824 (1G).
 "Logger::backupCount" = 20                           
-# 可选参数，配合Logger::maxBytes参数，日志文件的最大保存数量，取值范围： 0 - 1024。
+# Optional parameter, used in conjunction with the `Logger::maxBytes` parameter, specifies the maximum number of log files to store. Valid values are 0-1024.
 ```
 </details>
