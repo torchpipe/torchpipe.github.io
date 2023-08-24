@@ -62,7 +62,7 @@ const sidebars = {
       link: {
         type: "generated-index",
         title: "Preliminaries",
-        description: "Feel free to quickly skim or skip over this section, and refer back to it when needed.",
+        description: "Feel free to skim or skip over this section and refer back to it as needed.",
         slug: "/preliminaries",
       },
     },

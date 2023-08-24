@@ -8,7 +8,7 @@ We have found that a major problem in business is that the preset backends (comp
 - Is granular enough
 - Does not require any special input/output data types, with the backend author responsible for type validation and management
 - As an API, the `user` only needs to pay attention to the usage rules of **basic types (dict)** and the **optional logging component**, both of which can be re-implemented and globally overridden. No other C++ elements are required. Although this approach can easily lead to code confusion, it greatly gives the `user` freedom to extend.
-- Provides just-in-time compilation, especially in Python environments. 
+- Provides AOT compilation, especially in Python environments. 
 
 ## Basic Types
 ### any
@@ -52,6 +52,8 @@ class Backend {
   virtual uint32_t min() const { return 1; };
   ... //Irrelevant Functions
 };
+```
+
  You can customize the backend, for example, the internal `Identity` can be defined equivalently in the following `CustomIdentity.cpp` file:
 
 ```cpp
@@ -119,7 +121,7 @@ auto* pdata = any_cast<T>(&(*input_cpp)["data"]);
 
 If `T` is inconsistent with the actual `C++` type, an exception will be thrown or a null pointer will be returned.
 
-### From Any to Python Types
+### From `any` to Python Types {#any2py}
 When the back-end writes the results and other key values to `input_cpp`, if the Python interface is needed, the framework will automatically transmit the data corresponding to all key values except `data` to the Python end according to [certain rules](../cpp-python/basic#cpp2py).
  
 

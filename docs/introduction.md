@@ -4,9 +4,9 @@ title: 1. Introduction
 type: explainer
 ---
 
-To improve the peak throughput of deep learning serving, there are several challenges to overcome. In practical business applications, users typically need to deploy end-to-end services containing multiple nodes (such as model inference, general logic nodes, and remote calls) and provide services to the outside world in the form of online serving. This requires support for the following features:
-- Multi-instance, dynamic batch processing, and bucketing for a single computing node
-- Pipeline scheduling for multiple nodes
+To enhance the peak throughput of deep learning serving, various challenges must be addressed. In real-world business scenarios, users usually require deploying end-to-end services comprising multiple nodes (such as model inference, general logic nodes, and remote calls) and delivering services to external clients via online serving. This necessitates support for the following functionalities:
+- Multi-instance, dynamic batch processing, and bucketing on a single computing node
+- Pipeline scheduling across multiple nodes
 - Logical control flow between nodes
 
 There are some industry practices, such as [triton inference server](https://github.com/triton-inference-server/server/blob/main/docs/user_guide/architecture.md#ensemble-models), [Alibaba Mama high_service(in chinese)](https://mp.weixin.qq.com/s/Fd2GNXqO3wl3FrA7Wli3jA), and [Meituan Vision GPU Inference Service Deployment Architecture Optimization Practice(in chinese)](https://zhuanlan.zhihu.com/p/605094862).

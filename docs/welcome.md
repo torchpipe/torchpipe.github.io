@@ -7,13 +7,13 @@ type: explainer
 # Welcome to the TorchPipe Documentation!
 
 
-Torchpipe is a multi-instance pipeline parallel library that acts as a bridge between lower-level acceleration libraries (e.g., TensorRT, OpenCV) and RPC frameworks, ensuring a strict decoupling from them. It offers a thread-safe function interface for the PyTorch frontend at a higher level, while empowering users with fine-grained backend extension capabilities at a lower level. It maximizes service throughput while meeting latency requirements.
+TorchPipe is a multi-instance pipeline parallel library that provides a seamless integration between lower-level acceleration libraries (such as TensorRT and OpenCV) and RPC frameworks. It achieves strict decoupling from these libraries, offering a thread-safe function interface for the PyTorch frontend at a higher level. At the same time, it enables users to extend the backend capabilities at a lower level. TorchPipe's design ensures high service throughput while meeting latency requirements.
 
 
-This document will be continuously updated along with the code changes. You can:
+This document is continuously updated to reflect code changes, allowing you to:
 
-- Learn the TorchPipe documentation and quickly get started with the TorchPipe library.
-- Participate in open source development, track document updates, and become a contributor to the TorchPipe documentation.
-- Join the TorchPipe community, meet peers, and participate in more discussions and exchanges.
+- Quickly get started with the TorchPipe library by learning from the TorchPipe documentation.
+- Become a contributor to the TorchPipe documentation by tracking updates and participating in open source development.
+- Join the TorchPipe community to meet peers, engage in discussions, and exchange knowledge.
 
-Now, let's start the journey of exploring the official TorchPipe documentation!
+Let's begin exploring the official TorchPipe documentation.
