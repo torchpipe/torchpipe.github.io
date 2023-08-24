@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Redirecting...</title>
+    <script>
+      var lang = navigator.language || navigator.userLanguage;
+      if (lang.startsWith("en")) {
+        window.location.href = "/";
+      } else {
+        window.location.href = "/en/";
+      }
+    </script>
+  </head>
+  <body>
+    <p>Redirecting to English version...</p>
+  </body>
+</html>
