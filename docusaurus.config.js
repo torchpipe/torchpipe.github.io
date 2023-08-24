@@ -33,6 +33,7 @@ const config = {
     localeConfigs: {
       en: {
         label: 'English',
+        path: 'en',
       },
       zh: {
         label: '简体中文',
