@@ -115,7 +115,7 @@ const sidebars = {
     },
     {
       type: "category",
-      label: "5. tools",
+      label: "5. Tools",
       items: [
         "tools/encrypt",
         "tools/quantization",

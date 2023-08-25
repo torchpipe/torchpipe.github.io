@@ -15,17 +15,17 @@
     "message": "您可以快速浏览或跳过本部分，在需要时再回头查看。",
     "description": "The generated-index page description for category 2. Preliminary in sidebar main"
   },
-  "sidebar.main.category.5. tools": {
+  "sidebar.main.category.5. Tools": {
     "message": "5. 工具",
-    "description": "The label for category 5. tools in sidebar main"
+    "description": "The label for category 5. Tools in sidebar main"
   },
-  "sidebar.main.category.5. tools.link.generated-index.title": {
+  "sidebar.main.category.5. Tools.link.generated-index.title": {
     "message": "工具",
-    "description": "The generated-index page title for category 5. tools in sidebar main"
+    "description": "The generated-index page title for category 5. Tools in sidebar main"
   },
-  "sidebar.main.category.5. tools.link.generated-index.description": {
+  "sidebar.main.category.5. Tools.link.generated-index.description": {
     "message": "torchpipe相关的扩展工具",
-    "description": "The generated-index page description for category 5. tools in sidebar main"
+    "description": "The generated-index page description for category 5. Tools in sidebar main"
   },
   "sidebar.main.category.3. Single Node Scheduling": {
     "message": "3. 单节点并行化",
