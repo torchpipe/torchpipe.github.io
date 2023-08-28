@@ -18,7 +18,7 @@ const config = {
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
   // favicon: "images/favicon.ico",
-  favicon: "images/logo_double.svg",
+  favicon: "images/logo.svg",
   organizationName: "torchpipe",
   projectName: "torchpipe.github.io",
   deploymentBranch: "master",
