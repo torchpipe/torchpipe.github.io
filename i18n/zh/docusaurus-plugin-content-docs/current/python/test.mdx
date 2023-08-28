@@ -93,8 +93,8 @@ test_from_raw_file(forward_function, os.path.join("assets/norm_jpg/"),
 |   tool's version   |          20230421.0          |
 |    num_clients     |              10              |
 |    total_number    |            10000             |
-|  throughout::qps   |           1642.34            |
-|  throughout::avg   |           6.09(ms)           |
+|  throughput::qps   |           1642.34            |
+|  throughput::avg   |           6.09(ms)           |
 |   latency::TP50    |             5.17             |
 |   latency::TP90    |             7.56             |
 |   latency::TP99    |            21.88             |
@@ -104,12 +104,12 @@ test_from_raw_file(forward_function, os.path.join("assets/norm_jpg/"),
 </details>
  
 
-### torchpipe.utils.test.throughout
+### torchpipe.utils.test.throughput
 
 *从0.3.1b3版本开始生效*
 
 ```python
-def throughout(args_dict, num_clients=10, total_number=10000)
+def throughput(args_dict, num_clients=10, total_number=10000)
 ```
 > 给定模型参数，测试该模型在torchpipe吞吐，torchpipe的默认配置max=4，instance=2
 
@@ -128,7 +128,7 @@ import torchpipe
 import torch
 import os
 
-## test throughout
+## test throughput
 onnx_path = os.path.join("/tmp", f"resnet50.onnx")
 precision = "fp16"
 dict_args = {
@@ -136,7 +136,7 @@ dict_args = {
     'precision' : precision,
 }
 
-result = torchpipe.utils.test.throughout(dict_args, num_clients=5, total_number=5000)
+result = torchpipe.utils.test.throughput(dict_args, num_clients=5, total_number=5000)
 
 ```
 </details>
