@@ -73,7 +73,7 @@ model_simp, check = onnx_simplifier.simplify(onnx_model, check_n = 0)
 onnx.save(model_simp, onnx_save_path)
 ```
 
-<details><summary>为了方便，针对这步我们提供了torchpipe.utils.onnx_export小工具(0.3.1b3开始生效)</summary>
+<details><summary>为了方便，针对这步我们提供了torchpipe.utils.models.onnx_export小工具(0.3.1b3开始生效)</summary>
 
 - 该工具可以实现将PyTorch模型转换为ONNX模型并保存到本地。
 - 支持动态batch，并且自带onnx-simplify优化。
@@ -102,7 +102,7 @@ import torchpipe
 m = models.resnet50(weights=None).eval()
 onnx_path = os.path.join("/tmp", f"resnet50.onnx")
 input = torch.randn(1, 3, 224, 224)
-torchpipe.utils.onnx_export(m, onnx_path, input, opset=17)
+torchpipe.utils.models.onnx_export(m, onnx_path, input, opset=17)
 
 ```
 </details>
