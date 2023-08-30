@@ -112,7 +112,7 @@ const config = {
         { name: "og:image", content: "__.png" },
       ],
       navbar: {
-        title: "TorchPipe",
+        title: "torchpipe",
         logo: {
           alt: "torchpipe Logo",
           src: "images/logo.svg",

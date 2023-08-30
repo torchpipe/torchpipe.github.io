@@ -125,7 +125,7 @@ const sidebars = {
       link: {
         type: "generated-index",
         title: "工具",
-        description: "torchpipe相关的扩展工具",
+        description: "extension tools related to torchpipe",
         slug: "/tools",
         keywords: ["training", "vis", "debug"],
       },
@@ -145,7 +145,7 @@ const sidebars = {
       link: {
         type: "generated-index",
         title: "FAQ",
-        description: "FAQ",
+        description: "Frequently asked questions about torchpipe",
         slug: "/faq",
         keywords: ["onnx", "faq"],
       },
