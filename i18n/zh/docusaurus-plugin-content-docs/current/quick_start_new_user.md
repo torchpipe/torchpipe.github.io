@@ -246,7 +246,7 @@ next = "cpu_posprocess"
 #          但归一化这一步目前已经融合在模型处理（[resnet50]这个节点）中，因此在本节点中后处理过程完成后处理过程完成后输出的结果是与无归一化的后处理结果一致。
 #          每个节点完成后需要接上下一个节点的名称，否则默认最后一个节点
 #
-[cpu_posdecoder]
+[cpu_posprocess]
 backend = "Torch[Sequential[ResizeMat,cvtColorMat, Mat2Tensor]]" # 需要处理背景线程cuda流同步问题可用Torch， 否则可用Sequential；Torch确保初始化和前向在同一个线程时，能准确处理多个backend的同步时机
 
 ### resize 操作的参数
