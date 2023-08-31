@@ -19,10 +19,10 @@ During the forward execution of `Sequential[DecodeMat,ResizeMat]`, the data (dic
 
 `Sequential` can be abbreviated as `S`. API reference can be found in [`Sequential`](../backend-reference/basic#sequential).
 ## Conditional Control Flow Filter {#filter_sequential}
-`Sequential` itself implements support for control flow syntax extensions. In fact, `S[DecodeMat,ResizeMat]` is equivalent to `S[(Continue)DecodeMat,(swap)ResizeMat]`.
+`Sequential` itself implements support for control flow syntax extensions. In fact, `S[DecodeMat,ResizeMat]` is equivalent to `S[(Run)DecodeMat,(swap)ResizeMat]`.
 
 The filters in `()` parentheses can return the following states:
-- Continue, which means that the current sub-backend can be skipped and wait to enter the next sub-backend (renamed to Run since version 0.3.2)
+- Run, which means that the current sub-backend can be skipped and wait to enter the next sub-backend (Effective from v0.3.2b1; `Continue` can be used in previous versions.)
 - Break, which means to exit the execution of `Sequential`
 - Error, which means an error occurred
 - SerialSkip, which means that consecutive serial sub-backends can be skipped, equivalent to Break in `Sequential`
@@ -31,16 +31,16 @@ The filters in `()` parentheses can return the following states:
 Here are some built-in filter definitions:
 
 <Tabs groupId="filter"  className="unique-tabs">
-<TabItem value="Continue" label="Continue">
+<TabItem value="Run" label="Run">
 
 ```cpp
 #include "filter.hpp"
 
-class FilterContinue : public Filter {
+class FilterRun : public Filter {
  public:
-  status forward(dict data) override { return Filter::status::Continue; }
+  status forward(dict data) override { return Filter::status::Run; }
 };
-IPIPE_REGISTER(Filter, FilterContinue, "Continue,run");
+IPIPE_REGISTER(Filter, FilterRun, "Run,run");
 ```
 
 
@@ -50,7 +50,7 @@ IPIPE_REGISTER(Filter, FilterContinue, "Continue,run");
 ```cpp
 class Filter {
  public:
-  enum struct status { Continue, Skip, SerialSkip, SubGraphSkip, Break, Error };
+  enum struct status { Run, Skip, SerialSkip, SubGraphSkip, Break, Error };
 
   virtual bool init(const std::unordered_map<std::string, std::string>& /*config*/,
                     dict /*dict_config*/) {
@@ -65,7 +65,7 @@ class Filter {
 
     (*input)[TASK_DATA_KEY] = (*input)[TASK_RESULT_KEY];
     input->erase(iter);
-    return status::Continue;
+    return status::Run;
   }
 
   virtual ~Filter() = default;
@@ -80,7 +80,7 @@ Based on this, as will be discussed in the next section on [extending and compil
 Suppose there is a backend `S[DecodeTensor,(swap)TensorrtTensor,TensorrtSync]`, where the input range of `DecodeTensor` is [1,1], and the range of `TensorrtTensor` is [1,4]. According to the [Sequential rule for calculating input range](../backend-reference/basic#sequential), the input range of Sequential is [1,4].
 
 If four data enter this Sequential at the same time, but one of them fails to decode, then
-- One data returns `status::Break` in `swap`, while the others return `status::Continue`.
+- One data returns `status::Break` in `swap`, while the others return `status::Run`.
 - `Sequential` continues to send the remaining three data to the next stage, while the data in `Break` state terminates the execution in Sequential.
 
 The above describes the response when encountering `Break` for some data; similarly, when encountering `Skip` for some data, the data will be locally processed in a similar way. However, when a data is in `Error` state, Sequential will consider the overall task status as `Error`. If this contradicts the user's intention, the user can try to split the sub-backends into different Sequentials to avoid mutual interference. Note that the `Error` state is generally extremely rare and unexpected. 
