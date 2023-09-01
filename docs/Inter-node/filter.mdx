@@ -5,12 +5,12 @@ type: explainer
 ---
 
 As introduced in [filter](../Intra-node/Sequential.mdx#filter_sequential) in Sequential, `filter` is a logical control instruction between nodes or backends, with the following states:
-Continue, Skip, SerialSkip, SubGraphSkip, Break, Error.
+Run, Skip, SerialSkip, SubGraphSkip, Break, Error.
 
 ## Default Multi-Node Scheduler Interpretation of `filter` Return Values
 
 In multi-node scheduling, the return values of `filter` represent:
-- `Continue`: the backend of the current node can be executed.
+- `Run`: the backend of the current node can be executed.
 - `Skip`: the backend of the current node can be skipped, but it does not mean that the node has no result. The result of the node is the `dict` processed by `filter`.
 - `Break`: the execution of the entire DAG is terminated, and the `dict` processed by `filter` is the final result.
 - `Error`: an error occurred.
@@ -62,7 +62,7 @@ class your_filter : public Filter {
     // highlight-next-line
         return status::SubGraphSkip;
     else
-        return status::Continue;     
+        return status::Run;     
     }
 };
 IPIPE_REGISTER(Filter, your_filter, "your_filter");
@@ -77,11 +77,11 @@ filter="your_filter"
 Please do not use the same name as built-in filters for custom filters.
 
 ## Built-in Filters {#default_filters}
-|                                                                                                                                                          | Function                                                            |   |
-|----------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------|---|
-| Continue/run <br />Skip/skip <br />SerialSkip/serial_skip/serialskip <br />SubGraphSkip/subgraph_skip/subgraphskip, <br />Break/break, <br />Error/error | Returns the corresponding status value unconditionally              |   |
-| swap                                                                                                                                                     | Returns `Break` if there is no result, otherwise returns `Continue` |   |
-| or                                                                                                                                                       | Returns `Continue` if there is no result, otherwise returns `Skip`  |   |
+|                                                                                                                                                     | Function                                                       |   |
+|-----------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------|---|
+| Run/run <br />Skip/skip <br />SerialSkip/serial_skip/serialskip <br />SubGraphSkip/subgraph_skip/subgraphskip, <br />Break/break, <br />Error/error | Returns the corresponding status value unconditionally         |   |
+| swap                                                                                                                                                | Returns `Break` if there is no result, otherwise returns `Run` |   |
+| or                                                                                                                                                  | Returns `Run` if there is no result, otherwise returns `Skip`  |   |
 
 
 

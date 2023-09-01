@@ -1,7 +1,7 @@
 
 
 <p align="center">
-<h1 align="center">torchpipe</h1>
+<h1 align="center">Documentation for torchpipe</h1>
 <h6 align="center">Serving Inside <a href="https://pytorch.org/">Pytorch</a> with Multiple Threads</h6>
 </p>
 <p align="center">
@@ -38,11 +38,6 @@ The torchpipe code is being prepared for open sourcing. Here is its documentatio
 
 
 ## Compile
-See [./compile.md(in chinese now)](./compile.md)
-
-### Icons
-
-This project utilizes free icons (soap-bubble) from [IconPark](https://iconpark.oceanengine.com/official). These icons are licensed under the [Apache License 2.0](https://github.com/bytedance/IconPark/blob/master/LICENSE) and have been optimized for vector graphics by ChatGPT4.
-
+See [./compile.md](./compile.md)
 
 

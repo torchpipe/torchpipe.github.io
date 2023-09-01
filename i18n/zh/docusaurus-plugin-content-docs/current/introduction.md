@@ -11,7 +11,7 @@ type: explainer
 
 业界有一些实践，如[triton inference server](https://github.com/triton-inference-server/server/blob/main/docs/user_guide/architecture.md#ensemble-models), [阿里妈妈high_service](https://mp.weixin.qq.com/s/Fd2GNXqO3wl3FrA7Wli3jA), [美团视觉GPU推理服务部署架构优化实践](https://zhuanlan.zhihu.com/p/605094862)。
 
-通常用户对于Trinton Inference Server的一个抱怨是，在多个节点交织的系统中，需要在客户端完成大量业务逻辑，并通过RPC调用服务端，很麻烦；而为了性能考虑，不得不考虑共享显存、ensemble、[BLS](https://github.com/triton-inference-server/python_backend#business-logic-scripting)等非常规手段。
+通常用户对于Trinton Inference Server的一个抱怨是，在多个节点交织的系统中，需要在客户端完成大量业务逻辑，并通过RPC调用服务端，很麻烦；而为了性能考虑，不得不考虑共享显存、ensemble、[自定义业务逻辑(Business Logic Scripting)](https://github.com/triton-inference-server/python_backend#business-logic-scripting)等非常规手段。
 
 为了解决这个问题，TorchPipe通过深入PyTorch的C++计算后端和CUDA流管理，以及针对多节点的领域特定语言建模，对外提供面向PyTorch前端的线程安全函数接口，对内提供面向用户的细粒度后端扩展。
 

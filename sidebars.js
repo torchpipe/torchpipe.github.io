@@ -44,7 +44,7 @@ const sidebars = {
       link: {
         type: "generated-index",
         title: "Quick Start",
-        description: "本章节在为刚接触 torchpipe 项目的用户提供Quick Start的方法。看完本教程后，新用户应该能够Quick Start使用 torchpipe 来优化加速模型部署方案。",
+        description: "This section provides a comprehensive Quick Start guide for users who are new to the torchpipe project. By following this tutorial, users will be able to quickly and efficiently learn how to use torchpipe to optimize and accelerate their model deployment process, ultimately streamlining their workflow and enhancing their productivity.",
         slug: "/",
       },
     },
@@ -125,7 +125,7 @@ const sidebars = {
       link: {
         type: "generated-index",
         title: "工具",
-        description: "torchpipe相关的扩展工具",
+        description: "extension tools related to torchpipe",
         slug: "/tools",
         keywords: ["training", "vis", "debug"],
       },
@@ -145,7 +145,7 @@ const sidebars = {
       link: {
         type: "generated-index",
         title: "FAQ",
-        description: "FAQ",
+        description: "Frequently asked questions about torchpipe",
         slug: "/faq",
         keywords: ["onnx", "faq"],
       },

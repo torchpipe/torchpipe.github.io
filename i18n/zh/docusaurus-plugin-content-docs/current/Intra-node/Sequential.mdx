@@ -21,10 +21,10 @@ import TabItem from '@theme/TabItem';
 `Sequential`可简写为`S`. API可参考[`Sequential`](../backend-reference/basic#sequential).
 
 ## 条件控制流 filter {#filter_sequential}
-`Sequential` 这个后端本身实现了对控制流语法扩展的支持。事实上，`S[DecodeMat,ResizeMat]` 等价于`S[(Continue)DecodeMat,(swap)ResizeMat]`.
+`Sequential` 这个后端本身实现了对控制流语法扩展的支持。事实上，`S[DecodeMat,ResizeMat]` 等价于`S[(Run)DecodeMat,(swap)ResizeMat]`.
 
 `()`括号内的filter可返回以下状态：
-- Continue, 代表可以跳过当前子后端，等待进入下一个子后端 
+- Run, 代表可以跳过当前子后端，等待进入下一个子后端(从0.3.2b1开始生效；之前版本可使用Continue)
 - Break, 代表跳出Sequential的执行 
 - Error, 代表出现错误
 - SerialSkip, 代表可以连续跳过串行子后端，在`Sequential`中，等价于Break
@@ -34,16 +34,16 @@ import TabItem from '@theme/TabItem';
 
 
 <Tabs groupId="filter"  className="unique-tabs">
-<TabItem value="Continue" label="Continue">
+<TabItem value="Run" label="Run">
 
 ```cpp
 #include "filter.hpp"
 
-class FilterContinue : public Filter {
+class FilterRun : public Filter {
  public:
-  status forward(dict data) override { return Filter::status::Continue; }
+  status forward(dict data) override { return Filter::status::Run; }
 };
-IPIPE_REGISTER(Filter, FilterContinue, "Continue,run");
+IPIPE_REGISTER(Filter, FilterRun, "Run,run");
 ```
 
 
@@ -53,7 +53,7 @@ IPIPE_REGISTER(Filter, FilterContinue, "Continue,run");
 ```cpp
 class Filter {
  public:
-  enum struct status { Continue, Skip, SerialSkip, SubGraphSkip, Break, Error };
+  enum struct status { Run, Skip, SerialSkip, SubGraphSkip, Break, Error };
 
   virtual bool init(const std::unordered_map<std::string, std::string>& /*config*/,
                     dict /*dict_config*/) {
@@ -68,7 +68,7 @@ class Filter {
 
     (*input)[TASK_DATA_KEY] = (*input)[TASK_RESULT_KEY];
     input->erase(iter);
-    return status::Continue;
+    return status::Run;
   }
 
   virtual ~Filter() = default;
@@ -86,7 +86,7 @@ class Filter {
 而`TensorrtTensor`的范围刚好是[1,4]. 根据[Sequential计算输入范围的规则](../backend-reference/basic#sequential)，Sequential的输入范围是[1,4].
 
 如果同时有四个数据进入此Sequential，但是其中一个解码失败，那么此时
-- 一个数据在`swap`中返回`status::Break`，其余返回`status::Continue`.
+- 一个数据在`swap`中返回`status::Break`，其余返回`status::Run`.
 - `Sequential`将三个数据继续送入下一个阶段, 而`Break`状态的数据终止Sequential中的执行
 
 以上是遇到部分数据`Break`时的反应；类似的，遇到部分数据`Skip`，也会类似地局部性处理数据。然而，当一个数据`Error`时，Sequential会认为任务整体的状态是`Error`. 如果这与使用者的本意相违背，使用者可以尝试将子后端拆分到不同的Sequential中，以避免互相影响。注意，`Error`状态一般是极其稀有的，预料外的状态。

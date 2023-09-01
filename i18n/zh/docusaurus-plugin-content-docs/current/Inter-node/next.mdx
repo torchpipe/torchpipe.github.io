@@ -27,7 +27,7 @@ next="resize"
 
 `decode->resize`组成了由两个节点构成的有向无环图，其中decode是根节点，resize是子节点。
 
-与Sequential类似，根节点默认[filter](../Intra-node/Sequential.mdx#filter_sequential)=`Continue`, 子节点默认filter=`swap`.
+与Sequential类似，根节点默认[filter](../Intra-node/Sequential.mdx#filter_sequential)=`Run`, 子节点默认filter=`swap`.
 
 :::info 数据流向
 原始输入`dict`数据进入节点`decode`后，它的`result`键值被写入了结果。
@@ -75,7 +75,7 @@ next="output"
 map="B[result:B_result],C[result:data]"
 ```
 
-output通过`map`配置将B节点的result映射到了自己的B_result， 将C节点的result映射到了data. 当map存在时，默认filter为`Continue/run`, 也就是不再对输入数据做任何处理。
+output通过`map`配置将B节点的result映射到了自己的B_result， 将C节点的result映射到了data. 当map存在时，默认filter为`Run/run`, 也就是不再对输入数据做任何处理。
 
 `map`亦可将前序节点的多个键值映射到自身，如 `map="B[1:0,1:1,2:data]"`
 

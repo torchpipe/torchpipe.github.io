@@ -30,7 +30,7 @@ next="resize"
 
 The `decode->resize` forms a directed acyclic graph consisting of two nodes, where `decode` is the root node and `resize` is the child node.
 
-Similar to `Sequential`, the root node defaults to [filter](../Intra-node/Sequential.mdx#filter_sequential) = `Continue`, and the child node defaults to filter = `swap`.
+Similar to `Sequential`, the root node defaults to [filter](../Intra-node/Sequential.mdx#filter_sequential) = `Run`, and the child node defaults to filter = `swap`.
 
 :::info Data Flow
 The original input `dict` data enters the `decode` node, and its `result` key value is written into the result.
@@ -76,7 +76,7 @@ The original input `dict` data is processed by node `A`, and both nodes `B` and 
 # highlight-next-line
 map="B[result:B_result],C[result:data]"
 ```
-The `output` configuration uses `map` to map the `result` of node B to its own `B_result`, and the `result` of node C to `data`. When `map` is present, the default filter is `Continue/run`, which means that no further processing is done on the input data.
+The `output` configuration uses `map` to map the `result` of node B to its own `B_result`, and the `result` of node C to `data`. When `map` is present, the default filter is `Run/run`, which means that no further processing is done on the input data.
 
 `map` can also map multiple key-value pairs from preceding nodes to itself, such as `map="B[1:0,1:1,2:data]"`.
 

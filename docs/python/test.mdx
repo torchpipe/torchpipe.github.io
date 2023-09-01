@@ -93,8 +93,8 @@ test_from_raw_file(forward_function, os.path.join("assets/norm_jpg/"),
 |   tool's version   |          20230421.0          |
 |    num_clients     |              10              |
 |    total_number    |            10000             |
-|  throughout::qps   |           1642.34            |
-|  throughout::avg   |           6.09(ms)           |
+|  throughput::qps   |           1642.34            |
+|  throughput::avg   |           6.09(ms)           |
 |   latency::TP50    |             5.17             |
 |   latency::TP90    |             7.56             |
 |   latency::TP99    |            21.88             |
@@ -104,12 +104,12 @@ test_from_raw_file(forward_function, os.path.join("assets/norm_jpg/"),
 </details>
  
 
-### torchpipe.utils.test.throughout
+### torchpipe.utils.test.throughput
 
 *从0.3.1b3版本开始生效*
 
 ```python
-def throughout(model_path, precision, post=None,input_data=None, calibrate_dir="calibrate_dir")
+def throughput(model_path, precision, post=None,input_data=None, calibrate_dir="calibrate_dir")
 ```
 > 给定模型文件路径[onnx or tensorrt]，测试该模型在torchpipe吞吐，默认配置max=4，instance=2
 
@@ -131,11 +131,11 @@ import torchpipe
 import torch
 import os
 
-## test throughout
+## test throughput
 onnx_path = os.path.join("/tmp", f"resnet50.onnx")
 input_data = torch.randn(1, 3, 224, 224).cuda()
 precision = "fp16"
-torchpipe.utils.test.throughout(onnx_path, precision, post=None, input_data=input_data)
+torchpipe.utils.test.throughput(onnx_path, precision, post=None, input_data=input_data)
 ```
 
 <details><summary>calibrate_dir存放的calibrate文件示例</summary>

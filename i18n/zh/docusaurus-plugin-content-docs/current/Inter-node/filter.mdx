@@ -5,12 +5,12 @@ type: explainer
 ---
 
 正如在Sequential引入[filter](../Intra-node/Sequential.mdx#filter_sequential)时介绍过的，filter是节点或者后端间的逻辑控制指令，拥有以下状态：
-Continue, Skip, SerialSkip, SubGraphSkip, Break, Error.
+Run, Skip, SerialSkip, SubGraphSkip, Break, Error.
 
 ## 默认多节点调度器对filter返回值的解析
 
 在多节点调度中，filter返回值分别代表：
-- Continue, 代表可以执行当前节点的后端
+- Run, 代表可以执行当前节点的后端
 - Skip, 代表跳过当前节点的后端，但是不代表这个节点没有结果。节点的结果就是被filter处理过的`dict`
 - Break, 代表跳出整个有向无环图的执行， 被filter处理过的`dict`就是最终结果
 - Error, 代表出现错误
@@ -62,7 +62,7 @@ class your_filter : public Filter {
     // highlight-next-line
         return status::SubGraphSkip;
     else
-        return status::Continue;     
+        return status::Run;     
     }
 };
 IPIPE_REGISTER(Filter, your_filter, "your_filter");
@@ -77,11 +77,11 @@ filter="your_filter"
 
 注意自定义filter请勿与内置filter重名。
 ## 内置filter {#default_filters}
-|                                                                                                                                                          | 功能                                  |   |
-|----------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------|---|
-| Continue/run <br />Skip/skip <br />SerialSkip/serial_skip/serialskip <br />SubGraphSkip/subgraph_skip/subgraphskip, <br />Break/break, <br />Error/error | 无条件返回对应状态值                  |   |
-| swap                                                                                                                                                     | 没有result返回Break, 否则返回Continue |   |
-| or                                                                                                                                                       | 没有result返回Continue, 否则返回Skip  |   |
+|                                                                                                                                                     | 功能                             |   |
+|-----------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------|---|
+| Run/run <br />Skip/skip <br />SerialSkip/serial_skip/serialskip <br />SubGraphSkip/subgraph_skip/subgraphskip, <br />Break/break, <br />Error/error | 无条件返回对应状态值             |   |
+| swap                                                                                                                                                | 没有result返回Break, 否则返回Run |   |
+| or                                                                                                                                                  | 没有result返回Run, 否则返回Skip  |   |
 
 
 
