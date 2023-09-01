@@ -192,13 +192,17 @@ class PostProcessor {
 用户继承`PostProcessor<at::Tensor>`并实现前向接口后，可采用[AOT编译](../Intra-node/extensible_backend.mdx#编译)的方式编译后使用。
 内置后处理：
 
-|            | 功能                                            | 备注 |
-|------------|-----------------------------------------------|------|
-| cpu        | 将数据拷贝到cpu上                               |      |
-| softmaxcpu | 对二维tensor进行softmax操作后，将数据拷贝到cpu上 |      |
+|            | 功能                                                 | 备注          |
+|------------|----------------------------------------------------|---------------|
+| cpu        | 将数据拷贝到cpu上                                    |               |
+| SoftmaxCpu | 对二维tensor进行softmax操作后，将数据拷贝到cpu上      | from v0.3.2b3 |
+| SoftmaxMax | 对二维tensor进行softmax操作后，获取最大值及其对应下标 | from v0.3.2b3 |
 
-以下是`softmaxcpu`的参考实现：
+<details><summary>参考实现</summary>
+
+:::info `SoftmaxCpu`：
 ```cpp
+#include "prepost.hpp"
 class BatchingPostProcSoftmaxCpu : public PostProcessor<at::Tensor> {
  public:
   void forward(std::vector<at::Tensor> net_outputs, std::vector<dict> input,
@@ -212,8 +216,11 @@ class BatchingPostProcSoftmaxCpu : public PostProcessor<at::Tensor> {
   }
 };
 
-IPIPE_REGISTER(PostProcessor<at::Tensor>, BatchingPostProcSoftmaxCpu, "softmaxcpu");
+IPIPE_REGISTER(PostProcessor<at::Tensor>, BatchingPostProcSoftmaxCpu, "SoftmaxCpu");
 ```
+:::
+
+</details>
 
 ## LoadTensor
 用于加载磁盘中的tensor(.pt文件)到文件，可加载由`torch.save()` 保存的文件. 如果想加载为图片，可使用 `S[LoadTensor,Tensor2Mat, SyncTensor]`.
