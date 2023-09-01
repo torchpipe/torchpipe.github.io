@@ -17,9 +17,9 @@ To address these issues, TorchPipe provides a thread-safe function interface for
 
 
 ![jpg](.././static/images/EngineFlow-light-english.png)
-<center>torchpipe framework diagram</center> 
+<center>TorchPipe framework diagram</center> 
 
-**Features of the torchpipe framework:**
+**Features of the TorchPipe framework:**
 - Achieves near-optimal performance (peak throughput/TP99) from a business perspective, reducing widespread negative optimization and performance loss between nodes.
 - With a fine-grained generic backend, it is easy to expand hardware and weaken the difficulty of hardware vendor ecosystem migration.
 - Simple and high-performance modeling, including complex business systems such as multi-model fusion. Typical industrial scenarios include AI systems with up to 10 model nodes in smart cities, and OCR systems that involve subgraph independent scheduling, bucket scheduling, and intelligent batch grouping for extreme optimization.
