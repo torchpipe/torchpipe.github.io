@@ -218,7 +218,7 @@ std="58.395, 57.120, 57.375" # 255*"0.229, 0.224, 0.225"
 `
 测试具体代码见[client_qps.py](https://g.hz.netease.com/deploy/torchpipe/-/blob/develop/examples/resnet50/client_qps.py)
 
-采用相同的thrift的服务接口，测试机器1080,cpu 8核, 并发数10
+采用相同的thrift的服务接口，测试机器3080,cpu 36核, 并发数10
 
 - 从整个服务吞吐来看：
 

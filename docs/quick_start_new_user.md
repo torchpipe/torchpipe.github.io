@@ -229,7 +229,7 @@ std="58.395, 57.120, 57.375" # 255*"0.229, 0.224, 0.225"
 
 The specific test code can be found at [client_qps.py](https://g.hz.netease.com/deploy/torchpipe/-/blob/develop/examples/resnet50/client_qps.py)
 
-With the same Thrift service interface, testing on a machine with NIDIA-3080 GPU, 8-core CPU, and concurrency of 10, we have the following results:
+With the same Thrift service interface, testing on a machine with NIDIA-3080 GPU, 36-core CPU, and concurrency of 10, we have the following results:
 
 - throughput:
 
