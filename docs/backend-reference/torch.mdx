@@ -192,15 +192,19 @@ class PostProcessor {
 After inheriting from `PostProcessor<at::Tensor>` and implementing the forward interface, you can compile and use it using [AOT compilation](../Intra-node/extensible_backend.mdx#编译).
 Built-in postprocessing: 
 
-  |            | Functionality                                               | Note |
-  |------------|-------------------------------------------------------------|------|
-  | cpu        | Copy data to CPU                                            |      |
-  | softmaxcpu | Perform softmax operation on 2D tensor and copy data to CPU |      |
+ 
 
+  |            | Functionality                                                                                        | Note          |
+  |------------|------------------------------------------------------------------------------------------------------|---------------|
+  | cpu        | Copy data to CPU                                                                                     |               |
+  | SoftmaxCpu | Perform softmax operation on 2D tensor and copy data to CPU                                          | from v0.3.2b3 |
+  | SoftmaxMax | Get the maximum value and its corresponding index after performing softmax operation on a 2D tensor. | from v0.3.2b3 |
 
+<details><summary>Reference Implementation</summary>
 
-Here is a reference implementation of `softmaxcpu`:
+:::info `SoftmaxCpu`:
 ```cpp
+#include "prepost.hpp"
 class BatchingPostProcSoftmaxCpu : public PostProcessor<at::Tensor> {
  public:
   void forward(std::vector<at::Tensor> net_outputs, std::vector<dict> input,
@@ -214,8 +218,10 @@ class BatchingPostProcSoftmaxCpu : public PostProcessor<at::Tensor> {
   }
 };
 
-IPIPE_REGISTER(PostProcessor<at::Tensor>, BatchingPostProcSoftmaxCpu, "softmaxcpu");
+IPIPE_REGISTER(PostProcessor<at::Tensor>, BatchingPostProcSoftmaxCpu, "SoftmaxCpu");
 ```
+:::
+</details>
 
 ## LoadTensor
 Used to load tensors (.pt files) from disk, which can be saved using `torch.save()`. If you want to load an image, you can use `S[LoadTensor, Tensor2Mat, SyncTensor]`.
