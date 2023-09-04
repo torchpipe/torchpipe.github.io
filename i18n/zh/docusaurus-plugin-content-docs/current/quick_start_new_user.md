@@ -158,7 +158,7 @@ precision = "fp16" #精度 目前也可以支持fp32、int8
 #
 [cpu_decoder]
 backend = "DecodeMat" 
-next = "cpu_posprocess"
+next = "cpu_posdecoder"
 
 ## 预处理resize、cvtColorMat操作
 #
