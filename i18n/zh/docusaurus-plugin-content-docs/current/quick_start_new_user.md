@@ -29,15 +29,13 @@ torchpipe是为工业界所准备的一个独立作用于底层加速库（如te
 
 我们对模型部署中需要了解到的一些概念做一些简单的解释，希望对初次体验torchpipe的你有所帮助，可详见[预备知识](./preliminaries)。
 
-
-
 <a name='2'></a>
 
 ## 2.   环境安装与配置
 
 具体安装步骤可详看[安装](installation.mdx), 我们提供了两种配置torchpipe环境的方法:
- - [使用NGC基础镜像并用源码进行编译。](installation.mdx#使用ngc基础镜像)
- - [自定义dockerfile，根据提供的命令更灵活的配置您的环境。](installation.mdx#ddddd)
+ - [使用NGC基础镜像并用源码进行编译。](installation.mdx##NGC)
+ - [自定义dockerfile，根据提供的命令更灵活的配置您的环境。](installation.mdx#selfdocker)
 
 
 <a name='3'></a>
@@ -96,85 +94,12 @@ def load_classifier(net, max_batch_size,fp16):
 
 
 
-整体的线上服务部署使用核心代码：
-
-```py
-## 模型前处理，包括了【数据解码】、【预处理】
-def pull_image_pre(urls):
-    batch_imgs, imgs, img_orgs = [], [], []
-    batch_size = len(urls)
-    for url in urls:
-        try:
-            img = np.asarray(bytearray(url), dtype='uint8') 
-            
-            ## 数据解码（CPU解码）
-            img = cv2.imdecode(img, flags=cv2.IMREAD_COLOR)
-            img_org = img.copy()
-            
-            ## 预处理
-            precls_trans = transforms.Compose([transforms.ToTensor(), transforms.Normalize([0.485, 0.456, 0.406],[0.229, 0.224, 0.225]), ])
-            img = precls_trans(cv2.resize(cv2.cvtColor(img, cv2.COLOR_BGR2RGB), (224,224)))
-            img = torch.unsqueeze(img, axis=0)
-            if len(batch_imgs):
-                batch_imgs = torch.cat((batch_imgs,img),0)
-            else:
-                batch_imgs = img
-            img_orgs.append(img_org)
-        except: 
-            continue        
-    if not len(batch_imgs):
-        batch_imgs = torch.zeros(1, 224, 224, 3)
-        img_orgs.append(torch.zeros(224, 224, 3))
-    return batch_imgs, img_orgs
-    
- 
-
-## 模型加速
-def load_classifier(net, max_batch_size,fp16):
-    x = torch.ones((1, 3, 224, 224))
-    if self.device == 'gpu':
-        x = x.cuda()
-        net.cuda()
-    net.eval()
-    trtmodel = torch2trt(net,
-                        [x], 
-                        fp16_mode = fp16,
-                        max_batch_size=max_batch_size,
-                        max_workspace_size=32 * max_batch_size) 
-    del x
-    del net
-    return trtmodel
-
-
-
-# ------- main（整体服务的主函数部分） -------
-
-num_images = len(requests)
-for i in range(num_images):
-    bin_data_list.append(requests[i].data)
-    
-    
-classifier = load_classifier(net, batch_size)
-imgs, img_orgs = pull_image_pre(bin_data_list)
-if len(imgs):
-    with torch.no_grad():
-        if self.device == 'gpu':
-            imgs =imgs.cuda()
-        with self.lock:# 因为TensorRT不是线程安全的，所以要加锁
-            with torch.no_grad():
-                prob = np.squeeze(classifier(imgs).cpu().numpy())
-
-```
-`prob` 为模型推理最后输出的结果。`requests`为服务端从客户端接收的数据。
+整体的线上服务部署代码见[main_trt.py](https://g.hz.netease.com/deploy/torchpipe/-/blob/develop/examples/resnet50/main_trt.py)
 
 :::tip
 因为TensorRT不是线程安全的，所以利用这种方法进行模型加速时，服务部署过程中需要加锁（`with self.lock:`）处理。
 :::
-<!--
 
-传统的分布式/大规模系统忽略了跨节点的性能和前端复杂度。多模型系统的部署在多人协作，业务切入和部署工作前置-移交给算法开发人员方面存在挑战。另外，大模型或者多节点系统本身涉及到的跨卡流水线并行等问题也需要更加通用的高性能方案；
-
--->
 
 <a name='3.2'></a>
 
@@ -188,7 +113,7 @@ if len(imgs):
 
 ![](images/quick_start_new_user/torchpipe.png)
 
-利用torchpipe对本服务部署进行调整，核心函数调整如下：
+利用torchpipe对本服务部署进行调整，整体的线上服务部署代码见[main_torchpipe.py](https://g.hz.netease.com/deploy/torchpipe/-/blob/develop/examples/resnet50/main_torchpipe.py),核心函数调整如下：
 
 ```py
 # ------- main -------
@@ -197,18 +122,17 @@ for i in range(num_images):
     bin_data_list.append({TASK_DATA_KEY:requests[i].data, "node_name":"cpu_decoder"})
     
     
-toml_path = "resnet50_cpu.toml"
+toml_path = "resnet50.toml"
 classifier = pipe(toml_path)
 classifier(bin_data_list)
  
  
-for t in range(len(bin_data_list)):
-    if TASK_RESULT_KEY not in bin_data_list[t].keys():
-        print("error decode")
-        continue
-    else:
-        img_orgs.append(bin_data_list[t]["img"].cpu().numpy())
-        prob_per = np.squeeze(bin_data_list[t][TASK_RESULT_KEY].cpu().numpy())
+if TASK_RESULT_KEY not in bin_data.keys():
+    print("error decode")
+    return results
+else:
+    dis = self.softmax(bin_data[TASK_RESULT_KEY])
+
 
 ```
 从上面的逻辑流程来看较原来的main函数的代码量更少了。其中关键就是toml文件中的内容，整个toml包括了3个节点：[cpu_decoder]、[cpu_posdecoder]、[resnet50]，这三个节点串行进行，分别对应了[3.1中的3个部分](#31-使用tensorrt加速方案)，如下所示：
@@ -219,7 +143,7 @@ for t in range(len(bin_data_list)):
 ```bash
 # Schedule'parameter
 batching_timeout = 5 # 凑batch的超时时间
-instance_num = 4  # 实例数目
+instance_num = 8  # 实例数目
 precision = "fp16" #精度 目前也可以支持fp32、int8
 
 ## 数据解码
@@ -233,7 +157,7 @@ precision = "fp16" #精度 目前也可以支持fp32、int8
 #           每个节点完成后需要接上下一个节点的名称，否则默认最后一个节点
 #
 [cpu_decoder]
-backend = "Torch[Sequential[DecodeMat]]" # 需要处理背景线程cuda流同步问题可用Torch， 否则可用Sequential；Torch确保初始化和前向在同一个线程时，能准确处理多个backend的同步时机
+backend = "DecodeMat" 
 next = "cpu_posprocess"
 
 ## 预处理resize、cvtColorMat操作
@@ -242,12 +166,13 @@ next = "cpu_posprocess"
 #           precls_trans = transforms.Compose([transforms.ToTensor(), ])
 #           img = precls_trans(cv2.resize(cv2.cvtColor(img, cv2.COLOR_BGR2RGB), (224,224)))
 #      注意：
-#          后处理原先的顺序是resize、cv2.COLOR_BGR2RGB、再归一化。
-#          但归一化这一步目前已经融合在模型处理（[resnet50]这个节点）中，因此在本节点中后处理过程完成后处理过程完成后输出的结果是与无归一化的后处理结果一致。
+#          预处理原先的顺序是resize、cv2.COLOR_BGR2RGB、再归一化。
+#          但归一化这一步目前已经融合在模型处理（[resnet50]这个节点）中，因此在本节点中预处理过
+#          程完成后输出的结果是与无归一化的预处理结果一致。
 #          每个节点完成后需要接上下一个节点的名称，否则默认最后一个节点
 #
-[cpu_posprocess]
-backend = "Torch[Sequential[ResizeMat,cvtColorMat, Mat2Tensor]]" # 需要处理背景线程cuda流同步问题可用Torch， 否则可用Sequential；Torch确保初始化和前向在同一个线程时，能准确处理多个backend的同步时机
+[cpu_posdecoder]
+backend = "SyncTensor[Sequential[ResizeMat,cvtColorMat,Mat2Tensor]]"
 
 ### resize 操作的参数
 resize_h = 224
@@ -267,8 +192,9 @@ next = "resnet50"
 #
 [resnet50]
 backend = "Torch[TensorrtTensor]" 
-min = "1x3x224x224" 
-max = "4x3x224x224" 
+min = 1
+max = 4
+instance_num = 4
 
 model = "/you/model/path/resnet50.onnx" 
 
@@ -290,17 +216,16 @@ std="58.395, 57.120, 57.375" # 255*"0.229, 0.224, 0.225"
 ## 4 性能和效果对比
 `python test_tools.py --img_dir /your/testimg/path/ --port 8095 --request_client 10 --request_batch 1
 `
-测试具体代码见[test_tools.py](https://g.hz.netease.com/deploy/torchpipe/-/blob/master/torchpipe/tool/test_tools.py)
+测试具体代码见[client_qps.py](https://g.hz.netease.com/deploy/torchpipe/-/blob/develop/examples/resnet50/client_qps.py)
 
-
-采用相同的thrift的服务接口，测试机器1080,cpu 8核, 并发数10
+采用相同的thrift的服务接口，测试机器3080,cpu 36核, 并发数10
 
 - 从整个服务吞吐来看：
 
 | 方法            | QPS |
  :-: | :-: |
-| 纯TensorRT | 365.94   |
-| 使用torchpipe   |  776.62  |
+| 纯TensorRT |747.92 |
+| 使用torchpipe  |2172.54|
 
 
 
@@ -308,12 +233,12 @@ std="58.395, 57.120, 57.375" # 255*"0.229, 0.224, 0.225"
 
 | 方法            | TP50 | TP99 |
  :-: | :-: | :-:
-| 纯TensorRT |  26.32 |54.24|
-| 使用torchpipe   |12.69|19.81|
+| 纯TensorRT |  26.74 |35.24|
+| 使用torchpipe   |8.89|14.28|
 
 - 从整个服务资源利用率来看：
 
 | 方法            | GPU利用率 |cpu利用率|内存利用率 |
  :-: | :-: | :-:| :-: |
-| 纯TensorRT |  84-85% |231-235%|4.6%|
-| 使用torchpipe   |90-94% |318%-332%|4.1%|
+| 纯TensorRT | 42-45% |1473%|3.8%|
+| 使用torchpipe   |48-50% |983.8%|1.6%|
