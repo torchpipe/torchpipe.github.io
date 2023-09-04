@@ -158,7 +158,7 @@ precision = "fp16"
 #
 [cpu_decoder]
 backend = "DecodeMat" 
-next = "cpu_posprocess"
+next = "cpu_posdecoder"
 
 ## preprocessing: resize、cvtColorMat
 #
