@@ -4,8 +4,7 @@ title: "如何进行远程调试"
 type: explainer
 ---
 
-### 说明
-
+ 
 在程序开发过程中，经常需要我们去配置各种开发环境，并且如果本地与线上存在环境依赖的不同，还可能导致出现一些不知原因的bug，比较推荐使用的便是**Docker**。
 
 在日常开发过程中，项目代码往往存放在远程的主机中，我们通常利用本地机器通过SSH连接到远程主机进行开发。
@@ -13,14 +12,15 @@ type: explainer
 那么，如何进入到远程主机docker内部进行代码调试呢？本节以使用较为广泛的**vscode**为例，介绍如何通过vscode远程到docker容器内部进行c++/python部分的开发/调试工作。其他的IDE，感兴趣的用户可以自行Google。
 
 要完成这个主要有两步骤：
-步骤一、配置远程主机的docker
-步骤二、配置vscode
+
+- 步骤一、配置远程主机的docker
+- 步骤二、配置vscode
 
 下面详细介绍每一步的具体操作！
 
 
-### 步骤一：远程主机docker配置
-#### 1. 启动docker
+## 步骤一：远程主机docker配置
+### 1. 启动docker
 为了能够让vscode能够ssh连接到docker中，我们需要在启动docker容器的时候为其分配端口号。具体的启动方式如下：（8022为宿主端口，可修改，防止冲突。22为docker内的固定端口，默认即可）
 
 ```bash
@@ -28,16 +28,16 @@ docker_image_name=nvcr.io/nvidia/pytorch:22.12-py3
 docker run -it --gpus all --ipc=host --ulimit memlock=-1 --ulimit stack=67108864 -p 8022:22 -v `pwd`:/workspace  --name="any_names"  --cap-add=SYS_PTRACE $docker_image_name  bash
 ```
 
-#### 2. docker内增加密码
+### 2. docker内增加密码
 `passwd`
 
-#### 3. 安装openssh
+### 3. 安装openssh
 ```bash
 apt-get update
 apt-get install -y  openssh-server  openssh-client vim
 ```
 
-#### 4. 修改系统配置
+### 4. 修改系统配置
 ```bash
 vim /etc/ssh/sshd_config
 ```
@@ -52,12 +52,12 @@ PubkeyAuthentication yes
 启动服务后可以进行连接验证：`ssh -p 22 root@127.0.0.1`，如果启动失败，会报Connection refused的错误，成功则会让你输入密码，并有Welcome字样提示。
 
 
-#### 5. docker内安装调试工具
+### 5. docker内安装调试工具
 ```bash
 apt-get install gdb
 ```
 
-#### 6. 编译torchpipe为debug模式
+### 6. 编译torchpipe为debug模式
 
 进入到torchpipe目录
 
@@ -69,9 +69,9 @@ DEBUG=1 NCATCH_SUB=1 pip3 install -e .
 ```
 
 
-### 步骤二：vscode配置
+## 步骤二：vscode配置
 
-#### 1. vscode连接远程docker
+### 1. vscode连接远程docker
 
 按如下方式配置ssh的config文件，**注意User为root**，启动vscode，安装Remote-SSH插件，配置config如下：
 
@@ -85,19 +85,19 @@ Host docker_debug  #docker_debug为名字，随便起
 :::tip 国内用户
 如果觉得网速过慢，参考 [离线安装vscode server](https://zhuanlan.zhihu.com/p/426876766) 及其置顶评论。
 :::
-#### 2. vscode安装扩展
+### 2. vscode安装扩展
 在扩展商店内：
 
 - 搜索 c++ 安装相应语言扩展
 
 - 搜索 python 安装相应语言扩展
 
-#### 3. vscode配置
+### 3. vscode配置
 
 点击 `run  - open configurations`， 按照如下场景完成配置文件launch.json的配置。
 
 
-##### 3.1 情境一：仅调试Python部分代码
+#### 3.1 情境一：仅调试Python部分代码
 
 **配置文件：**
 
@@ -134,7 +134,7 @@ pdb.set_trace()
 
 
 
-##### 3.2 情境二：仅调试C++部分代码
+#### 3.2 情境二：仅调试C++部分代码
 
 **配置文件**
 
@@ -168,7 +168,7 @@ pdb.set_trace()
 
 
 
-##### 3.3 情境三：python和C++联调
+#### 3.3 情境三：python和C++联调
 
 [参考链接: Example debugging mixed Python C++ in VS Code](https://nadiah.org/2020/03/01/example-debug-mixed-python-c-in-visual-studio-code/)
 
@@ -236,7 +236,7 @@ run your.py
 
 
 
-#### 4. vscode头文件补全(可选)
+### 4. vscode头文件补全(可选)
 修改 项目配置 `./.vscode/c_cpp_properties.json`
 补充相应头文件路径
 ```json

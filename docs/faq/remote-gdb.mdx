@@ -4,22 +4,16 @@ title: "How to do remote debugging"
 type: explainer
 ---
 
-### Description
 
-During the process of program development, it is often necessary to configure various development environments. If there are differences in environment dependencies between local and online, it may cause some unknown bugs. It is recommended to use **Docker**.
-
-In the daily development process, project code is often stored on a remote host. We usually use SSH to connect to the remote host from our local machine for development.
-
-So, how can we enter the remote host's Docker container for code debugging? In this section, we will take the widely used **vscode** as an example to introduce how to use vscode to remotely access the Docker container for c++/python development/debugging. For other IDEs, interested users can Google it.
+In this section, we will introduce how to use vscode to remotely access the Docker container for c++/python development/debugging.
 
 To complete this, there are two main steps:
-Step 1: Configure the Docker on the remote host
-Step 2: Configure vscode
+- Step 1: Configure the Docker on the remote host
+- Step 2: Configure vscode
 
-The specific operations for each step are detailed below!
 
-### Step 1: Configure Docker on the remote host
-#### 1. Start Docker
+## Step 1: Configure Docker on the remote host
+### 1. Start Docker
 To allow vscode to SSH into the Docker container, we need to assign a port number when starting the Docker container. The specific startup method is as follows: (8022 is the host port, which can be modified to avoid conflicts. 22 is the fixed port inside Docker and can be left as default.)
 
 ```bash
@@ -27,17 +21,17 @@ docker_image_name=nvcr.io/nvidia/pytorch:22.12-py3
 docker run -it --gpus all --ipc=host --ulimit memlock=-1 --ulimit stack=67108864 -p 8022:22 -v `pwd`:/workspace  --name="any_names"  --cap-add=SYS_PTRACE $docker_image_name  bash
 ```
 
-#### 2. Add password inside Docker
+### 2. Add password inside Docker
 `passwd`
 
-#### 3. Install openssh
+### 3. Install openssh
 
 ```bash
 apt-get update
 apt-get install -y  openssh-server  openssh-client vim
 ```
 
-#### Modify system configuration
+### Modify system configuration
 
 
 
@@ -57,13 +51,13 @@ Start the service: `/etc/init.d/ssh start` or `/etc/init.d/ssh restart`
 
 After starting the service, you can perform connection verification: `ssh -p 22 root@127.0.0.1`. If the startup fails, it will report a "Connection refused" error. If successful, it will prompt you to enter a password and display a "Welcome" message.
 
-#### 5. Install debugging tools inside Docker
+### 5. Install debugging tools inside Docker
 
 ```bash
 apt-get install gdb
 ```
 
-#### Compile torchpipe in debug mode
+### 6. Compile torchpipe in debug mode
 
 
 Change directory to torchpipe:
@@ -77,10 +71,10 @@ DEBUG=1 NCATCH_SUB=1 pip3 install -e .
 ```
 
 
-### Step 2: Configure vscode
+## Step 2: Configure vscode
 
 
-#### 1. Connect vscode to remote Docker
+### 1. Connect vscode to remote Docker
 
 Configure the ssh config file as follows, **note that User is root**, start vscode, install the Remote-SSH plugin, and configure the config as follows:
 
@@ -91,23 +85,20 @@ Host docker_debug  #docker_debug can be any name
     Port 8022 #the port number in Step 1
 ```
 
-:::tip For users in China
- f you find the network speed too slow, please refer to [Offline installation of vscode server](https://zhuanlan.zhihu.com/p/426876766) and its top comments. 
-:::
 
 
 
-#### 2. Install Extensions in VS Code
+### 2. Install Extensions in VS Code
 In the extension marketplace:
 
 - Search for and install the corresponding language extension for C++
 
 - Search for and install the corresponding language extension for Python
 
-#### 3. Configure VS Code
+### 3. Configure VS Code
 Click `run - open configurations`, and complete the configuration of the launch.json file according to the following scenario.
 
-##### 3.1 Scenario One: Debugging Only Python Code
+#### 3.1 Scenario One: Debugging Only Python Code
 
 **Configuration File:**
 
@@ -142,7 +133,7 @@ pdb.set_trace()
 ```
 
 
-##### 3.2 Scenario 2: Debugging Only C++ Code
+#### 3.2 Scenario 2: Debugging Only C++ Code
 
 **Configuration File**
 
@@ -174,7 +165,7 @@ pdb.set_trace()
 
 You can directly execute your Python file, such as python3 a.py, and then start "(gdb) Attach" to bind to the Python process. If the Python process exits too quickly, you can sleep for a period of time to begin debugging.
 
-##### 3.3 Scenario 3: Debugging Python and C++ Together
+#### 3.3 Scenario 3: Debugging Python and C++ Together
 
 [Reference: Example debugging mixed Python C++ in VS Code](https://nadiah.org/2020/03/01/example-debug-mixed-python-c-in-visual-studio-code/)
 
@@ -240,7 +231,7 @@ Trace the stack after a crash: bt
 
 
 
-#### 4. VSCode Header File Autocomplete (Optional)
+### 4. VSCode Header File Autocomplete (Optional)
 Update the project configuration in `./.vscode/c_cpp_properties.json` by adding the appropriate header file paths.
 ```json
 {
