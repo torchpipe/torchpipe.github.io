@@ -58,7 +58,7 @@ This part primarily relies on CPU data decoding to execute the operation.
 
 ```py
 ## Data decoding（CPU decoding）
-img = cv2.imdecode(img, flags=cv2.IMREAD_COLOR)
+img = cv2.imdecode(np.asarray(bytearray(bin_list.data), dtype='uint8'), flags=cv2.IMREAD_COLOR)
 ```
 
 2、Preprocessing
@@ -66,9 +66,10 @@ In this part, we mainly uses the built-in functions of pytorch to complete the o
 
 ```py
 ## Preprocessing
-precls_trans = transforms.Compose([transforms.ToTensor(), transforms.Normalize([0.485, 0.456, 0.406],[0.229, 0.224, 0.225]), ])
+self.pre_trans = transforms.Compose([transforms.ToTensor(), transforms.Normalize([0.485, 0.456, 0.406],[0.229, 0.224, 0.225]),])
 
-img = precls_trans(cv2.resize(cv2.cvtColor(img, cv2.COLOR_BGR2RGB), (224,224)))
+
+img = self.precls_trans(cv2.resize(cv2.cvtColor(img, cv2.COLOR_BGR2RGB), (224,224)))
 ```
 
 3、TensorRT acceleration
@@ -108,14 +109,13 @@ The core function modifications as follows:
 
 ```py
 # ------- main -------
-num_images = len(requests)
-for i in range(num_images):
-    bin_data_list.append({TASK_DATA_KEY:requests[i].data, "node_name":"cpu_decoder"})
-    
-    
-toml_path = "resnet50.toml"
-classifier = pipe(toml_path)
-classifier(bin_data_list)
+bin_data = {TASK_DATA_KEY:bin_list.data, "node_name":"cpu_decoder"}
+
+
+config = torchpipe.parse_toml("resnet50.toml")
+self.classification_engine = pipe(config)
+
+self.classification_engine(bin_data)
  
  
 if TASK_RESULT_KEY not in bin_data.keys():

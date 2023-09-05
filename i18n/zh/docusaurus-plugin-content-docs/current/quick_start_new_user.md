@@ -61,7 +61,7 @@ TensorRT是一个基于NVIDIA GPU的高性能深度学习推理引擎，可以�
 
 ```py
 ## 数据解码（CPU解码）
-img = cv2.imdecode(img, flags=cv2.IMREAD_COLOR)
+img = cv2.imdecode(np.asarray(bytearray(bin_list.data), dtype='uint8'), flags=cv2.IMREAD_COLOR)
 ```
 
 2、预处理：
@@ -69,9 +69,10 @@ img = cv2.imdecode(img, flags=cv2.IMREAD_COLOR)
 
 ```py
 ## 预处理
-precls_trans = transforms.Compose([transforms.ToTensor(), transforms.Normalize([0.485, 0.456, 0.406],[0.229, 0.224, 0.225]), ])
+self.pre_trans = transforms.Compose([transforms.ToTensor(), transforms.Normalize([0.485, 0.456, 0.406],[0.229, 0.224, 0.225]),])
 
-img = precls_trans(cv2.resize(cv2.cvtColor(img, cv2.COLOR_BGR2RGB), (224,224)))
+
+img = self.precls_trans(cv2.resize(cv2.cvtColor(img, cv2.COLOR_BGR2RGB), (224,224)))
 ```
 
 3、模型TensorRT加速
@@ -111,14 +112,13 @@ self.classification_engine = torch2trt(resnet50, [input_shape],
 
 ```py
 # ------- main -------
-num_images = len(requests)
-for i in range(num_images):
-    bin_data_list.append({TASK_DATA_KEY:requests[i].data, "node_name":"cpu_decoder"})
-    
-    
-toml_path = "resnet50.toml"
-classifier = pipe(toml_path)
-classifier(bin_data_list)
+bin_data = {TASK_DATA_KEY:bin_list.data, "node_name":"cpu_decoder"}
+
+
+config = torchpipe.parse_toml("resnet50.toml")
+self.classification_engine = pipe(config)
+
+self.classification_engine(bin_data)
  
  
 if TASK_RESULT_KEY not in bin_data.keys():
@@ -127,8 +127,8 @@ if TASK_RESULT_KEY not in bin_data.keys():
 else:
     dis = self.softmax(bin_data[TASK_RESULT_KEY])
 
-
 ```
+
 从上面的逻辑流程来看较原来的main函数的代码量更少了。其中关键就是toml文件中的内容，整个toml包括了3个节点：[cpu_decoder]、[cpu_posdecoder]、[resnet50]，这三个节点串行进行，分别对应了[3.1中的3个部分](#31-使用tensorrt加速方案)，如下所示：
 ![](images/quick_start_new_user/torchpipe_pipeline.png)
 
