@@ -7,7 +7,7 @@ type: explainer
 
 # Trial in 30mins(new users)
 
-TorchPipe is a multi-instance pipeline parallel library that provides a seamless integration between lower-level acceleration libraries (such as TensorRT and OpenCV) and RPC frameworks. It guarantees high service throughput while meeting latency requirements. This document is mainly for new users, that is, users who are in the introductory stage of acceleration-related theoretical knowledge, know some python grammar, and can read simple codes. This content mainly includes the use of torchpipe for accelerating service deployment, complemented by performance and effect comparisons.
+TorchPipe is a multi-instance pipeline parallel library that provides a seamless integration between lower-level acceleration libraries (such as TensorRT and OpenCV) and RPC frameworks. It guarantees high service throughput while meeting latency requirements. This document is mainly for new users, that is, users who are in the introductory stage of acceleration-related theoretical knowledge, know some python grammar, and can read simple codes. This content mainly includes the use of torchpipe for accelerating service deployment, complemented by performance and effect comparisons. The complete code of this document can be found at [resnet50_thrift](https://g.hz.netease.com/deploy/torchpipe/-/blob/develop/examples/resnet50_thrift/)。
 
 ## Catalogue
 * [1. Basic knowledge](#1)
@@ -74,24 +74,16 @@ img = precls_trans(cv2.resize(cv2.cvtColor(img, cv2.COLOR_BGR2RGB), (224,224)))
 3、TensorRT acceleration
 
 ```py
-def load_classifier(net, max_batch_size,fp16):
-    x = torch.ones((1, 3, 224, 224))
-    if device == 'gpu':
-        x = x.cuda()
-        net.cuda()
-    net.eval()
-    trtmodel = torch2trt(net,
-                        [x], 
-                        fp16_mode = fp16,
-                        max_batch_size=max_batch_size,
-                        max_workspace_size=32 * max_batch_size) 
-    del x
-    del net
-    return trtmodel
+
+input_shape = torch.ones((1, 3, 224, 224)).cuda()
+self.classification_engine = torch2trt(resnet50, [input_shape], 
+                            fp16_mode=self.fp16,
+                            max_batch_size=self.cls_trt_max_batchsize,
+                            )
 
 ```
 
-The overall online service deployment can be found at [main_trt.py](https://g.hz.netease.com/deploy/torchpipe/-/blob/develop/examples/resnet50/main_trt.py)
+The overall online service deployment can be found at [main_trt.py](https://g.hz.netease.com/deploy/torchpipe/-/blob/develop/examples/resnet50_thrift/main_trt.py)
 
 :::tip
 Since TensorRT is not thread-safe, when using this method for model acceleration, it is necessary to handle locking (with self.lock:) during the service deployment process.
@@ -111,7 +103,7 @@ From the above process, it's clear that when accelerating a single model, the fo
 
 ![](images/quick_start_new_user/torchpipe_en.png)
 
-We've made adjustments to the deployment of our service using TorchPipe.The overall online service deployment can be found at [main_torchpipe.py](https://g.hz.netease.com/deploy/torchpipe/-/blob/develop/examples/resnet50/main_torchpipe.py).
+We've made adjustments to the deployment of our service using TorchPipe.The overall online service deployment can be found at [main_torchpipe.py](https://g.hz.netease.com/deploy/torchpipe/-/blob/develop/examples/resnet50_thrift/main_torchpipe.py).
 The core function modifications as follows:
 
 ```py
@@ -227,7 +219,7 @@ std="58.395, 57.120, 57.375" # 255*"0.229, 0.224, 0.225"
 `python clien_qps.py --img_dir /your/testimg/path/ --port 8888 --request_client 20 --request_batch 1
 `
 
-The specific test code can be found at [client_qps.py](https://g.hz.netease.com/deploy/torchpipe/-/blob/develop/examples/resnet50/client_qps.py)
+The specific test code can be found at [client_qps.py](https://g.hz.netease.com/deploy/torchpipe/-/blob/develop/examples/resnet50_thrift/client_qps.py)
 
 With the same Thrift service interface, testing on a machine with NIDIA-3080 GPU, 36-core CPU, and concurrency of 10, we have the following results:
 

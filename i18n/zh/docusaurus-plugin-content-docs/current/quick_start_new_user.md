@@ -7,7 +7,8 @@ type: explainer
 
 # torchpipe快速上手（30min体验版）
 
-torchpipe是为工业界所准备的一个独立作用于底层加速库（如tensorrt，opencv，torchscript）以及 RPC（如thrift, gRPC）之间的多实例流水线并行库，助力使用者能在部署阶段节约更多的硬件资源，帮助产品应用落地。此教程主要针对初级用户，即对于加速相关的理论知识处于入门阶段，具有一定的 Python基础，能够阅读简单代码的用户。此内容主要包括使用torchpipe进行服务部署加速的使用方法、性能和效果差异对比等。
+torchpipe是为工业界所准备的一个独立作用于底层加速库（如tensorrt，opencv，torchscript）以及 RPC（如thrift, gRPC）之间的多实例流水线并行库，助力使用者能在部署阶段节约更多的硬件资源，帮助产品应用落地。此教程主要针对初级用户，即对于加速相关的理论知识处于入门阶段，具有一定的 Python基础，能够阅读简单代码的用户。此内容主要包括使用torchpipe进行服务部署加速的使用方法、性能和效果差异对比等。本文档的完整代码见可详见[resnet50_thrift](https://g.hz.netease.com/deploy/torchpipe/-/blob/develop/examples/resnet50_thrift/)。
+
 
 
 ## 目录
@@ -28,6 +29,7 @@ torchpipe是为工业界所准备的一个独立作用于底层加速库（如te
 
 
 我们对模型部署中需要了解到的一些概念做一些简单的解释，希望对初次体验torchpipe的你有所帮助，可详见[预备知识](./preliminaries)。
+
 
 <a name='2'></a>
 
@@ -75,26 +77,18 @@ img = precls_trans(cv2.resize(cv2.cvtColor(img, cv2.COLOR_BGR2RGB), (224,224)))
 3、模型TensorRT加速
 
 ```py
-def load_classifier(net, max_batch_size,fp16):
-    x = torch.ones((1, 3, 224, 224))
-    if device == 'gpu':
-        x = x.cuda()
-        net.cuda()
-    net.eval()
-    trtmodel = torch2trt(net,
-                        [x], 
-                        fp16_mode = fp16,
-                        max_batch_size=max_batch_size,
-                        max_workspace_size=32 * max_batch_size) 
-    del x
-    del net
-    return trtmodel
+
+input_shape = torch.ones((1, 3, 224, 224)).cuda()
+self.classification_engine = torch2trt(resnet50, [input_shape], 
+                            fp16_mode=self.fp16,
+                            max_batch_size=self.cls_trt_max_batchsize,
+                            )
 
 ```
 
 
 
-整体的线上服务部署代码见[main_trt.py](https://g.hz.netease.com/deploy/torchpipe/-/blob/develop/examples/resnet50/main_trt.py)
+整体的线上服务部署代码见[main_trt.py](https://g.hz.netease.com/deploy/torchpipe/-/blob/develop/examples/resnet50_thrift/main_trt.py)
 
 :::tip
 因为TensorRT不是线程安全的，所以利用这种方法进行模型加速时，服务部署过程中需要加锁（`with self.lock:`）处理。
@@ -113,7 +107,7 @@ def load_classifier(net, max_batch_size,fp16):
 
 ![](images/quick_start_new_user/torchpipe.png)
 
-利用torchpipe对本服务部署进行调整，整体的线上服务部署代码见[main_torchpipe.py](https://g.hz.netease.com/deploy/torchpipe/-/blob/develop/examples/resnet50/main_torchpipe.py),核心函数调整如下：
+利用torchpipe对本服务部署进行调整，整体的线上服务部署代码见[main_torchpipe.py](https://g.hz.netease.com/deploy/torchpipe/-/blob/develop/examples/resnet50_thrift/main_torchpipe.py),核心函数调整如下：
 
 ```py
 # ------- main -------
@@ -216,7 +210,7 @@ std="58.395, 57.120, 57.375" # 255*"0.229, 0.224, 0.225"
 ## 4 性能和效果对比
 `python test_tools.py --img_dir /your/testimg/path/ --port 8095 --request_client 10 --request_batch 1
 `
-测试具体代码见[client_qps.py](https://g.hz.netease.com/deploy/torchpipe/-/blob/develop/examples/resnet50/client_qps.py)
+测试具体代码见[client_qps.py](https://g.hz.netease.com/deploy/torchpipe/-/blob/develop/examples/resnet50_thrift/client_qps.py)
 
 采用相同的thrift的服务接口，测试机器3080,cpu 36核, 并发数10
 
