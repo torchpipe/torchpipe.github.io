@@ -8,58 +8,84 @@ type: explainer
 This feature is currently under development.
 :::
 
-为了对齐部署和训练的前处理过程，很自然的想法是将torchpipe加入训练流程流水线。然而这并不是容易的，主要是因为这将涉及到多卡数据的问题。事实上，目前鲜有将torchvision的gpu前处理加入训练流水线的实践。一个可供参考的例子是[kornia的training API](https://kornia.readthedocs.io/en/latest/get-started/training.html).然而它是非常重的，重构了整个流程。
+To align the preprocessing process of deployment and training, a natural idea is to incorporate torchpipe into the training pipeline. However, this is not an easy task, mainly due to the involvement of multi-card data. In fact, there are currently few practices that integrate GPU preprocessing of torchvision into the training pipeline. One reference example is the [training API of Kornia](https://kornia.readthedocs.io/en/latest/get-started/training.html). However, it is quite heavy and requires a complete restructuring of the entire process.
+
 
 
 ###  Motivation
 
-   * 在项目的train-infer迭代中，通常的做法是在训练环节使用Open-CV模块在CPU上进行数据预处理；而在上线环节中，希望使用GPU进行该操作以进一步提升上线服务性能.
+In the train-infer iteration of a project, it is common practice to use the OpenCV module for data preprocessing on the CPU during the training phase. However, during the deployment phase, it is desirable to use the GPU for this operation to further enhance the performance of the online service.
 
-      * 关于本项目带来的服务性能提升测试，可以参考下面的性能提升实验（QPS、RT等指标受实际线上环境、数据影响较大，仅供参考）
-          ![image](../images/training/gpu_decode_exp_show_readme_2.jpg)
+* Regarding the performance improvement testing brought by this project, you can refer to the following performance improvement experiment. However, please note that metrics such as QPS and RT (Response Time) are heavily influenced by the actual online environment and data, so these results should be taken as reference only.
+* Test Configuration: ResNet50, input image size 1080x1080.
+
+       
+| machine  | decode type  | client  | cpu utilization  |qps  |avg  |TP50  |TP99  |QPS improvement  |
+| :----:  | :----:  | :----:  | :----:  | :----:  | :----:  | :----:  | :----: |  :----: | 
+| 3080Ti | cpu decode | 10 | 300% limit | 271 | 36.88 | 30.11 | 65.97 |  | 
+| 3080Ti | gpu decode  | 10 |  300% limit |319 | 31.34 | 23.15 | 61.60 | 17.71% | 
+| 3080Ti | cpu decode  | 1 |  300% limit |70 | 14.27 | 14.24 | 18.35 |  | 
+| 3080Ti | gpu decode  | 1 |  300% limit |90 | 11.08 | 10.76 | 14.46 | 28.57% | 
+| 3080Ti | cpu decode  | 5 |  300% limit |276 | 18.11 | 12.62 | 38.87 |  | 
+| 3080Ti | gpu decode  | 5 |  300% limit |321 | 15.59 | 9.83 | 40.43 | 16.30% | 
 
 
-   * 基于CPU的数据预处理与GPU不对齐，可能会导致模型的识别效果出现波动，因而限制了infer时GPU解码的应用。
 
-     * 关于train-infer不对齐带来的负面影响和本项目带来的改进，可以参考下面的效果一致性测试实验,效果结论可以看表中注释部分
-      ![image](../images/training/gpu_decode_exp_show_readme.jpg)
+
+
+* Due to the misalignment between CPU data preprocessing and GPU, it may lead to fluctuations in the recognition accuracy of the model, thus restricting the application of GPU decoding during inference.
+
+* For the negative impact of misalignment between training and inference, as well as the improvements introduced in this project, you can refer to the consistency test experiment below. The conclusions regarding the effects can be found in the analysis section of the table. This experiment uses an internal dataset as an example and compares the training with CPU decoding and GPU decoding, while keeping other experimental hyperparameters consistent.
+  
+       
+| index  | train type  |Model Inference Method  |recall  |Diff  |precision  | Diff  |Analysis  |
+| :----:  | :----:  | :----:  | :----:  | :----:  | :----:  | :----: | :----: | 
+| 1 | cpu decode， all data train | cpu decode  | 94.76% |  | 89.73% |  |  | 
+| 2 | cpu decode， all data train | gpu decode  | 95.09% | 0.33% | 90.35% | 0.62% | The comparison between experiments 1 and 2 demonstrates that using the CPU for decoding during training and GPU for decoding during inference can result in significant fluctuations in model performance. This poses a risk to the stability of the model's performance once it is deployed. | 
+| 3 | cpu decode ，5% data train | cpu decode  | 88.56% |  | 75.83% |  |  | 
+| 4 | cpu decode ，5% data train | gpu decode  | 91.14% | 2.58% | 79.86% | 4.03% | Experiments 3 and 4 further demonstrate that in scenarios with a small amount of training data, which are prone to overfitting, the pipeline of using CPU for decoding during training and GPU for decoding during inference can lead to significant fluctuations in model performance. This exacerbates the instability of the results. | 
+| 5 | gpu decode ， all data train | gpu decode +torch模型 | 94.19% |  | 90.55% |  |  | 
+| 6 | gpu decode ， all data train | gpu decode + torchpipe fp32 | 94.19% |  | 90.59% |  |  | 
+| 7 | gpu decode ， all data train | gpu decode + torchpipe fp16  | 94.19% | 0 | 90.59% | 0.04% | Experiments 5, 6, and 7 provide evidence that the pipeline of using GPU for both training and inference based on torchpipe can align the results and further improve the performance for deploying the model. This suggests that using GPU for both training and inference can lead to consistent and improved performance for the model when deployed in a production environment.  | 
+
+
      
     
-   * 本项目希望在Pytorch训练框架中基于Torchpipe加速框架实现GPU预处理，同时利用Torchpipe的多实例操作，有效提高训练效率。
+   * This project aims to implement GPU preprocessing in the PyTorch training framework using the Torchpipe acceleration framework. Additionally, leveraging the multi-instance operation feature of Torchpipe can effectively improve training efficiency.
+
 
 
 
 ### Major features
-* 将Torchpipe框架作为GPU预处理pipeline嵌入通用的Pytorch训练框架中，实现便捷式使用
-* Train-Infer的gpu解码对齐，进一步提升上线服务性能（并发、耗时等）
-* 利用线程池、缓存队列、多卡分发数据等技术，实现了多进程Dataloader & GPU负载均衡 & 高效训练
-* 支持DP & DDP等多种分布式训练模式
-* 同时支持cpu与gpu解码，可通过参数控制比例，变相增加augment操作
+* Embedding the Torchpipe framework as a GPU preprocessing pipeline into the general PyTorch training framework for convenient usage.
+* Aligning the GPU decoding for Train-Infer, further enhancing the performance of online services in terms of concurrency and response time.
+* Implementing efficient training through techniques such as thread pools, caching queues, and multi-GPU data distribution, achieving multi-process Dataloader, GPU load balancing, and efficient training.
+* Supporting various distributed training modes such as DP (Data Parallel) and DDP (Distributed Data Parallel).
+* Supporting both CPU and GPU decoding, with the ability to control the proportion through parameters, effectively increasing the augment operations.
 
 
 ### Quick Usage
 
-本样例中，提供了学习参考代码，在torchpipe的example/gpu_train 文件夹下，分别为train_gpu.py，train_dp.py, train_ddp.py。
-
+In this example, reference code for learning is provided in the torchpipe's example/gpu_train directory. The code files are train_gpu.py, train_dp.py, and train_ddp.py.
   
-- train_dp.py 如果多卡并行使用了dp，可以参考这份代码。
+- train_dp.py  # if you use dp in your code，you can refer to this code.
   ```
   sh train_dp.sh
   ```
-- train_ddp.py 如果多卡并行使用了ddp，可以参考这份代码。
+- train_ddp.py # if you use ddp in your code，you can refer to this code.
   ```
   sh train_ddp.sh
   ```
 
 
 
-**为了方便大家调用，只需8步，就可以将该方法应用到您的项目中去。**
+**To make it easier for everyone to use, you can follow these 8 steps to apply this method to your project：**
 
-##### step 1: 准备toml
+##### step 1: Prepare toml file
 
-- toml主要用于设置gpu decode、resize等操作。
-- 可以参考例子中的toml文件夹下的gpu_decode_train.toml以及gpu_decode_val.toml，分别用于train和val的数据加载以及预处理过程，
-- 如有必要，可以在其中修改对应的操作。
+- Toml is primarily used to configure GPU decoding, resizing, and other operations.
+- You can refer to the `gpu_decode_train.toml` and `gpu_decode_val.toml` files in the "toml" folder as examples. These files are used for data loading and preprocessing during training and validation processes respectively.
+- If necessary, you can modify the corresponding operations in these files.
 
 ##### step 2: import library
 
@@ -74,7 +100,7 @@ train_dataset = datasets.ImageFolder(traindir, loader=cv2_loader)
 
 ```
 
-##### step 4: 设置 gpu augment , 这里不需要resize操作，resize在torchpipe的toml里面设置了，只设置其他的就行，唯一不同的是 [ToTensor] 变成了自定义的 [TensorToTensor]
+##### step 4: set gpu augment , Here, we don't need to include the resize operation as it is already set in the toml file for TorchPipe. We only need to set the other operations, and the only difference is that [ToTensor] is replaced with a custom operation called [TensorToTensor].
 
 ```python
 
@@ -83,7 +109,7 @@ train_transform_gpu = transforms.Compose([
     transforms.RandomHorizontalFlip(0.05),
     transforms.RandomGrayscale(0.02),
     transforms.RandomRotation(10),
-    transforms.ColorJitter(0.05, 0.05, 0.05),  ## 4个参数这里设置3个，是因为最后的hue参数在1080Ti计算会导致速度变慢，其他显卡不会有问题
+    transforms.ColorJitter(0.05, 0.05, 0.05),  ## Here, we are setting three out of four parameters because the last parameter, "hue," tends to slow down the speed of computation on a 1080Ti GPU. Other GPUs should not have an issue with it.
     TensorToTensor(),
     #the same as normalize range [0,1]
     transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
@@ -91,7 +117,7 @@ train_transform_gpu = transforms.Compose([
 
 ```
 
-##### step 5: 如果要做gpu与cpu的联合预处理，需要同时设置 cpu augment, 这个就是正常按照pytorch原来的就行。
+##### step 5: If you want to perform joint preprocessing on both GPU and CPU, you need to set up the CPU augment as well. This can be done following the regular PyTorch approach for CPU preprocessing.
 
 ```python
 
@@ -108,11 +134,13 @@ train_transform_cpu =transforms.Compose([
 
 ```
 
-##### step 6: 将dataloader类进行包装，包装成我们的wrap_dataloader_torchpipe类。
+##### step 6: We can wrap the DataLoader class into our custom class called `wrap_dataloader_torchpipe`.
 
-* 需要注意的是，这里需要传入toml的路径
-* local_rank为使用ddp的时候才会用到的参数，不使用ddp，不设置这个参数即可。
-* cpu_percentage 代表的是cpu解码以及预处理的百分比。
+
+* Please note that the path to the TOML file needs to be passed as an argument.
+* The `local_rank` parameter is only used when using Distributed Data Parallel (DDP). If DDP is not used, this parameter can be left unset.
+* `cpu_percentage` represents the percentage of CPU decoding and preprocessing.
+
 
 ```python
   
@@ -127,9 +155,9 @@ wrap_train_loader = wrap_dataloader_torchpipe(
 )
 ```
 
-##### step 7: 将val做跟train同样的操作。
+##### step 7: Apply the same operations to the "val" as applied to the "train" dataset.
 
-##### step 8: 每个epoch需要重置一下迭代器
+##### step 8: Reset the iterator after each epoch.
 
 ```python
 
@@ -140,31 +168,32 @@ wrap_val_loader.reset()
 
 
 
-### 训练好的模型如何进行本地测试?
+### How to perform local testing with a trained model?
 
-训练和测试密不可分，前面我们已经实现了利用torchpipe实现gpu解码，并将模型训练完成，那么如何利用训练好的模型来进行gpu解码测试呢？
+Training and testing go hand in hand. We have already implemented GPU decoding using TorchPipe and completed model training. Now, how can we use the trained model for GPU decoding testing?
 
-这里主要涉及两个问题：
-1. 在测试阶段如何实现gpu解码与预处理。
-2. 模型如何进行前向。
+There are primarily two aspects to consider:
+1. How to implement GPU decoding and preprocessing during the testing phase.
+2. How to perform model inference.
 
-这里给出两种解决方案，供大家参考，可根据项目实际情况来选择具体方案。
+Here are two solutions for your reference. You can choose the specific approach based on your project requirements.
 
-详细代码可以参考example里面的test_gpu.py，以及test_gpu.sh，大家可以先看下面的介绍，然后再看详细代码，就一目了然了。
+For detailed code examples, you can refer to "test_gpu.py" and "test_gpu.sh" in the "example" directory. First, read the following explanation, and then take a look at the detailed code to gain a clearer understanding.
 
-#### 方案一（推荐）：解码和模型全部使用torchpipe来完成
+#### Solution 1 (Recommended): Perform decoding and model inference all using TorchPipe
 
-这个方案适合项目相对简单（比如只有1、2个模型），或者对torchpipe具有一定掌握，可以利用torchpipe实现复杂逻辑的同学
+This solution is suitable for relatively simple projects (such as those with 1 or 2 models) or for individuals who have a good understanding of TorchPipe and can utilize its capabilities to implement complex logic.
 
-##### step 1: 将pytorch模型转换为onnx模型，这里可以参考文档：[pytorch模型转onnx](../faq/onnx)
 
-* 这一步需要注意的是：要不要将**减均值、除方差**放到模型中，这里做了，后面就不需要这个预处理了。
+##### step 1: Convert the PyTorch model to an ONNX model. You can refer to the documentation here: [Converting PyTorch models to ONNX](../faq/onnx?_highlight=onnx).
 
-##### step 2: 实现toml
+* One important thing to consider in this step is whether to include the "subtract mean and divide by variance" preprocessing in the model itself. If you have already incorporated this preprocessing step, then there is no need to perform it separately later on.
 
-这里给一个简单的通用版本：
+##### step 2: write your toml
 
-* 这个版本实现了解码与模型前向的基本操作，先对图像进行解码、resize、cvtcolor，然后过模型，给出结果。
+Here's a simple and generic version:
+
+* This version implements basic operations for decoding and forward pass of the model. It starts by decoding the image, resizing it, and converting the color space. Then, it passes the image through the model to obtain the results.
 
 ```python
 batching_timeout = 1 
@@ -195,14 +224,14 @@ instance_num = 2
 ```
 
 
-##### step3 ： 前向的代码
+##### step3：forward code example
 
 ```python
 def init_decodeNode(self):
     config = torchpipe.parse_toml(self.toml_path)
     for key in config.keys():
         if key != 'global':
-            # 如果toml里没有指定gpu，这里需要指定gpu
+            # If no GPU is specified in the TOML file, it is necessary to specify the GPU here.
             config[key]["device_id"] = 0
     print(config)
     decode_node = torchpipe.pipe(config)
@@ -228,14 +257,14 @@ def predict(self, img_path):
 
 ```
 
-#### 方案二：只使用torchpipe来完成gpu解码、resize，模型依然使用PyTorch的模型
+#### Solution 2 ：We will only use TorchPipe for GPU decoding and resizing, while still utilizing PyTorch models.
 
-这个方法，只需要把原来PyTorch代码中的预处理修改了就可以了，其他不需要做修改，也不需要转onnx这步骤了。
+This method only requires modifications to the preprocessing part of the original PyTorch code. No other modifications are needed, and there is no need to go through the process of converting to ONNX.
 
-##### step1: toml例子(建议与val的toml保持一致)
+##### step1: exmaple of toml(Suggest keeping the toml consistent with Val.)
 
-* 完成gpu解码、resize、cvtColor功能
-* 返回tensor类型(shape:1x3x224x224)
+* Completed GPU decoding, resizing, and cvtColor functionalities.
+* Returns tensor of shape 1x3x224x224.
 
 ```python
 batching_timeout = 1 
@@ -259,7 +288,7 @@ instance_num =8
 
 ```
 
-##### step2 : infer代码：
+##### step2 : infer code：
 
 ```python
 
@@ -267,7 +296,7 @@ def init_decodeNode(self):
     config = torchpipe.parse_toml(self.toml_path)
     for key in config.keys():
         if key != 'global':
-            # 如果toml里没有指定gpu，这里需要指定gpu
+            # If no GPU is specified in the TOML file, it is necessary to specify the GPU here.
             config[key]["device_id"] = 0
     print(config)
     decode_node = torchpipe.pipe(config)
@@ -308,9 +337,8 @@ def predict(self, img_path):
 ```
 
 ### For Users:
-本项目的核心实现代码主要是gpu_train_tools.py中基于Pytoch进一步封装的DataLoader类，如果您想在自己已有的训练框架中添加功能，或是进一步探索，可以参考这个类进行修改。
+The core implementation code of this project is mainly the DataLoader class in gpu_train_tools.py, which is further encapsulated based on PyTorch. If you want to add functionality to your existing training framework or further explore, you can refer to this class for modifications.
 
-**在功能实现过程中，难免会有一些没有考虑到的地方，如果遇到了bug，请联系Author(WangLichun，LinYuxing，ZhangShiyang)协助解决**
-
+**During the implementation process, there may be some unforeseen aspects that were not considered. If you encounter any bugs, please contact the authors (WangLichun, LinYuxing, ZhangShiyang) for assistance in resolving them.**
 
 
