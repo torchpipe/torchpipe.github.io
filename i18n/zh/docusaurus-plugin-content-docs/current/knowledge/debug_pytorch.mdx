@@ -33,41 +33,6 @@ export CMAKE_PREFIX_PATH=/usr/lib/gcc/x86_64-linux-gnu/7:/opt/conda/lib:$CMAKE_P
 DEBUG=1 python setup.py bdist_wheel
 
 ```
-<!-- 
-## 准备基础镜像
-```bash
-img_name=nvcr.io/nvidia/pytorch:22.12-py3
-img_name=pytorch/pytorch:1.13.1-cuda11.6-cudnn8-devel
-
-docker pull $img_name
-docker run --rm -it --gpus 1 --ipc=host --ulimit memlock=-1 --ulimit stack=67108864 -p 1111:22 -v `pwd`:/pytorch  --name="any_names"  --cap-add=SYS_PTRACE $img_name  bash
-
-pip uninstall torch
-```
-## 编译
-```bash
-# https://github.com/pytorch/pytorch/tree/v1.13.1#install-dependencies
-conda install astunparse numpy ninja pyyaml setuptools cmake cffi typing_extensions future six requests dataclasses
-conda install mkl mkl-include
-# CUDA only: Add LAPACK support for the GPU if needed
-conda install -c pytorch magma-cuda110  # or the magma-cuda* that matches your CUDA version from https://anaconda.org/pytorch/repo
-pip install -r requirements.txt
-
-export CMAKE_PREFIX_PATH=${CONDA_PREFIX:-"$(dirname $(which conda))/../"}
-
-apt-get update
-mkdir -p /opt/conda/bin
-ln -s /usr/bin/ /opt/conda/
-rm -r  /opt/conda/lib/libgomp.so*
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/conda/bin/../lib
-
-export CMAKE_PREFIX_PATH=/usr/lib/gcc/x86_64-linux-gnu/7:/opt/conda/lib:$CMAKE_PREFIX_PATH
-python setup.py bdist_wheel
-
-DEBUG=1 python setup.py bdist_wheel
-
-```
-  -->
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';

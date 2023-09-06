@@ -18,7 +18,7 @@ To allow vscode to SSH into the Docker container, we need to assign a port numbe
 
 ```bash
 docker_image_name=nvcr.io/nvidia/pytorch:22.12-py3
-docker run -it --gpus all --ipc=host --ulimit memlock=-1 --ulimit stack=67108864 -p 8022:22 -v `pwd`:/workspace  --name="any_names"  --cap-add=SYS_PTRACE $docker_image_name  bash
+docker run -it --gpus all --ipc=host   --shm-size 1G  --ulimit memlock=-1 --ulimit stack=67108864 -p 8022:22 -v `pwd`:/workspace  --name="any_names"  --cap-add=SYS_PTRACE $docker_image_name  bash
 ```
 
 ### 2. Add password inside Docker
