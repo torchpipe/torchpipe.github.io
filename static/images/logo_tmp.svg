@@ -1,7 +1,0 @@
-<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <path d="M5 23L18.5 23L25 5L31.5 23L45 23L33 38L38 59L25 44L12 59L17 38L5 23Z" fill="#04A2B8"/>
-  <path d="M25 44L33 38L38 59L25 44Z" fill="white"/>
-  <path d="M25 44L33 38L38 59" stroke="#333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M5 23L18.5 23L25 5L31.5 23L45 23L33 38L38 59L25 44L12 59L17 38L5 23Z" stroke="#333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-  <text x="32" y="56" font-size="16" fill="#333" font-family="Arial" text-anchor="middle" dominant-baseline="middle">TorchPipe</text>
-</svg>

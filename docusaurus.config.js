@@ -205,42 +205,10 @@ const config = {
       footer: {
         // links: [
         //   {
-        //     title: "Resources",
-        //     items: [
-        //       {
-        //         label: "Release",
-        //         href: "https://g.hz.netease.com/deploy/torchpipe/-/releases",
-        //       }
-        //     ],
-        //   },
-        //   {
-        //     title: "Help",
-        //     items: [
-        //       {
-        //         label: "Troubleshooting",
-        //         to: "/docs/troubleshooting",
-        //       },
-        //       {
-        //         label: "Report Issues",
-        //         href: "https://g.hz.netease.com/deploy/torchpipe/-/issues",
-        //       },
-        //     ],
-        //   },
-        //   {
-        //     title: "Community",
-        //     items: [
-        //       {
-        //         label: "GitLab",
-        //         href: "https://g.hz.netease.com/deploy/torchpipe",
-        //       }
-        //     ],
-        //   },
-        //   {
         //     title: "More",
         //     items: [
         //       // {
         //       //   label: "Content security",
-        //       //   href: "https://dun.163.com/product/picture-detection",
         //       // },
         //     ],
         //   },
