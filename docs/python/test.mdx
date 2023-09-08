@@ -8,13 +8,12 @@ displayed_sidebar: api
 :::caution Verification Stage
 
 The performance testing API is currently unstable. We need to collect more feedback.
-
 This particular API underwent breaking changes in version 0.3.1b1.
 
 :::
 
-torchpipe.utils.test integrated the multi-client/multi-threaded performance testing and concurrent inference tool.
-In general, we recommend using the more powerful [Locust](https://locust.io/) for performance testing. However, if you only require a simple script to conveniently test local and remote function calls, generate test reports, or perform concurrent function invocations and result processing, this tool can be used.
+torchpipe.utils.test is a performance testing and concurrent inference tool which integrated multi-client/multi-threaded.
+In general, we recommend using the more powerful tool called [Locust](https://locust.io/) for performance testing. However, if you only require a simple script to conveniently test local and remote function calls, generate test reports, or perform concurrent function invocations and result processing, this tool can be used.
 
 
 | *locust*                                    | *torchpipe.utils.test*               |
@@ -45,7 +44,7 @@ def test_from_raw_file(forward_function:
 ```
 > Read the files with a specific file extension from the given file path and pass them to the user's specified `forward_function`.
 
-:::tip 参数
+:::tip Parameters
 - **forward_function** - Forward function, with a function parameter `List[Tuple[str, bytes]]`, representing *batchsize [(id, file data)]*. The testing program will repeatedly execute this function and record latency-related data. It can also be multiple functions of this type (`List[Callable]`), in which case the length should be equal to num_clients.
 - **file_dir** - File path
 - **num_clients** - Number of clients/Concurrent channels
