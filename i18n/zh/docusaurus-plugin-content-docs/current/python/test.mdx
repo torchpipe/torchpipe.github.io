@@ -10,7 +10,6 @@ displayed_sidebar: api
 
 此部分的API在0.3.1b1版本有了破坏性变更；
 
-0.3.0版本文档请查阅[此处](https://g.hz.netease.com/deploy/torchpipe-docs/-/blob/0.3.0%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95API/website/docs/python/test.mdx).
 
 :::
 
@@ -51,7 +50,7 @@ def test_from_raw_file(forward_function:
 - **num_clients** - 客户端数目/并发路数
 - **batch_size** 每次请求的数据batch大小, 代表执行一次`forward_function`所消耗的测试数据量
 - **total_number** 总共的数据量。仅当`num_preload>0`时有效。
-- **num_preload** 预读取文件数目。当`num_preload<=0`时，将遍历所有文件（文件数据为None）；当`num_preload>0`时，将预先读取这个数量的数据，其他数据将被舍弃。当`0<num_preload<total_number`时，会循环送入数据。
+- **num_preload** 预读取文件数目。当`num_preload<=0`时，将遍历所有文件；当`num_preload>0`时，将预先读取这个数量的数据，其他数据将被舍弃。当`0<num_preload<total_number`时，会循环送入数据。
 - **recursive** 是否递归读取目录下的文件
 - **ext** - 文件后缀
 :::
@@ -106,15 +105,16 @@ test_from_raw_file(forward_function, os.path.join("assets/norm_jpg/"),
 
 ### torchpipe.utils.test.throughput
 
-*从0.3.1b3版本开始生效*
+*从0.3.2rc2版本开始生效*
 
 ```python
-def throughput(args_dict, num_clients=10, total_number=10000)
+def throughput(args_dict_or_str, num_clients=10, total_number=10000)
 ```
-> 给定模型参数，测试该模型在torchpipe吞吐，torchpipe的默认配置max=4，instance=2
+> 给定模型参数，测试该模型在torchpipe的吞吐，torchpipe的默认配置max=4，instance=2，模型默认采用tensorrt加速。
 
 :::tip 参数
-- **args_dict** - 模型参数，参考TensorrtTensor算子参数，必须需要包含`model`参数。
+- **args_dict_or_str** - 测试模型参数，支持dict和str两种类型，dict类型参数请参考TensorrtTensor算子参数进行设置，必须包含关键key:`model`。
+str类型参数为模型的路径，支持.onnx和.trt两种类型。dict参数的好处在于可以控制更多的参数，比如`precision`，`max_batch_size`等。str则均采用默认值。
 - **num_clients** - 客户端数目/并发路数，默认为10。
 - **total_number** 总共的数据量，默认为10000。
 
@@ -136,7 +136,11 @@ dict_args = {
     'precision' : precision,
 }
 
+# type1: 采用dict方式
 result = torchpipe.utils.test.throughput(dict_args, num_clients=5, total_number=5000)
+
+# type2: 采用str方式
+result = torchpipe.utils.test.throughput(onnx_path, num_clients=5, total_number=5000)
 
 ```
 </details>
@@ -152,7 +156,7 @@ def test_function(forward_function:Union[Callable,List[Callable]],
 > 重复执行用户给定的`forward_function`函数。
 
 :::tip 参数
-- **forward_function** - 前向函数；参数为`None`。测试程序将反复执行此函数，并记录此函数的延迟相关数据。 也可以为List`[Function]`, 此时其长度需要为num_clients.
+- **forward_function** - 前向函数。测试程序将反复执行此函数，并记录此函数的延迟相关数据。 也可以为List`[Function]`, 此时其长度需要为num_clients.
 - **num_clients** - 客户端数目/并发路数
 - **batch_size** 每次请求的数据batch大小, 代表执行一次`forward_function`所消耗的测试数据量
 - **total_number** 总共的数据量。

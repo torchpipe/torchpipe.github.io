@@ -5,30 +5,30 @@ type: reference
 displayed_sidebar: api
 ---
 
-:::caution 验证阶段
-性能测试API暂不稳定。需要收集更多意见。
+:::caution Verification Stage
 
-此部分的API在0.3.1b1版本有了破坏性变更；
+The performance testing API is currently unstable. We need to collect more feedback.
 
-0.3.0版本文档请查阅[此处](https://g.hz.netease.com/deploy/torchpipe-docs/-/blob/0.3.0%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95API/website/docs/python/test.mdx).
+This particular API underwent breaking changes in version 0.3.1b1.
 
 :::
 
-torchpipe.utils.test 集成了多客户端/多线程性能测试和并发推理工具。
-通常情况下，我们推荐功能更强大的[locust](https://locust.io/)，然而，如果你只需要一个简单的脚本，去方便的测本地函数和远程函数调用，并给出测试报告，或者并发的调用函数并处理结果，可以用此工具。
+torchpipe.utils.test integrated the multi-client/multi-threaded performance testing and concurrent inference tool.
+In general, we recommend using the more powerful [Locust](https://locust.io/) for performance testing. However, if you only require a simple script to conveniently test local and remote function calls, generate test reports, or perform concurrent function invocations and result processing, this tool can be used.
+
 
 | *locust*                                    | *torchpipe.utils.test*               |
 |---------------------------------------------|--------------------------------------|
-| 基于事件驱动，可以支持更高的并发数, 可分布式 | 基于本地线程，并发数有限，不支持分布式 |
-| 拥有web端模式                               | 无                                   |
-| 支持扩展                                    | 支持扩展                             |
-| `locust -f target.py`                       | python函数                           |
+| Event-driven, supports higher concurrency, distributed | Based on local threads, limited concurrency, does not support distributed |
+| Has a web interface                           | None                                 |
+| Supports extensions                           | Supports extensions                  |
+| `locust -f target.py`                          | Python functions                     |
 
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-## 测试
+## Test
 
 ### *torchpipe.utils.test.test_from_raw_file*
 ```python
@@ -43,22 +43,22 @@ def test_from_raw_file(forward_function:
                 recursive=True, 
                 ext=[".jpg", '.JPG', '.jpeg', '.JPEG'])
 ```
-> 读取给定文件路径下的指定后缀名的文件，并发送入用户给定的`forward_function`中。
+> Read the files with a specific file extension from the given file path and pass them to the user's specified `forward_function`.
 
 :::tip 参数
-- **forward_function** - 前向函数, 函数参数为`List[Tuple[str, bytes]]`，代表*batchsize[(id,文件数据)]*。测试程序将反复执行此函数，并记录此函数的延迟相关数据。 也可以为多个此类函数（`List[Callable]`）, 此时长度需要为num_clients.
-- **file_dir** - 文件路径
-- **num_clients** - 客户端数目/并发路数
-- **batch_size** 每次请求的数据batch大小, 代表执行一次`forward_function`所消耗的测试数据量
-- **total_number** 总共的数据量。仅当`num_preload>0`时有效。
-- **num_preload** 预读取文件数目。当`num_preload<=0`时，将遍历所有文件（文件数据为None）；当`num_preload>0`时，将预先读取这个数量的数据，其他数据将被舍弃。当`0<num_preload<total_number`时，会循环送入数据。
-- **recursive** 是否递归读取目录下的文件
-- **ext** - 文件后缀
+- **forward_function** - Forward function, with a function parameter `List[Tuple[str, bytes]]`, representing *batchsize [(id, file data)]*. The testing program will repeatedly execute this function and record latency-related data. It can also be multiple functions of this type (`List[Callable]`), in which case the length should be equal to num_clients.
+- **file_dir** - File path
+- **num_clients** - Number of clients/Concurrent channels
+- **batch_size** Batch size of data for each request, representing the amount of test data consumed by executing the `forward_function` once.
+- **total_number** Total amount of data. Only valid when `num_preload > 0`.
+- **num_preload** The number of preloaded files. When `num_preload<=0`, all files will be traversed; when `num_preload>0`, this amount of data will be preloaded, and other data will be discarded. When `0<num_preload<total_number`, the data will be fed into the pipeline repeatedly.
+- **recursive** Whether to recursively read files under the directory
+- **ext** - File extension
 :::
 
 
 
-<details><summary>示例</summary>
+<details><summary>Example</summary>
 
 ```python
 from typing import List,Tuple
@@ -76,12 +76,12 @@ def forward_function(files : List[Tuple[str,bytes]]):
 
     for input in inputs:
         result = input["result"] 
-    # 如果需要保存结果，可将(img_path, result)保存在全局Queue中
+    # If you need to save the results, you can save (img_path, result) in a global Queue.
 
-## 预读取1000张图片测试速度
+## preload 1000 images to test speed
 test_from_raw_file(forward_function, os.path.join("assets/norm_jpg/"),
             num_clients=10, batch_size=1,total_number=10000)
-## 遍历全部数据
+## Iterate through all the data
 test_from_raw_file(forward_function, os.path.join("assets/norm_jpg/"),
             num_clients=10, batch_size=1,num_preload=0)
 ```
@@ -106,25 +106,25 @@ test_from_raw_file(forward_function, os.path.join("assets/norm_jpg/"),
 
 ### torchpipe.utils.test.throughput
 
-*从0.3.1b3版本开始生效*
+*Effective from version 0.3.2rc2 onwards*
 
 ```python
-def throughput(model_path, precision, post=None,input_data=None, calibrate_dir="calibrate_dir")
+def throughput(args_dict_or_str, num_clients=10, total_number=10000)
 ```
-> 给定模型文件路径[onnx or tensorrt]，测试该模型在torchpipe吞吐，默认配置max=4，instance=2
+> Given the model parameters, test the throughput of the model using torchpipe with the default configuration of max=4 and instance=2. The model will be accelerated using TensorRT by default.
 
-:::tip 参数
-- **model_path** - 测试模型的路径，支持onnx和tensorrt模型，onnx模型需后缀名为.onnx，测试时会自动转为tensorrt模型，tensorrt模型需要后缀名为.trt
-- **precision** - 支持fp32、fp16、int8(**还在优化中**)
-- **post** - 模型需要的postprocessor算子，这在检测中比较常用。
-- **input_data** 设置输入测试数据，torch.tensor类型，如果不设置，会根据模型自动读取输入尺寸，并将输入设置为torch.randn(shape)
-- **calibrate_dir** 指向int8量化时calibrate的数据路径，存放数据需为torch.save类型
+:::tip Parameters
+- **args_dict_or_str** - Model parameters for testing, supports both dict and str types. For dict type parameters, please refer to the TensorrtTensor operator parameters for configuration. 
+It must include the key `model`. For str type parameters, the value should be the path to the model, supporting both .onnx and .trt formats. 
+The advantage of using dict parameters is that it allows for more control over additional parameters, such as `precision` and `max_batch_size`. 
+The default values will be used for str type parameters.
+- **num_clients** - Number of clients or concurrent channels, default is 10.
+- **total_number** - Total amount of data, default is 10000.
 
 :::
 
 
-
-<details><summary>示例</summary>
+<details><summary>Examples</summary>
 
 ```python
 import torchpipe
@@ -133,22 +133,19 @@ import os
 
 ## test throughput
 onnx_path = os.path.join("/tmp", f"resnet50.onnx")
-input_data = torch.randn(1, 3, 224, 224).cuda()
 precision = "fp16"
-torchpipe.utils.test.throughput(onnx_path, precision, post=None, input_data=input_data)
+dict_args = {
+    'model' : onnx_path,
+    'precision' : precision,
+}
+
+# type1: use dict type
+result = torchpipe.utils.test.throughput(dict_args, num_clients=5, total_number=5000)
+
+# type2: use str type
+result = torchpipe.utils.test.throughput(onnx_path, num_clients=5, total_number=5000)
+
 ```
-
-<details><summary>calibrate_dir存放的calibrate文件示例</summary>
-
-```python
-
-data = cv2.imread("../static/dog_result.jpg")
-data=preprocess_image(data)
-import random
-torch.save(torch.from_numpy(data),os.path.join(calibrate_dir, f"cache_{random.random()}.pt"))
-
-```
-</details>
 </details>
 
 ### *torchpipe.utils.test.test_function*
@@ -158,18 +155,18 @@ def test_function(forward_function:Union[Callable,List[Callable]],
                 batch_size=1, 
                 total_number=10000)
 ```
-> 重复执行用户给定的`forward_function`函数。
+> Repeatedly execute the `forward_function` provided by the user
 
 :::tip 参数
-- **forward_function** - 前向函数；参数为`None`。测试程序将反复执行此函数，并记录此函数的延迟相关数据。 也可以为List`[Function]`, 此时其长度需要为num_clients.
-- **num_clients** - 客户端数目/并发路数
-- **batch_size** 每次请求的数据batch大小, 代表执行一次`forward_function`所消耗的测试数据量
-- **total_number** 总共的数据量。
+- **forward_function** - Forward function; the testing program will repeatedly execute this function and record latency-related data. It can also be a list `[Function]`, in which case its length should be equal to `num_clients`.
+- **num_clients** - Number of clients/Concurrent channels
+- **batch_size** Batch size of data for each request, representing the amount of test data consumed by executing the `forward_function` once.
+- **total_number** Total amount of data.
 :::
 
 
 
-<details><summary>示例</summary>
+<details><summary>Examples</summary>
 
 ```python
 import torchpipe as tp
@@ -196,10 +193,10 @@ torchpipe.utils.test.test_function(run, num_clients=5, batch_size=1,total_number
 def torchpipe.utils.test.test(sample :Union[Sampler, List[Sampler]],
                             total_number=10000):
 ```
-> 模拟多个客户端执行`sample`指定的计算并统计计算结果。
+> Simulate multiple clients executing the computation specified by `sample` and collect the computation results.
 
-:::tip 参数
-- **sample** - 客户端数据生成器，它的个数就代表客户端的数量，需要定义为以下类的子类：
+:::tip parameters
+- **sample** - Client Data Generator, the number of which represents the quantity of clients. It needs to be defined as a subclass of the following classes:
 ```python
 class torchpipe.utils.test.Sampler:
     def __init__(self):
@@ -210,11 +207,11 @@ class torchpipe.utils.test.Sampler:
     def batchsize(self):
         return 1
 ```
-- **total_number** - 将计算的总数据量。系统每执行一次`Sampler().__call__(start_index)`, 数据量为`Sampler().batchsize()`。调用时满足`0 <= start_index <= total_number - Sampler.batchsize()`.
+- **total_number** - total number to test。Each time the system executes `Sampler().__call__(start_index)`, the data size will be `Sampler().batchsize()`. The call should meet the condition `0 <= start_index <= total_number - Sampler.batchsize()`.
 :::
 
 ### *torchpipe.utils.test.RandomSampler*
-> 从传入的数据(List)中随机选取batch_size的数据。需要实现其`forward`函数作为真正的计算部分。
+> To randomly select batch_size data from the given input list, you need to implement the `forward` function as the actual computation part.
 
 ```python
 class torchpipe.utils.test.RandomSampler(Sampler):
@@ -240,7 +237,7 @@ class torchpipe.utils.test.RandomSampler(Sampler):
         return self.batch_size
 ```
 
-<details><summary>示例</summary>
+<details><summary>Examples</summary>
 
 ```python
 def test_function_from_preload(forward_function, 
@@ -265,7 +262,7 @@ def test_function_from_preload(forward_function,
 
 
 ### *torchpipe.utils.test.LoopSampler*
-> 对传入的数据(List)全量按顺序的送入计算。与SequentialSampler不同的是，允许`start_index > len(self.data) - self.batch_size`, 也就是允许`total_number > len(self.data)`.
+> The data from the input list will be fed into the computation in a sequential order. Unlike the SequentialSampler, it allows `start_index > len(self.data) - self.batch_size`, which means `total_number > len(self.data)` is allowed.
 
 ```python
 
@@ -291,9 +288,9 @@ class LoopSampler(Sampler):
         raise RuntimeError("Requires users to implement this function")
 ```        
 
-## 例子
-### 示例：遍历目录下的文件
-以下演示了如何将文件夹下的所有目标文件遍历一遍并获取结果。
+## Examples
+### To iterate through files in a directory:
+The following demonstrates how to iterate through all target files in a folder and obtain the results.
 
 ```python
 import torchpipe
@@ -325,13 +322,13 @@ def test_all_files(file_dir:str, num_clients=10, batch_size = 1,
     torchpipe.utils.test.test(forwards, len(files))
 ```
 
-用户可以把结果临时保存在`self.local_result`中，最终进行汇总，也可以在运行时实时校验数据。
+Users can temporarily store the results in `self.local_result` and then consolidate them at the end, or they can validate the data in real-time while running.
  
 
 
 
-### 示例：thrift
-首先，根据实际使用的thrift协议定义其数据前向函数：
+### Example: thrift
+First, define the data forwarding function based on the actual use of the Thrift protocol:
 ```python
 import torchpipe
 class ThriftSampler(torchpipe.utils.test.FileSampler):
@@ -363,7 +360,7 @@ class ThriftSampler(torchpipe.utils.test.FileSampler):
     def __del__(self):
         self.transport.close()
 ```
-如果进行速度测试，可以预读取图片：
+To conduct speed tests, you can pre-load the images:
 
 ```python
 # for test speed
@@ -378,7 +375,8 @@ def test_function_from_preload():
             num_clients=10, batch_size=1,total_number=10000)
 ```
 
-否则，可以考虑全量数据测试：
+Otherwise, you can consider conducting a full data test:
+
 ```python
 def test_all_files(file_dir:str, num_clients=10, batch_size = 1,
                      ext=[".jpg", '.JPG', '.jpeg', '.JPEG']):
@@ -393,9 +391,12 @@ def test_all_files(file_dir:str, num_clients=10, batch_size = 1,
 
 ```
 
-### 不同batchsize的客户端
-在[此处例子](https://g.hz.netease.com/deploy/torchpipe/-/blob/master/examples/yolox/yolox_multithreads_test.py)中，我们使用十个客户端，客户端每次请求的数据量分别为1，2，3，...10。我们验证了在这种情况下结果的一致性。
-通常来讲，用户可遍历一个目录中的所有数据，并多次重复发送，以验证结果的稳定性和一致性。
-:::warning tensorrt模型推理结果不一致
-如果模型本身batchsize>1,tensorrt推理结果可能会有少量差异（输入数据的batchsize不同时，模型选取的优化方法可能不同）；如果batchsize==1，这种差异不应该存在，然而重新生成模型后，推理结果仍然有可能变化。
+
+### Clients with Different Batch Sizes
+In the example provided [here](https://g.hz.netease.com/deploy/torchpipe/-/blob/master/examples/yolox/yolox_multithreads_test.py), we use ten clients, each requesting different amounts of data per request, ranging from 1 to 10. We validate the consistency of the results in this case.
+
+Typically, users can iterate through all the data in a directory and repeatedly send requests to verify the stability and consistency of the results.
+
+:::warning Inconsistent Results for TensorRT Model Inference
+If the model itself has a batch size larger than 1, there may be slight differences in the inference results with TensorRT (as the optimization methods chosen by the model may differ for different input data batch sizes). If the batch size is 1, such differences should not exist. However, even after regenerating the model, there is still a possibility of changes in the inference results.
 :::
