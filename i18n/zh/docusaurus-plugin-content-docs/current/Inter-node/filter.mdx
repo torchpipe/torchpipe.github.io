@@ -77,11 +77,11 @@ filter="your_filter"
 
 注意自定义filter请勿与内置filter重名。
 ## 内置filter {#default_filters}
-|                                                                                                                                                     | 功能                             |   |
-|-----------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------|---|
-| Run/run <br />Skip/skip <br />SerialSkip/serial_skip/serialskip <br />SubGraphSkip/subgraph_skip/subgraphskip, <br />Break/break, <br />Error/error | 无条件返回对应状态值             |   |
-| swap                                                                                                                                                | 没有result返回Break, 否则返回Run |   |
-| or                                                                                                                                                  | 没有result返回Run, 否则返回Skip  |   |
+|                                                                                                                                                     | 功能                                                |   |
+|-----------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------|---|
+| Run/run <br />Skip/skip <br />SerialSkip/serial_skip/serialskip <br />SubGraphSkip/subgraph_skip/subgraphskip, <br />Break/break, <br />Error/error | 无条件返回对应状态值                                |   |
+| swap                                                                                                                                                | 没有result返回Break, 否则result赋值给data，并返回Run |   |
+| or                                                                                                                                                  | 没有result返回Run, 否则返回Skip                     |   |
 
 
 

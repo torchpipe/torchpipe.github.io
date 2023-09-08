@@ -77,11 +77,11 @@ filter="your_filter"
 Please do not use the same name as built-in filters for custom filters.
 
 ## Built-in Filters {#default_filters}
-|                                                                                                                                                     | Function                                                       |   |
-|-----------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------|---|
-| Run/run <br />Skip/skip <br />SerialSkip/serial_skip/serialskip <br />SubGraphSkip/subgraph_skip/subgraphskip, <br />Break/break, <br />Error/error | Returns the corresponding status value unconditionally         |   |
-| swap                                                                                                                                                | Returns `Break` if there is no result, otherwise returns `Run` |   |
-| or                                                                                                                                                  | Returns `Run` if there is no result, otherwise returns `Skip`  |   |
+|                                                                                                                                                     | Function                                                                                            |   |
+|-----------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------|---|
+| Run/run <br />Skip/skip <br />SerialSkip/serial_skip/serialskip <br />SubGraphSkip/subgraph_skip/subgraphskip, <br />Break/break, <br />Error/error | Returns the corresponding status value unconditionally                                              |   |
+| swap                                                                                                                                                | Returns `Break` if there is no result, otherwise returns `Run`. Assign the value of result to data. |   |
+| or                                                                                                                                                  | Returns `Run` if there is no result, otherwise returns `Skip`                                       |   |
 
 
 
