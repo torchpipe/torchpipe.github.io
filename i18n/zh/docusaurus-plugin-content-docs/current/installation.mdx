@@ -36,8 +36,8 @@ cd torchpipe/ && git submodule update --init --recursive
 然后，启动容器，如果您的机器支持更高版本镜像，可采用[更新版本的Pytorch镜像](https://catalog.ngc.nvidia.com/orgs/nvidia/containers/pytorch/tags)。
 
 ```bash
-img_name=nvcr.io/nvidia/pytorch:22.12-py3 #  for cuda11
-# img_name=nvcr.io/nvidia/pytorch:23.05-py3 #  for tensort8.6.1, LayerNorm
+img_name=nvcr.io/nvidia/pytorch:23.05-py3 #  for tensort8.6.1, LayerNorm
+# img_name=nvcr.io/nvidia/pytorch:22.12-py3 #  For driver version lower than 510
 docker run --rm --gpus=all --ipc=host  --network=host -v `pwd`:/workspace  --shm-size 1G  --ulimit memlock=-1 --ulimit stack=67108864  --privileged=true -it $img_name /bin/bash
 ```
 
