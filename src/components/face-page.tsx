@@ -66,8 +66,8 @@ export default function FacePage(): JSX.Element {
               <ChevronRightIcon className={styles.callout__icon} aria-hidden="true" />
             </a>
             <h2 className={styles.slogan}>
-              <span  style={{ marginBottom: '10px' }}><Translate id="home.tagline0">Serving Inside Pytorch</Translate></span>
-              <span className={styles.slogan__highlight}><Translate id="home.tagline1">with Multiple Threads</Translate></span>
+              <span  style={{ marginBottom: '10px' }}><Translate id="home.tagline0">Accelerated Pytorch</Translate></span>
+              <span className={styles.slogan__highlight}><Translate id="home.tagline1">Serving with Multithreading</Translate></span>
             </h2>
             <p className={styles.description}>
               <Translate id="siteConfig.tagline">{siteConfig.tagline}</Translate>
@@ -170,8 +170,8 @@ export default function FacePage(): JSX.Element {
 //               <ChevronRightIcon className={styles.callout__icon} aria-hidden="true" />
 //             </a>
 //             <h1 className={styles.slogan}>
-//               <span><Translate id="home.tagline0">Serving Inside Pytorch</Translate></span>
-//               <span className={styles.slogan__highlight}><Translate id="home.tagline1">with Multiple Threads</Translate></span>
+//               <span><Translate id="home.tagline0">Accelerated Pytorch</Translate></span>
+//               <span className={styles.slogan__highlight}><Translate id="home.tagline1">Serving with Multithreading</Translate></span>
 //             </h1>
 //             <p className={styles.description}>
 //               <Translate id="siteConfig.tagline">{siteConfig.tagline}</Translate>

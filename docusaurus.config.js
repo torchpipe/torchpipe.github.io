@@ -107,7 +107,7 @@ const config = {
         {
           name: "description",
           content:
-            "Serving Inside Pytorch with Multiple Threads.",
+            "Accelerated PyTorch Serving with Multithreading.",
         },
         { name: "og:image", content: "__.png" },
       ],

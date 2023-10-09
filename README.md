@@ -2,7 +2,7 @@
 
 <p align="center">
 <h1 align="center">Documentation for torchpipe</h1>
-<h6 align="center">Serving Inside <a href="https://pytorch.org/">Pytorch</a> with Multiple Threads</h6>
+<h6 align="center">Accelerated <a href="https://pytorch.org/">Pytorch</a> Serving with Multithreading</h6>
 </p>
 <p align="center">
 <!-- <img alt="license" src="https://img.shields.io/github/license/alibaba/async_simple?style=flat-square"> -->
