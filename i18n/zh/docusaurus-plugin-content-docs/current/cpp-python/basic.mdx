@@ -76,7 +76,7 @@ using dict = std::shared_ptr<std::unordered_map<std::string, ipipe::any>>;
 | `numpy.ndarray` | 不支持        |      |
 | `torch.Tensor`  | `at::Tensor`  |      |
 | `bool`          | `bool`        |      |
-| `float`         | `double`      |      |
+| `float`         | `float`       | 会产生精度损失|
 | `int`           | `int`         |      |
 
 ### 容器转换
