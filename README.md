@@ -1,7 +1,7 @@
 
 
 <p align="center">
-<h1 align="center">Documentation for [torchpipe](https://github.com/torchpipe/torchpipe)</h1>
+<h1 align="center">Documentation for torchpipe</h1>
 <h6 align="center">Accelerated <a href="https://pytorch.org/">Pytorch</a> Serving with Multithreading</h6>
 </p>
 <p align="center">
