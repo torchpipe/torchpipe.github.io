@@ -32,7 +32,7 @@ type: explainer
 
 ```bash
 git clone -b master ssh://git@g.hz.netease.com:22222/deploy/torchpipe.git
-# git clone -b master https://g.hz.netease.com/deploy/torchpipe.git
+# git clone -b master https://github.com/torchpipe/torchpipe.git
 cd torchpipe/ && git submodule update --init --recursive
 ```
 
@@ -133,7 +133,7 @@ print(input["result"].shape)  # 失败则此键值一定不存在，即使输入
 
 ## 自定义dockerfile {#selfdocker}
 
-参考[示例dockerfile](https://g.hz.netease.com/deploy/torchpipe/-/blob/master/docker/torchpipe.base)，预先下载tensorrt和opencv后可编译相关基础镜像。
+参考[示例dockerfile](https://github.com/torchpipe/torchpipe/-/blob/master/docker/torchpipe.base)，预先下载tensorrt和opencv后可编译相关基础镜像。
 ```
 # put TensorRT-8.6.1.6.Linux.x86_64-gnu.cuda-11.8.tar.gz into thirdparty/
 wget https://codeload.github.com/opencv/opencv/zip/refs/tags/4.5.4 -O thirdparty/opencv-4.5.4.zip

@@ -10,7 +10,7 @@ tensorrt 的训练后量化过程主要包含两步：
 - 准备量化数据，500份左右。这部分我们将进入后端的数据按照Pytorch的格式保存下来
 - 以准备好的数据启动量化过程，并生成模型。
 
-详细可参见[示例](https://g.hz.netease.com/deploy/torchpipe/-/tree/develop/examples/int8).
+详细可参见[示例](https://github.com/torchpipe/torchpipe//examples/int8).
 
 ## 训练时量化（基于pytorch_quantization）
 在[官方notebook](https://github.com/NVIDIA/TensorRT/blob/release/8.6/quickstart/quantization_tutorial/qat-ptq-workflow.ipynb)中，NVIDIA总结了如何在Pytorch中通过训练时量化提升量化精度。
@@ -31,7 +31,7 @@ tensorrt 的训练后量化过程主要包含两步：
 
 训练时量化除了需要正常训练的模型提供预训练参数，也需要训练后量化（ptq）提供量化的预训练参数。
 
-我们集成了[calib_tools](https://g.hz.netease.com/deploy/torchpipe/-/blob/develop/examples/int8/qat/calib_tools.py)，可做参考.
+我们集成了[calib_tools](https://github.com/torchpipe/torchpipe/-/blob/develop/examples/int8/qat/calib_tools.py)，可做参考.
 
 - 定义calibrater：
 ```python
@@ -99,17 +99,17 @@ calib_tools.save_onnx(q_model, f"model_name_qat.onnx")
 #### 不改变backbone，直接量化
 仿照官方示例，我们对resnet进行了分步骤实验：
 
-- 下载训练数据：[代码](https://g.hz.netease.com/deploy/torchpipe/-/blob/develop/examples/int8/qat/download_data.py)
-- 训练10个epoch获得resnet50模型：[代码](https://g.hz.netease.com/deploy/torchpipe/-/blob/develop/examples/int8/qat/fp32_train.py), 精度98.44%
-- (optinal)pytorch ptq：[代码](https://g.hz.netease.com/deploy/torchpipe/-/blob/develop/examples/int8/qat/ptq.py), 精度96.64%（max）
-- (optinal)pytorch qat：[代码](https://g.hz.netease.com/deploy/torchpipe/-/blob/develop/examples/int8/qat/qat.py), 精度98.26%. 
+- 下载训练数据：[代码](https://github.com/torchpipe/torchpipe/-/blob/develop/examples/int8/qat/download_data.py)
+- 训练10个epoch获得resnet50模型：[代码](https://github.com/torchpipe/torchpipe/-/blob/develop/examples/int8/qat/fp32_train.py), 精度98.44%
+- (optinal)pytorch ptq：[代码](https://github.com/torchpipe/torchpipe/-/blob/develop/examples/int8/qat/ptq.py), 精度96.64%（max）
+- (optinal)pytorch qat：[代码](https://github.com/torchpipe/torchpipe/-/blob/develop/examples/int8/qat/qat.py), 精度98.26%. 
 
 #### mse + 残差融合 {#mseadd}
 
 以上resnet的训练，采用max方式量化，并且没有对Add进行融合，导致tensorrt运行速度未达预期。以下将Add在int8下进行融合并换用mse模式后的结果：
 
-- ptq：[代码](https://g.hz.netease.com/deploy/torchpipe/-/blob/develop/examples/int8/qat/ptq_merge_residual.py), 精度94.34%（mse）
-- qat：[代码](https://g.hz.netease.com/deploy/torchpipe/-/blob/develop/examples/int8/qat/qat_merge_residual.py), 精度95.82%
+- ptq：[代码](https://github.com/torchpipe/torchpipe/-/blob/develop/examples/int8/qat/ptq_merge_residual.py), 精度94.34%（mse）
+- qat：[代码](https://github.com/torchpipe/torchpipe/-/blob/develop/examples/int8/qat/qat_merge_residual.py), 精度95.82%
 
 #### pytorch下结果汇总
 | Model                    | Accuracy |  Performance |备注 |
@@ -122,9 +122,9 @@ calib_tools.save_onnx(q_model, f"model_name_qat.onnx")
 ### torchpipe下测试结果汇总
 以下使用torchpipe加载生成的onnx进行测试：
 
-- 导出onnx：[代码](https://g.hz.netease.com/deploy/torchpipe/-/blob/develop/examples/int8/qat/export_onnx_merge_residual.py)
-- 使用torchpipe加载fp32-onnx并进行ptq： [代码](https://g.hz.netease.com/deploy/torchpipe/-/blob/develop/examples/int8/qat/torchpipe_ptq_test.py)
-- 使用torchpipe加载qat-onnx进行测试： [代码](https://g.hz.netease.com/deploy/torchpipe/-/blob/develop/examples/int8/qat/torchpipe_qat_test.py)
+- 导出onnx：[代码](https://github.com/torchpipe/torchpipe/-/blob/develop/examples/int8/qat/export_onnx_merge_residual.py)
+- 使用torchpipe加载fp32-onnx并进行ptq： [代码](https://github.com/torchpipe/torchpipe/-/blob/develop/examples/int8/qat/torchpipe_ptq_test.py)
+- 使用torchpipe加载qat-onnx进行测试： [代码](https://github.com/torchpipe/torchpipe/-/blob/develop/examples/int8/qat/torchpipe_qat_test.py)
 
 
 | Model                    | Accuracy |  Performance |备注 |
@@ -133,4 +133,4 @@ calib_tools.save_onnx(q_model, f"model_name_qat.onnx")
 | tensorrt's native int8 |98.26%   | -  | |
 | qat   | 98.67%   | -    |  [onnxruntime下精度]为98.69%。   |
 
-[onnxruntime下精度]: https://g.hz.netease.com/deploy/torchpipe/-/blob/develop/examples/int8/qat/onnxruntime_qat_test.py
+[onnxruntime下精度]: https://github.com/torchpipe/torchpipe/-/blob/develop/examples/int8/qat/onnxruntime_qat_test.py

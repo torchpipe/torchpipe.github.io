@@ -11,7 +11,7 @@ const members: Member[] = [
       name: 'resnet18',
       avatar: '',
       description: '解码+resnet18',
-      Url: 'https://g.hz.netease.com/deploy/torchpipe/-/tree/master/examples/resnet18',
+      Url: 'https://github.com/torchpipe/torchpipe/-/tree/master/examples/resnet18',
       blogUrl: '',
     },
   ]

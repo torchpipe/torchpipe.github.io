@@ -56,13 +56,13 @@ export default function FacePage(): JSX.Element {
         <div className="row">
           <div className="col col--12 margin-vert--xl">
             <a
-              href="https://g.hz.netease.com/deploy/torchpipe/-/tree/master"
+              href="https://github.com/torchpipe/torchpipe/-/tree/master"
               target="_blank"
               rel="noreferrer"
               className={styles.callout}
             >
               <span className="badge badge--primary callout__badge">NEW</span>
-              <span className={styles.callout__text}>get source code from gitlab!</span>
+              <span className={styles.callout__text}>get source code from github!</span>
               <ChevronRightIcon className={styles.callout__icon} aria-hidden="true" />
             </a>
             <h2 className={styles.slogan}>
@@ -160,7 +160,7 @@ export default function FacePage(): JSX.Element {
 //         <div className="row">
 //           <div className="col col--8 margin-vert--xl">
 //             <a
-//               href="https://g.hz.netease.com/deploy/torchpipe/-/tree/master"
+//               href="https://github.com/torchpipe/torchpipe/-/tree/master"
 //               target="_blank"
 //               rel="noreferrer"
 //               className={styles.callout}

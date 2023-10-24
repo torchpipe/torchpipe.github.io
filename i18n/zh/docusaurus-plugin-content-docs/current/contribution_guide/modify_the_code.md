@@ -25,8 +25,8 @@ pip install -r requirements.txt
 pytest .
 ```
 
-需要时请考虑补充[python测试](https://g.hz.netease.com/deploy/torchpipe/-/tree/develop/test)。
+需要时请考虑补充[python测试](https://github.com/torchpipe/torchpipe//test)。
 
 :::note 代码格式（optinal）
-请配置格式化插件以便[.clang-format](https://g.hz.netease.com/deploy/torchpipe/-/blob/develop/.clang-format)生效。
+请配置格式化插件以便[.clang-format](https://github.com/torchpipe/torchpipe/-/blob/develop/.clang-format)生效。
 :::

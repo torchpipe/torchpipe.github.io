@@ -107,7 +107,7 @@ const config = {
         {
           name: "description",
           content:
-            "Accelerated PyTorch Serving with Multithreading.",
+            "Multi-thread Serving with PyTorch Frontend.",
         },
         { name: "og:image", content: "__.png" },
       ],
@@ -192,8 +192,8 @@ const config = {
           //   label: "Nrwl",
           // },
           {
-            href: "https://g.hz.netease.com/deploy/torchpipe/-/tree/develop",
-            className: "header-gitlab-link",
+            href: "https://github.com/torchpipe/torchpipe/",
+            className: "header-github-link",
             "aria-label": "Github repository",
             position: "right",
             title: "torchpipe on Github",

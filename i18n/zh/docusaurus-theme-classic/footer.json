@@ -13,7 +13,7 @@
   },
   "link.item.label.Release": {
     "message": "Release",
-    "description": "The label of footer link with label=Release linking to https://g.hz.netease.com/deploy/torchpipe/-/releases"
+    "description": "The label of footer link with label=Release linking to https://github.com/torchpipe/torchpipe/-/releases"
   },
   "link.item.label.Troubleshooting": {
     "message": "Troubleshooting",
@@ -21,11 +21,11 @@
   },
   "link.item.label.Report Issues": {
     "message": "Report Issues",
-    "description": "The label of footer link with label=Report Issues linking to https://g.hz.netease.com/deploy/torchpipe/-/issues"
+    "description": "The label of footer link with label=Report Issues linking to https://github.com/torchpipe/torchpipe/-/issues"
   },
   "link.item.label.GitLab": {
     "message": "GitLab",
-    "description": "The label of footer link with label=GitLab linking to https://g.hz.netease.com/deploy/torchpipe"
+    "description": "The label of footer link with label=GitLab linking to https://github.com/torchpipe/torchpipe"
   },
   "link.title.More": {
     "message": "More",
