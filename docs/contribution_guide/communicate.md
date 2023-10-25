@@ -7,4 +7,4 @@ type: reference
 Please submit an [issue](https://github.com/torchpipe/torchpipe/issues) here.
 
 # Communication
-POPO communication group: Group ID: 4101019
+To be established, welcome to host
