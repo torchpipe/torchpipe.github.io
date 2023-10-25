@@ -163,9 +163,9 @@ const sidebars = {
       label: "Backend API Reference",
       items: ["backend-reference/basic", 
             "backend-reference/opencv", 
-            "backend-reference/torch", 
-            "backend-reference/log",
-            "backend-reference/ppl.cv"],
+            "backend-reference/torch",
+            "backend-reference/Ppl.cv", 
+            "backend-reference/log"],
     },
     
     "Intra-node/schedule",
