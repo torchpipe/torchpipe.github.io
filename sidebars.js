@@ -161,7 +161,11 @@ const sidebars = {
     {
       type: "category",
       label: "Backend API Reference",
-      items: ["backend-reference/basic", "backend-reference/opencv", "backend-reference/torch", "backend-reference/log"],
+      items: ["backend-reference/basic", 
+            "backend-reference/opencv", 
+            "backend-reference/torch", 
+            "backend-reference/log",
+            "backend-reference/ppl.cv"],
     },
     
     "Intra-node/schedule",

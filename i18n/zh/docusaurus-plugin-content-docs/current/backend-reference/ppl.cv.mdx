@@ -1,0 +1,19 @@
+---
+id: ppl.cv
+title: ppl.cv相关后端
+type: reference
+displayed_sidebar: api
+
+---
+
+# ppl.cv相关后端
+
+## 速览
+
+| 名称| 主要初始化参数 |运行时参数[类型] | 输入[类型]  | 输出[类型] | 备注|
+| --- | --- | --- | --- | --- | --- |
+|[PPLResizeTensor]|resize_h,resize_w | resize_h[int],resize_w[int]|data[Tensor]|result[Tensor]||
+|[PPLWarpAffineTensor]|target_h,target_w|target_h[int],target_w[int],affine_matrix[vector\<float\>]|data[Tensor]|result[Tensor]|affine_matrix.size() == 6|
+|[PPLCopyMakeBorderTensor]||top[int],bottom[int],left[int],right[int]|data[Tensor]|result[Tensor]||
+
+
