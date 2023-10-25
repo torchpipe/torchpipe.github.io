@@ -213,7 +213,7 @@ const config = {
         //     ],
         //   },
         // ],
-        copyright: `&copy; 2021-${new Date().getFullYear()} nisp. All rights reserved <br /> this page is modified from <a href='https://lerna.js.org/'>lerna</a> and built with <a href='https://docusaurus.io/'>docusaurus</a>. `,
+        copyright: `&copy; 2021-${new Date().getFullYear()} GuardEase. All rights reserved <br /> this page is modified from <a href='https://lerna.js.org/'>lerna</a> and built with <a href='https://docusaurus.io/'>docusaurus</a>. `,
       },
       prism: {
         theme: lightCodeTheme,
