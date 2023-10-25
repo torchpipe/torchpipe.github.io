@@ -144,13 +144,13 @@ For more examples, see [Showcase](./showcase/showcase.mdx).
 
 ## Customizing Dockerfile {#selfdocker}
 
-Refer to the [example Dockerfile](https://github.com/torchpipe/torchpipe/-/blob/master/docker/torchpipe.base). After downloading TensorRT and OpenCV in advance, you can compile the corresponding base image.
+Refer to the [example Dockerfile](https://github.com/torchpipe/torchpipe/blob/main/docker/trt9.1.base). After downloading [TensorRT](https://github.com/NVIDIA/TensorRT/tree/release/9.1#optional---if-not-using-tensorrt-container-specify-the-tensorrt-ga-release-build-path) in advance, you can compile the corresponding base image.
 ```
-# put TensorRT-8.6.1.6.Linux.x86_64-gnu.cuda-11.8.tar.gz into thirdparty/
-wget https://codeload.github.com/opencv/opencv/zip/refs/tags/4.5.4 -O thirdparty/opencv-4.5.4.zip
-# docker build --network=host -f docker/torchpipe.base -t hub.c.163.com/neteaseis/ai/torchpipe:base_trt-8.6 .
+# put TensorRT-9.1.0.4.Linux.x86_64-gnu.cuda-11.8.tar.gz into thirdparty/
 
-# docker run --rm   --network=host --gpus=all --ulimit memlock=-1 --ulimit stack=67108864 --privileged=true  -v `pwd`:/workspace -it hub.c.163.com/neteaseis/ai/torchpipe:base_trt-8.6  /bin/bash 
+# docker build --network=host -f docker/trt9.1.base -t torchpipe:base_trt-9.1 .
+
+# docker run --rm   --network=host --gpus=all --ulimit memlock=-1 --ulimit stack=67108864 --privileged=true  -v `pwd`:/workspace -it torchpipe:base_trt-9.1  /bin/bash 
 
 ```
 Base images compiled in this way have smaller sizes than NGC PyTorch images. Please note that `_GLIBCXX_USE_CXX11_ABI==0`.

@@ -392,7 +392,7 @@ def test_all_files(file_dir:str, num_clients=10, batch_size = 1,
 
 
 ### Clients with Different Batch Sizes
-In the example provided [here](https://github.com/torchpipe/torchpipe/-/blob/master/examples/yolox/yolox_multithreads_test.py), we use ten clients, each requesting different amounts of data per request, ranging from 1 to 10. We validate the consistency of the results in this case.
+In the example provided [here](https://github.com/torchpipe/torchpipe/blob/main/examples/yolox/yolox_multithreads_test.py), we use ten clients, each requesting different amounts of data per request, ranging from 1 to 10. We validate the consistency of the results in this case.
 
 Typically, users can iterate through all the data in a directory and repeatedly send requests to verify the stability and consistency of the results.
 
