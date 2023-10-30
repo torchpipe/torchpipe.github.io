@@ -168,7 +168,7 @@ next = "cpu_posdecoder"
 #          appended, otherwise the last node is assumed by default.
 #
 [cpu_posdecoder]
-backend = "SyncTensor[Sequential[ResizeMat,cvtColorMat,Mat2Tensor]]"
+backend = "Sequential[ResizeMat,cvtColorMat,Mat2Tensor,SyncTensor]"
 
 ### Parameters for the resize operation
 resize_h = 224
@@ -190,7 +190,7 @@ next = "resnet50"
 #          For the conversion method, see [Converting Torch to ONNX].
 #
 [resnet50]
-backend = "Torch[TensorrtTensor]" 
+backend = "SyncTensor[TensorrtTensor]" 
 min = 1
 max = 4
 instance_num = 4

@@ -166,7 +166,7 @@ next = "cpu_posdecoder"
 #          每个节点完成后需要接上下一个节点的名称，否则默认最后一个节点
 #
 [cpu_posdecoder]
-backend = "SyncTensor[Sequential[ResizeMat,cvtColorMat,Mat2Tensor]]"
+backend = "Sequential[ResizeMat,cvtColorMat,Mat2Tensor,SyncTensor]"
 
 ### resize 操作的参数
 resize_h = 224
@@ -185,7 +185,7 @@ next = "resnet50"
 #        转化方法见[torch转onnx]
 #
 [resnet50]
-backend = "Torch[TensorrtTensor]" 
+backend = "SyncTensor[TensorrtTensor]" 
 min = 1
 max = 4
 instance_num = 4
