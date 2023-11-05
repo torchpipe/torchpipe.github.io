@@ -17,6 +17,7 @@ displayed_sidebar: api
 | [`Identity`](#identity)                         | 无                      | `data/any`         | `result/any`       | `dict["result"]=dict["data"]` | 默认后端 |
 | [`Sequential`](#sequential)                     | `Sequential::backend`   | `data/any`         |                    |                               |          |
 | [`Jump`](../Inter-node/graphtraversal.mdx#jump) | `jump`                  |                    |                    | 跳转到其他（根）节点            |          |
+| [`Range`](#range)                     | `Range::backend`;`range`            | `data/any`              |                          |                               |                 |
 
 
 
@@ -92,3 +93,14 @@ jump="||node_name_1||node_name_2"
 :::caution
 被提升输入范围的后端的前向接口必须是线程安全的，并且状态不依赖于线程本身。[torch相关后端](./torch.mdx)不被支持
 ::: -->
+
+## Range
+设定新的最大最小范围 [target_min, target_max]。
+使用动态规划来确定 [target_min, target_max] 范围内的所有整数 'target' 是否可以表示为 `Range::backend` 的 [min, max] 范围内的多个数字之和，并提供可能的最大值结果。
+### 初始化
+:::tip 参数
+- **range** - 目标 [min, max]。例如，`range="1,10"`。
+- **Range::backend** - 代理的后端。
+:::
+如果新的范围无法被旧的范围中的范围表示，则初始化失败。例如，`range=[10,10], [min, max]=[2,9]` => `10 = 8+2`。
+而以下情况会失败：`range=[10,10], [min, max]=[8,8]` => `10 != 8`。

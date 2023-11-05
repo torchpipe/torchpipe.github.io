@@ -15,6 +15,7 @@ Overview
 | [`Identity`](#identity)                         | None                             | `data/any`              | `result/any`             | `dict["result"]=dict["data"]` | Default backend |
 | [`Sequential`](#sequential)                     | `Sequential::backend`            | `data/any`              |                          |                               |                 |
 | [`Jump`](../Inter-node/graphtraversal.mdx#jump) | `jump`                           |                         |                          | Jump to other (root) node     |                 |
+| [`Range`](#range)                     | `Range::backend`;`range`            | `data/any`              |                          |                               |                 |
 
 
 
@@ -69,3 +70,14 @@ When forwarding, sub-backends are executed in series. If the result of a non-fin
 
 ### Input Range
 If the input data range of all sub-backends is [1,1], then the range of `Sequential` is [1,1]. Otherwise, it is the union of the input ranges of sub-backends whose input ranges are not [1,1]. **Currently, only one sub-backend is allowed to satisfy `max() != 1 && max() != UINT32_MAX` at most**. In `Sequential`, currently only one sub-backend with non-trivial input range is allowed at most, and this sub-backend can be regarded as the main functional implementer of the entire `Sequential`, while other backends are auxiliary or functional backends.
+
+## Range
+Set a new maximum and minimum range [target_min, target_max].
+Use dynamic programming to determine whether all the integer 'target' in [target_min, target_max] can be represented as the sum
+of multiple numbers within `Range::backend`'s [min, max] range, and provide a result with the largest possible values. 
+### Initialization
+:::tip Parameters
+- **range** - Target [min, max]. for example, `range="1,10"`.
+- **Range::backend** - Proxy backend.
+:::
+Initialization fails if the new range cannot be represented by the range in the old range. For example, `target=10, [min, max]=[2,9]` => `10 = 8+2`. And the following situations will fail: `range=[10,10], [min, max]=[8,8]` => `10 != 8`.
