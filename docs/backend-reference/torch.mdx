@@ -94,7 +94,7 @@ flowchart LR
 
 ## Torch
 Similar to [SyncTensor](#synctensor), but with additional cross-card functionality. Effective from version 0.3.2b1.
-- Torch::backend: required
+- Torch::backend: required, like `Torch[TensorrtTensor]`
 - device_id: Default is -1, which sets the current device to this ID. During initialization, it is equivalent to calling `c10::cuda::set_device(device_id)` or `torch.cuda.set_device(device_id)`. During forward propagation, the input data type must be `at::Tensor` or `vector<at::Tensor>`. This backend will move the data to the specified graphics card.
 
 ## SaveTensor

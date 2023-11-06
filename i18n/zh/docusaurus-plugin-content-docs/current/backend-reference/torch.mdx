@@ -97,7 +97,7 @@ flowchart LR
 
 ## Torch
 与[SyncTensor](#synctensor)类似，但额外添加了跨卡功能。 从0.3.2b1版本开始生效。
-- Torch::backend: default=Identity
+- Torch::backend: 必须提供, 比如 `Torch[TensorrtTensor]`
 - device_id: 默认为-1；表示将当前设备设置为这个id. 初始化时内部相当于调用了`c10::cuda::set_device(device_id)` 或者 `torch.cuda.set_device(device_id)`，前向时，要求输入数据类型是`at::Tensor` or `vector<at::Tensor>`; 此后端会将数据搬运到指定显卡上。
 
 ## SaveTensor
