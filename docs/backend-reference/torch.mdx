@@ -79,22 +79,22 @@ otherwise `Tensor2Mat` will use the default CUDA stream.
 
 - [The scheduling system](../Intra-node/schedule.mdx) ensures that the initialization and forward of the backend instance are executed in the same independent thread. Torch perceives that it is in this independent thread mode before activating its own functionality.
 - Torch will determine whether the current thread is [bound to the default stream](../preliminaries/pytorch_libtorch) during initialization. If so, it will activate its own functionality: switch the thread to an independent stream during initialization and perform stream synchronization during forward.
-- The Sequential container ensures that the initialization order of its sub-backends is opposite to the forward order, such as `Sequential[Torch[A],Torch[B]]`, which initializes in reverse order and forwards in order:
+- The Sequential container ensures that the initialization order of its sub-backends is opposite to the forward order, such as `Sequential[SyncTensor[A],SyncTensor[B]]`, which initializes in reverse order and forwards in order:
 ```mermaid
 flowchart LR
-  BI["Torch[B].init"] --> AI["Torch[A].init"]
-  AI --> AF["Torch[A].forward"]
-  AF --> BF["Torch[B].forward "]
+  BI["SyncTensor[B].init"] --> AI["SyncTensor[A].init"]
+  AI --> AF["SyncTensor[A].forward"]
+  AF --> BF["SyncTensor[B].forward "]
 ```
-  Torch[A] is not the default stream during initialization, so it does not need to set a new stream or be responsible for stream synchronization during forward. At this time, Torch[B] sets a new stream, so Torch[B] is responsible for stream synchronization.
-- Mat2Tensor and Tensor2Mat backends have their own stream synchronization functions for the current stream. However, they cannot change the stream bound by the thread and still need to switch to an independent stream through `S[Tensor2Mat,...,Torch]`, otherwise it will affect performance.
+  SyncTensor[A] is not the default stream during initialization, so it does not need to set a new stream or be responsible for stream synchronization during forward. At this time, SyncTensor[B] sets a new stream, so SyncTensor[B] is responsible for stream synchronization.
+- Mat2Tensor and Tensor2Mat backends have their own stream synchronization functions for the current stream. However, they cannot change the stream bound by the thread and still need to switch to an independent stream through `S[Tensor2Mat,...,SyncTensor]`, otherwise it will affect performance.
 
 </details>
 
 
 ## Torch
 Similar to [SyncTensor](#synctensor), but with additional cross-card functionality. Effective from version 0.3.2b1.
-- Torch::backend: default=Identity
+- Torch::backend: required
 - device_id: Default is -1, which sets the current device to this ID. During initialization, it is equivalent to calling `c10::cuda::set_device(device_id)` or `torch.cuda.set_device(device_id)`. During forward propagation, the input data type must be `at::Tensor` or `vector<at::Tensor>`. This backend will move the data to the specified graphics card.
 
 ## SaveTensor
