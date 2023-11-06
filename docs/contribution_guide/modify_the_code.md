@@ -28,5 +28,5 @@ pytest .
 If necessary, please consider supplementing with [Python tests](https://github.com/torchpipe/torchpipe//test).
 
 :::note Code Formatting (optional)
-Please configure a formatting plugin to enable [.clang-format](https://github.com/torchpipe/torchpipe/-/blob/develop/.clang-format).
+Please configure a formatting plugin to enable [.clang-format](https://github.com/torchpipe/torchpipe/blob/develop/.clang-format).
 :::
