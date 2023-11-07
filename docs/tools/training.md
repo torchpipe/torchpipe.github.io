@@ -73,6 +73,11 @@ In this example, reference code for learning is provided in the torchpipe's exam
   sh train_dp.sh
   ```
 - train_ddp.py # if you use ddp in your code，you can refer to this code.
+
+:::warning DDP mode is temporarily unavailable
+DDP mode may cause the main card's memory load to be higher than other cards.
+:::
+
   ```
   sh train_ddp.sh
   ```

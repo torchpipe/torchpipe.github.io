@@ -72,6 +72,11 @@ type: explainer
   sh train_dp.sh
   ```
 - train_ddp.py 如果多卡并行使用了ddp，可以参考这份代码。
+
+:::warning ddp 模式暂时不可用
+ddp模式可能造成主卡显存负载过高于其他卡
+:::
+
   ```
   sh train_ddp.sh
   ```
