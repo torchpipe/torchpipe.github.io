@@ -8,3 +8,5 @@ type: reference
 
 # 交流 & 答疑
 ![Alt text](../assets/image.jpg)
+
+如果以上途径失效，可以添加微信billom拉群，备注torchpipe
