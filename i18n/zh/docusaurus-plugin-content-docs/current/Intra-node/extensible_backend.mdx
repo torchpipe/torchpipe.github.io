@@ -99,6 +99,26 @@ model(input)
 assert(input["result"] == b"123")
 ```
 
+
+Or you can:
+```python
+tp.utils.cpp_extension.load_filter(
+    name = 'Skip', 
+    sources='status forward(dict data){return status::Skip;}',
+    sources_header="")
+
+
+
+tp.utils.cpp_extension.load_backend(
+    name = 'identity', 
+    sources='void forward(dict data){(*data)["result"] = (*data)["data"];}',
+    sources_header="")
+model = tp.pipe({"backend":'identity'})
+input = {"data":2}
+model(input)
+assert input["result"] == 2
+```
+
 ## 与python的绑定
 以python为前端语言时，会从python中调用后端，并且将结果返回到python中，需要进行类型转换。
 ### 从python类型到any {#py2any}

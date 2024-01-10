@@ -95,6 +95,25 @@ model(input)
 assert(input["result"] == b"123")
 ```
 
+Or you can:
+```python
+tp.utils.cpp_extension.load_filter(
+    name = 'Skip', 
+    sources='status forward(dict data){return status::Skip;}',
+    sources_header="")
+
+
+
+tp.utils.cpp_extension.load_backend(
+    name = 'identity', 
+    sources='void forward(dict data){(*data)["result"] = (*data)["data"];}',
+    sources_header="")
+model = tp.pipe({"backend":'identity'})
+input = {"data":2}
+model(input)
+assert input["result"] == 2
+```
+
 ## Binding with Python
 When using Python as the front-end language, the back-end is called from Python and the results are returned to Python, requiring type conversion.
 ### From Python Types to Any {#py2any}

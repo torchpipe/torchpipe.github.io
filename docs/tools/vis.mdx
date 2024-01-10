@@ -4,25 +4,25 @@ title: Configuration Visualizing
 type: explainer
 ---
 
+(From v0.4.0)
 We provide a simple web-based visualization feature for configuration files.
 ## Environment Setup
 
 ```bash
-apt-get update
-apt install graphviz
-pip install pydot gradio
+pip install  gradio
 ```
 
 ## Usage {#parameter}
 
- `torchpipe.utils.vis [-h] [--port PORT] [--save] toml`
 
-:::tip Parameters
-- **--save** - Whether to save the graph as an SVG image. The image will be saved in the current directory with a different file extension than the TOML file.
-::: 
+```python
+import torchpipe as tp
 
+a=tp.parse_toml("examples/ppocr/ocr.toml")
 
-## Example
-```bash
-python -m torchpipe.utils.vis your.toml # --port 2211
+tp.utils.Visual(a).launch()
 ```
+
+
+ 
+ 
