@@ -10,7 +10,7 @@ type: explainer
 ## 环境准备
 ```bash
  
-pip install gradio
+pip install gradio pyvis
 ```
 
 ## 使用方法 {#parameter}
@@ -19,7 +19,6 @@ pip install gradio
 ```python
 import torchpipe as tp
 
-a=tp.parse_toml("examples/ppocr/ocr.toml")
 
-tp.utils.Visual(a).launch()
+tp.utils.Visual("examples/ppocr/ocr.toml").launch()
 ```

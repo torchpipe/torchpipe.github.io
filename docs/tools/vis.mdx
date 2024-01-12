@@ -9,7 +9,7 @@ We provide a simple web-based visualization feature for configuration files.
 ## Environment Setup
 
 ```bash
-pip install  gradio
+pip install  gradio pyvis
 ```
 
 ## Usage {#parameter}
@@ -18,9 +18,8 @@ pip install  gradio
 ```python
 import torchpipe as tp
 
-a=tp.parse_toml("examples/ppocr/ocr.toml")
 
-tp.utils.Visual(a).launch()
+tp.utils.Visual("examples/ppocr/ocr.toml").launch()
 ```
 
 
