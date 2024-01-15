@@ -1,6 +1,6 @@
 ---
 id: introduction
-title: 1. 介绍
+title: 介绍
 type: explainer
 ---
 

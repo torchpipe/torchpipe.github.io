@@ -122,7 +122,7 @@ The following are initialization parameters:
 |--------------|---------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | model        | Model path          | Supports <br />- onnx files ending with .onnx<br />- tensorrt engine files ending with .trt <br />- [encrypted](../tools/encrypt.mdx) files ending with .onnx.encrypted and .trt.encrypted |
 | instance_num | Number of instances | If the number of profiles in the tensorrt engine is not enough to establish enough instances, multiple engines will be deserialized.                                                       |
-| [postprocessor](#postprocessing-extension) | Custom post-processing | Custom C++ batch post-processing for network output; the default operation is to split the batch dimension; needs to be implemented as a subclass of PostProcessor and registered.         ||
+| [postprocessor](#postprocessing-extension) | Custom post-processing | Custom C++ batch post-processing for network output; the default operation is to split the batch dimension; needs to be implemented as a subclass of PostProcessor and registered.         |builtin: cpu, softmaxcpu|
 
 For onnx models, there are the following additional parameters:
 

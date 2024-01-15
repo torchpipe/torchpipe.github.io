@@ -54,7 +54,7 @@ const sidebars = {
     
     {
       type: "category",
-      label: "2. Preliminary",
+      label: "1. Preliminary",
       items: [
         "preliminaries/cuda_stream",
         "preliminaries/pytorch_libtorch",
@@ -70,7 +70,7 @@ const sidebars = {
     },
     {
       type: "category",
-      label: "3. Single Node Scheduling",
+      label: "2. Single Node Scheduling",
       items: [
         "Intra-node/model_parallel",
         "Intra-node/computational_backend",
@@ -104,7 +104,7 @@ const sidebars = {
     },
     {
       type: "category",
-      label: "4. Multi-node Pipeline",
+      label: "3. Multi-node Pipeline",
       items: ["Inter-node/next","Inter-node/filter","Inter-node/context","Inter-node/graphtraversal", "Inter-node/logical_nodes" ],
       link: {
         type: "generated-index",
@@ -117,7 +117,7 @@ const sidebars = {
     },
     {
       type: "category",
-      label: "5. Tools",
+      label: "4. Tools",
       items: [
         "tools/encrypt",
         "tools/quantization",

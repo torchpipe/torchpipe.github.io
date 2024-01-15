@@ -127,7 +127,7 @@ tensorrt推理引擎
 |--------------------------------------------|------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | model                                      | 模型路径     | 支持 <br />- 以 .onnx 结尾的onnx文件<br />- 以 .trt 结尾的tensorrt engine文件 <br />- 以 .onnx.encrypted 和 .trt.encrypted 结尾的[加密](../tools/encrypt.mdx)文件 |
 | instance_num                               | 实例数目     | 如果tensorrt engine的profile数目不足以建立足够的实例数，将反序列化多个engine.                                                                                      |
-| [postprocessor](#postprocessing-extension) | 自定义后处理 | 自定义网络输出c++批后处理;默认操作是拆分batch维度； 需要实现为 PostProcessor 的子类并注册                                                                          |
+| [postprocessor](#postprocessing-extension) | 自定义后处理 | 自定义网络输出c++批后处理;默认操作是拆分batch维度； 需要实现为 PostProcessor 的子类并注册。预置：cpu, softmaxcpu                                                                          |
 
 对于onnx模型，有以下额外参数
 

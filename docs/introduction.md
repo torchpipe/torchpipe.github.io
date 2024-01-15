@@ -1,6 +1,6 @@
 ---
 id: introduction
-title: 1. Introduction
+title: Introduction
 type: explainer
 ---
 
