@@ -6,16 +6,16 @@ displayed_sidebar: api
 
 ---
 
-<!-- [The following compilation option](../installation.mdx#compilation-options) need to be enabled to use the following backends.
+[The following compilation option](../installation.mdx#compilation-options) need to be enabled to use the following backends.
 
-`version>=0.3.3b2`
+`version>=0.4.0`
 
 ```bash
-BUILD_PPLCV=1 pip install -e .
+WITH_CVCUDA=1 pip install -e .
 ```
 ## Overview
 
-| Name| Main Initialization Parameters |Runtime Parameters[Type] | Input[Type]  | Output[Type] | Note|
+<!-- | Name| Main Initialization Parameters |Runtime Parameters[Type] | Input[Type]  | Output[Type] | Note|
 | --- | --- | --- | --- | --- | --- |
 |[PPLResizeTensor]|resize_h,resize_w | resize_h[int],resize_w[int]|data[Tensor]|result[Tensor]||
 |[PPLWarpAffineTensor]|target_h,target_w|target_h[int],target_w[int],affine_matrix[vector\<float\>]|data[Tensor]|result[Tensor]|affine_matrix.size() == 6|
