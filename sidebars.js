@@ -21,11 +21,13 @@ const sidebars = {
   // But you can create a sidebar manually
   main: [
     "welcome",
+    "introduction",
+    "installation",
     {
       type: "category",
       label: "Quick Start",
       items: [
-        "installation",
+        
         "quick_start_new_user",
         //"quick_start_professional",
         {
@@ -49,7 +51,7 @@ const sidebars = {
       },
     },
     
-    "introduction",
+    
     {
       type: "category",
       label: "2. Preliminary",
@@ -165,6 +167,7 @@ const sidebars = {
             "backend-reference/opencv", 
             "backend-reference/torch",
             "backend-reference/Ppl.cv", 
+            "backend-reference/CVCUDA", 
             "backend-reference/log"],
     },
     

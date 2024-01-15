@@ -16,7 +16,8 @@ displayed_sidebar: api
 | [PillowResizeTensor](#pillowresizetensor) | resize_h,resize_w                                                                | data[at::Tensor]                  | result[at::Tensor]                                                                                        | CV_8UC3                                                                 |
 | [ResizePadTensor](#resizepadtensor)       | max_h,max_w,pad_value                                                            | data[at::Tensor]                  | - result[at::Tensor]<br />- inverse_trans<br />[std::function<std::pair<float, float>(float x, float y)>] |                                                                         |
 | [TensorrtTensor](#tensorrttensor)         | `model`,`instance_num`,<br />`max`,`precision`,<br />`mean`,`std`,`model::cache` |                                   |                                                                                                           | TensorRT inference engine                                               |
-| [Tensor2Mat](#tensor2mat)                 |                                                                                  | data[at::Tensor]                  | result[cv::Mat]                                                                                           |                                                                         |
+| [Tensor2Mat](#tensor2mat)                 |                                                                                  | data[at::Tensor]                  | result[cv::Mat]                                                                                           |         
+| [Tensor2Vector](#tensor2vector)                 |                                                                                  | data[at::Tensor]                  | result[std::vector]                                                                                           |                                                                       |
 | [SyncTensor](#synctensor)                 | `SyncTensor::backend`                                                | data[at::Tensor]                  | result[at::Tensor]                                                                                        | CUDA Stream Synchronization Facility                                    |
 | [Torch](#torch)                           | `device_id` `Torch::backend`                                                     | data[at::Tensor]                  | result[at::Tensor]                                                                                        |                                                                         |
 | [SaveTensor](#savetensor)                 | save_dir                                                                         | data[at::Tensor]                  | result[at::Tensor]                                                                                        |                                                                         |
@@ -63,6 +64,15 @@ Please insert stream management operations:
 otherwise `Tensor2Mat` will use the default CUDA stream.
 :::
 
+## Tensor2Vector
+- Convert `at::Tensor` to `std::vector` while keeping the data type unchanged (>=v0.4.1, currently only supports float)
+- Input shape: hw3 or 13hw
+- Similar to [SyncTensor](#SyncTensor), it will synchronize the current stream.
+:::caution
+Please insert stream management operations:
+`Sequential[Tensor2Vector,SyncTensor]` or `SyncTensor[Tensor2Vector`,
+otherwise `Tensor2Vector` will use the default CUDA stream.
+:::
 
 
 ## SyncTensor

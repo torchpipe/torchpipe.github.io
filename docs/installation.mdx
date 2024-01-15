@@ -162,7 +162,7 @@ Base images compiled in this way have smaller sizes than NGC PyTorch images. Ple
 | Option             | Default |                                       Description                                       |
 |--------------------|:-------:|:---------------------------------------------------------------------------------------:|
 | DEBUG              |    0    |                            Whether to compile in debug mode                             |
-| WITH_OPENCV        |    1    |                Whether to compile the C++ backend that depends on OpenCV;It's invalid now, don't change it.                |
+|WITH_CVCUDA| 0| Whether to compile the C++ backend that depends on CVCUDA(>=0.4.0)|
 | BUILD_PPLCV      |   0    |      Whether to compile the C++ backend that depends on ppl.cv(>=0.3.3b2)|
 | IPIPE_KEY(optinal) |  None   | str(length>=8). If using encryption and decryption functions, this key needs to be set. |
 

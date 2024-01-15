@@ -20,6 +20,7 @@ displayed_sidebar: api
 | [ResizePadTensor](#resizepadtensor)       | max_h,max_w,pad_value                                                            | data[at::Tensor]                  | - result[at::Tensor]<br />- inverse_trans<br />[std::function<std::pair<float, float>(float x, float y)>] |                                          |
 | [TensorrtTensor](#tensorrttensor)         | `model`,`instance_num`,<br />`max`,`precision`,<br />`mean`,`std`,`model::cache` |                                   |                                                                                                           | tensorrt推理引擎                         |
 | [Tensor2Mat](#tensor2mat)                 |                                                                                  | data[at::Tensor]                  | result[cv::Mat]                                                                                           |                                          |
+| [Tensor2Vector](#tensor2vector)                 |                                                                                  | data[at::Tensor]                  | result[std::vector]                                                                                           |                                          |
 | [SyncTensor](#synctensor)                 | `SyncTensor::backend`                                                            | data[at::Tensor]                  | result[at::Tensor]                                                                                        | CUDA流同步设施                           |
 | [Torch](#torch)                           | `device_id` `Torch::backend`                                                     | data[at::Tensor]                  | result[at::Tensor]                                                                                        |                                          |
 | [SaveTensor](#savetensor)                 | save_dir                                                                         | data[at::Tensor]                  | result[at::Tensor]                                                                                        |                                          |
@@ -66,6 +67,16 @@ displayed_sidebar: api
 请插入流管理操作：
 `Sequential[Tensor2Mat,SyncTensor]` 或者`SyncTensor[Tensor2Mat]`，
 否则`Tensor2Mat`将使用默认cuda流。
+:::
+
+## Tensor2Vector
+- 将`at::Tensor`转为`std::vector`，保持数据类型不变（>=v0.4.1, 目前仅仅支持float）
+- 输入形状hw3或者13hw
+- 类似于[SyncTensor](#SyncTensor), 会同步当前流
+:::caution
+请插入流管理操作：
+`Sequential[Tensor2Vector,SyncTensor]` 或者`SyncTensor[Tensor2Vector]`，
+否则`Tensor2Vector`将使用默认cuda流。
 :::
 
 ## SyncTensor
