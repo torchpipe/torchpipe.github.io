@@ -14,9 +14,9 @@ The basic environment is as follows:
 | Dependency         | Version           | Remarks                                                                                                                                                                                                                                                    |
 |--------------------|:------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `cuda`             | >= 11.0           | - The CUDA version must be consistent with the version that PyTorch depends on (for the convenience of `torch.utils.cpp_extension` to compile code on the fly). <br />- Compatibility testing with CUDA 10.2(no support for c++17) is no longer performed. |
-| `pytorch`          | >= 1.10.0(cuda11) | - Compatibility testing is no longer performed for `c++14/cuda-10.2/pytorch==1.10.2`, but you may still be able to run it with simple modifications.                                                                                                       |
+| `pytorch`          | >= 1.10.2(cuda11) | - Compatibility testing is no longer performed for `c++14/cuda-10.2/pytorch==1.10.2`, but you may still be able to run it with simple modifications.                                                                                                       |
 | `opencv`(optional) | 4.x               | At least the core, imgproc, imgcodecs, and highgui modules are included.                                                                                                                                                                                   |
-|  `tensorrt`(optional)	|>= 7.2<br /><= 9.1.0.4| - There is a [memory leak](https://github.com/NVIDIA/TensorRT/issues/351) in TensorRT 7.0 with dynamic inputs.<br />- TensorRT 7.1 and earlier cannot directly INT8-quantize models with dynamic inputs.
+|  `tensorrt`(optional)	|>= 7.2<br /><= 9.2| - There is a [memory leak](https://github.com/NVIDIA/TensorRT/issues/351) in TensorRT 7.0 with dynamic inputs.
 
 
 :::note 
@@ -28,6 +28,10 @@ The easiest way is to choose NGC mirror for source code compilation (official mi
 
 - Minimum support nvcr.io/nvidia/pytorch:21.07-py3 (Starting from 0.3.2rc3)
 - Maximum support nvcr.io/nvidia/pytorch:23.08-py3
+- Latest test version: nvcr.io/nvidia/pytorch:22.12-py3
+
+If you encounter any compilation or runtime issues inside the Docker container, please submit an issue.
+
 
 First, clone the code:
 

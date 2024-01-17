@@ -15,9 +15,9 @@ type: explainer
 | 依赖             | 版本                   | 备注                                                                                                                                          |
 |------------------|:-----------------------|---------------------------------------------------------------------------------------------------------------------------------------------|
 | `cuda`           | >= 11.0                | - 与PyTorch依赖的cuda版本必须一致（便于`torch.utils.cpp_extension`即时编译代码） <br />- 不再对CUDA 10.2（不支持c++17）的兼容进行测试。            |
-| `pytorch`        | >= 1.10.0（cuda11）      | - 对于`c++14/cuda-10.2/pytorch==1.10.2`不再进行兼容测试，然而通过简单修改，您可能仍可运行。                                                      |
+| `pytorch`        | >= 1.10.2（cuda11）      | - 对于`c++14/cuda-10.2/pytorch==1.10.2`不再进行兼容测试，然而通过简单修改，您可能仍可运行。                                                      |
 | `opencv`(可选)   | 3.x, 4.x               | 至少包含 core, imgproc，imgcodecs 和 highgui 四个模块                                                                                          |
-| `tensorrt`(可选) | >= 7.2(Starting from 0.3.2rc3)<br /><= 9.1.0.4 | - tensorrt 7.0 动态输入下存在[内存泄漏](https://github.com/NVIDIA/TensorRT/issues/351)<br />- tensorrt 7.1 及以下无法直接int8化动态输入的模型 |
+| `tensorrt`(可选) | >= 7.2(Starting from 0.3.2rc3)<br /><= 9.2 | - tensorrt 7.0 动态输入下存在[内存泄漏](https://github.com/NVIDIA/TensorRT/issues/351) |
 
 :::note 
 以上依赖项均来源于默认存在的特定计算后端。构筑c++核心不依赖于以上任意一项。
@@ -27,6 +27,9 @@ type: explainer
 最简单的方式是可以选择<font color='Brown'>NGC镜像</font>进行源码编译（低版本驱动依靠 Forward Compatibility 或者 Minor Version Compatibility 依然可能跑起来官方镜像）。
 - 最低支持 nvcr.io/nvidia/pytorch:21.07-py3（从0.3.2rc3开始）
 - 最高支持 nvcr.io/nvidia/pytorch:23.08-py3
+- 测试版本 nvcr.io/nvidia/pytorch:22.12-py3
+
+如果在docker容器内遇到编译或者运行问题，请提交issue。
 
 首先，克隆代码：
 
