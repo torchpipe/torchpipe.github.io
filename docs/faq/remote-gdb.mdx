@@ -27,8 +27,8 @@ docker run -it --gpus all --ipc=host   --shm-size 1G  --ulimit memlock=-1 --ulim
 ### 3. Install openssh
 
 ```bash
-apt-get update
-apt-get install -y  openssh-server  openssh-client vim
+apt-get update -y
+apt-get install -y  openssh-server  openssh-client vim gdb
 ```
 
 ### Modify system configuration
@@ -47,15 +47,14 @@ PermitRootLogin yes
 PubkeyAuthentication yes
 ```
 
-Start the service: `/etc/init.d/ssh start` or `/etc/init.d/ssh restart`
+Start the service: 
+`/etc/init.d/ssh start` 
+or 
+`/etc/init.d/ssh restart`
 
 After starting the service, you can perform connection verification: `ssh -p 22 root@127.0.0.1`. If the startup fails, it will report a "Connection refused" error. If successful, it will prompt you to enter a password and display a "Welcome" message.
 
-### 5. Install debugging tools inside Docker
-
-```bash
-apt-get install gdb
-```
+ 
 
 ### 6. Compile torchpipe in debug mode
 
@@ -138,7 +137,7 @@ pdb.set_trace()
 **Configuration File**
 
 ```json
-// Modify "program": "/opt/conda/bin/python" according to the result of "which python"
+// Modify "program": "/usr/bin/python" according to the result of "which python"
 {
     "version": "0.2.0",
     "configurations": [
@@ -146,7 +145,7 @@ pdb.set_trace()
             "name": "(gdb) Attach",
             "type": "cppdbg",
             "request": "attach",
-            "program": "/opt/conda/bin/python", /* My virtual env */
+            "program": "/usr/bin/python", /* My virtual env */
             "processId": "${command:pickProcess}",
             "MIMode": "gdb",
             "setupCommands": [

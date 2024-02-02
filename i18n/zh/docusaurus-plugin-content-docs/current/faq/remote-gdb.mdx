@@ -33,8 +33,8 @@ docker run -it --gpus all --ipc=host --shm-size 1G --ulimit memlock=-1 --ulimit 
 
 ### 3. 安装openssh
 ```bash
-apt-get update
-apt-get install -y  openssh-server  openssh-client vim
+apt-get update -y
+apt-get install -y  openssh-server  openssh-client vim gdb
 ```
 
 ### 4. 修改系统配置
@@ -47,15 +47,15 @@ Port 22
 PermitRootLogin yes
 PubkeyAuthentication yes
 ```
-启动服务： `/etc/init.d/ssh start` 或者 `/etc/init.d/ssh restart`
+启动服务： 
+`/etc/init.d/ssh start` 
+或者
+`/etc/init.d/ssh restart`
 
 启动服务后可以进行连接验证：`ssh -p 22 root@127.0.0.1`，如果启动失败，会报Connection refused的错误，成功则会让你输入密码，并有Welcome字样提示。
 
 
-### 5. docker内安装调试工具
-```bash
-apt-get install gdb
-```
+ 
 
 ### 6. 编译torchpipe为debug模式
 
@@ -139,7 +139,7 @@ pdb.set_trace()
 **配置文件**
 
 ```json
-// 根据 ``which python`` 的结果修改 "program": "/opt/conda/bin/python"
+// 根据 ``which python`` 的结果修改 "program": "/usr/bin/python"
 {
     "version": "0.2.0",
     "configurations": [
@@ -147,7 +147,7 @@ pdb.set_trace()
             "name": "(gdb) Attach",
             "type": "cppdbg",
             "request": "attach",
-            "program": "/opt/conda/bin/python", /* My virtual env */
+            "program": "/usr/bin/python", /* My virtual env */
             "processId": "${command:pickProcess}",
             "MIMode": "gdb",
             "setupCommands": [
