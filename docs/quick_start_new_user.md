@@ -77,7 +77,7 @@ img = self.precls_trans(cv2.resize(cv2.cvtColor(img, cv2.COLOR_BGR2RGB), (224,22
 ```py
 
 input_shape = torch.ones((1, 3, 224, 224)).cuda()
-self.classification_engine = torch2trt(resnet50, [input_shape], 
+self.classification_engine = torch2trt(resnet50, [input_shape],
                             fp16_mode=self.fp16,
                             max_batch_size=self.cls_trt_max_batchsize,
                             )
@@ -116,8 +116,8 @@ config = torchpipe.parse_toml("resnet50.toml")
 self.classification_engine = pipe(config)
 
 self.classification_engine(bin_data)
- 
- 
+
+
 if TASK_RESULT_KEY not in bin_data.keys():
     print("error decode")
     return results
@@ -133,9 +133,9 @@ The contents of the toml file are as follows:
 
 ```bash
 # Schedule'parameter
-batching_timeout = 5 
-instance_num = 8 
-precision = "fp16" 
+batching_timeout = 5
+instance_num = 8
+precision = "fp16"
 
 ## Data decoding
 #
@@ -145,11 +145,11 @@ precision = "fp16"
 #           The original decoding output format was BGR
 #           The DecodeMat backend also defaults to outputting in BGR format
 #           Since decoding is done on the CPU, DecodeMat is used
-#           After each node is completed, the name of the next node needs to be 
+#           After each node is completed, the name of the next node needs to be
 #           appended, otherwise the last node is assumed by default
 #
 [cpu_decoder]
-backend = "DecodeMat" 
+backend = "DecodeMat"
 next = "cpu_posdecoder"
 
 ## preprocessing: resize、cvtColorMat
@@ -160,11 +160,11 @@ next = "cpu_posdecoder"
 #      Note:
 #          The original preprocessing order was resize, cv2.COLOR_BGR2RGB,
 #          then Normalize.
-#          However, the normalization step is now integrated into the model 
-#          processing (the [resnet50] node), so the output result after the 
-#          preprocessing in this node is consistent with the preprocessing result 
+#          However, the normalization step is now integrated into the model
+#          processing (the [resnet50] node), so the output result after the
+#          preprocessing in this node is consistent with the preprocessing result
 #          without normalization.
-#          After each node is completed, the name of the next node needs to be 
+#          After each node is completed, the name of the next node needs to be
 #          appended, otherwise the last node is assumed by default.
 #
 [cpu_posdecoder]
@@ -183,23 +183,23 @@ next = "resnet50"
 #
 #          This corresponds to 3.1（3) TensorRT acceleration and 3.1（2）Normalize
 #      Note:
-#          There's a slight difference from the original method of generating 
-#          engines online. Here, the model needs to be first converted to ONNX 
+#          There's a slight difference from the original method of generating
+#          engines online. Here, the model needs to be first converted to ONNX
 #          format.
-# 
+#
 #          For the conversion method, see [Converting Torch to ONNX].
 #
 [resnet50]
-backend = "SyncTensor[TensorrtTensor]" 
+backend = "SyncTensor[TensorrtTensor]"
 min = 1
 max = 4
 instance_num = 4
-model = "/you/model/path/resnet50.onnx" 
+model = "/you/model/path/resnet50.onnx"
 
 mean="123.675, 116.28, 103.53" # 255*"0.485, 0.456, 0.406"
 std="58.395, 57.120, 57.375" # 255*"0.229, 0.224, 0.225"
 
-# TensorrtTensor 
+# TensorrtTensor
 "model::cache"="/you/model/path/resnet50.trt" # or resnet50.trt.encrypted
 
 ```
@@ -221,7 +221,7 @@ std="58.395, 57.120, 57.375" # 255*"0.229, 0.224, 0.225"
 
 The specific test code can be found at [client_qps.py](https://github.com/torchpipe/torchpipe/blob/develop/examples/resnet50_thrift/client_qps.py)
 
-With the same Thrift service interface, testing on a machine with NIDIA-3080 GPU, 36-core CPU, and concurrency of 10, we have the following results:
+With the same Thrift service interface, testing on a machine with NVIDIA-3080 GPU, 36-core CPU, and concurrency of 10, we have the following results:
 
 - throughput:
 
@@ -233,7 +233,7 @@ With the same Thrift service interface, testing on a machine with NIDIA-3080 GPU
 - response time:
 
 | Methods | TP50 | TP99 |
-:-: | :-: | :-:| 
+:-: | :-: | :-:|
 | Pure TensorRT | 26.74 |35.24|
 | Using TorchPipe |8.89|14.28|
 
