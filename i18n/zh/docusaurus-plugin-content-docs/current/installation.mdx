@@ -17,7 +17,7 @@ type: explainer
 | `cuda`           | >= 11.0                | - 与PyTorch依赖的cuda版本必须一致（便于`torch.utils.cpp_extension`即时编译代码） <br />- 不再对CUDA 10.2（不支持c++17）的兼容进行测试。            |
 | `pytorch`        | >= 1.10.2（cuda11）      | - 对于`c++14/cuda-10.2/pytorch==1.10.2`不再进行兼容测试，然而通过简单修改，您可能仍可运行。                                                      |
 | `opencv`   | 3.x, 4.x               | 至少包含 core, imgproc，imgcodecs 和 highgui 四个模块                                                                                          |
-| `tensorrt` | >= 7.2(Starting from 0.3.2rc3)<br /><= 9.2 | - tensorrt 7.0 动态输入下存在[内存泄漏](https://github.com/NVIDIA/TensorRT/issues/351) |
+| `tensorrt` | >= 7.2<br /><= 9.3 | - tensorrt 7.0 动态输入下存在[内存泄漏](https://github.com/NVIDIA/TensorRT/issues/351) |
 
 :::note 
 以上依赖项均来源于默认存在的特定计算后端。构筑c++核心不依赖于以上任意一项。
@@ -50,7 +50,6 @@ docker run --rm --gpus=all --ipc=host  --network=host -v `pwd`:/workspace  --shm
 :::note
 - 如果您使用的是Transformer-like的模型，强烈推荐使用Tensorrt >= 8.6.1(`nvcr.io/nvidia/pytorch:23.05-py3`)以便支持 opset 17 for LayerNormalization 和 opset 18 GroupNormalization, 以及对此类模型更深的支持。然而，其NGC镜像对显卡驱动版本[有所要求](https://docs.nvidia.com/deeplearning/frameworks/pytorch-release-notes/rel-23-05.html#rel-23-05). 
 可以使用下一节[自定义镜像](#selfdocker).
-- 由于tensorrt的优化问题，部分较大参数量的Transformer-like的模型opset13下速度更快。
 
 
 :::
@@ -115,7 +114,7 @@ torch.onnx.export(resnet18, data_bchw, model_path,
 ```python
 import torch, torchpipe
 model = torchpipe.pipe({'model': model_path,
-                        'backend': "Sequential[cvtColorTensor,TensorrtTensor,SyncTensor]", # 后端引擎， 可见overview章节的解释。
+                        'backend': "Sequential[CvtColorTensor,TensorrtTensor,SyncTensor]", # 后端引擎， 可见overview章节的解释。
                         'instance_num': 2, 'batching_timeout': '5', # 实例数和超时时间
                         'max': 4, # 模型优化范围最大值，也可以为 '4x3x224x224'
                         'mean': '123.675, 116.28, 103.53',#255*"0.485, 0.456, 0.406"，
@@ -136,15 +135,19 @@ print(input["result"].shape)  # 失败则此键值一定不存在，即使输入
 
 ## 自定义dockerfile {#selfdocker}
 
-参考[示例dockerfile](https://github.com/torchpipe/torchpipe/blob/main/docker/trt9.base)，预先下载[TensorRT](https://github.com/NVIDIA/TensorRT/tree/release/9.1#optional---if-not-using-tensorrt-container-specify-the-tensorrt-ga-release-build-path)后可编译相关基础环境镜像。
+
 ```bash
-# put TensorRT-9.*.Linux.x86_64-gnu.cuda-11.8.tar.gz into thirdparty/
+ 
+docker build --network=host -f ./docker/Dockerfile -t torchpipe thirdparty/
 
-# docker build --network=host -f docker/trt9.base -t torchpipe:base_trt-9 .
+docker run --rm   --network=host --gpus=all --ulimit memlock=-1 --ulimit stack=67108864 --privileged=true  -v `pwd`:/workspace -it torchpipe:latest  /bin/bash 
 
-# docker run --rm   --network=host --gpus=all --ulimit memlock=-1 --ulimit stack=67108864 --privileged=true  -v `pwd`:/workspace -it torchpipe:base_trt-9  /bin/bash 
+cd /workspace/ && python setup.py install
+
+cd examples/resnet18 && python resnet18.py
 
 ```
+
 这种方式编译出的基础镜像比NGC pytorch镜像体积更小. 需要注意，其`_GLIBCXX_USE_CXX11_ABI==0`
 
 
