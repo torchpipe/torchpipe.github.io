@@ -48,7 +48,7 @@ For `BaselineSchedule`, these six instances form two virtual instances, with eac
 ### Initialization
 |                  | Functionality                                     | Remarks                                                                                                                                         |
 |------------------|---------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
-| batching_timeout | Timeout for batching, default 0 (in milliseconds) | Does not accept `&` syntax; ineffective when batching is not needed                                                                             |
+| batching_timeout | Timeout for batching | Does not accept `&` syntax; ineffective when batching is not needed                                                                             |
 | instance_num     | Number of instances                               | instance_num multiplied by the backend's max() is generally set to slightly less than the maximum amount of data to be processed simultaneously |
 | backend          | Actual computation backend                        | Provides data input range through min()/max() functions                                                                                         |
 
