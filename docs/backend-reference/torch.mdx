@@ -128,7 +128,7 @@ For onnx models, there are the following additional parameters:
 
 | Parameter               | Description                                                                       | Note                                                                                                                                                                                                                               |
 |-------------------------|-----------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| min/max                 | Minimum/maximum input of the model                                                | In form, it can be `1`, `1x3x224x224`, or `1,1` (for multi-input networks). Sorted in lexicographic order;<br />When `instance_num > 1`, it can be multiple configurations separated by `;`.                                       |
+| min/max                 | Minimum/maximum input of the model                                                | In form, it can be `1`, `1x3x224x224`, or `1,1` (for multi-input networks). <br />When `instance_num > 1`, it can be multiple configurations separated by `;`.                                       |
 | precision               | Model precision                                                                   | [fp32,fp16,int8,best]. The default value for versions <=0.3.1b1 is fp16, and for versions >0.3.1b1 it is [fp16(SM>6.1), fp32(SM<=6.1)]; If the precision is not supported, it will automatically degrade to a supported precision. |
 | precision::fp32         | Set the precision of some layers to fp32 (overrides the precision setting)        | Layer name(s) (can provide only part of the name), separated by commas.                                                                                                                                                            |
 | precision::fp16         | Set the precision of some layers to fp16 (overrides the precision setting)        | Layer name(s) (can provide only part of the name), separated by commas.                                                                                                                                                            |
@@ -155,8 +155,8 @@ See [example](https://github.com/torchpipe/torchpipe/tree/main/examples/int8).
 
   |                          | Description                                                                                                                                                     | Note                          |
   |--------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------|
-  | TASK_DATA_KEY            | When the network has a single input and output, the type is at::Tensor/torch.Tensor. When the network has multiple inputs and outputs, the type is vector/List. | Sorted in lexicographic order |
-  | TASK_RESULT_KEY (Output) | The output type is the same as the input type, and the postprocessor can customize the output.                                                                  | Sorted in lexicographic order |
+  | TASK_DATA_KEY            | When the network has a single input and output, the type is at::Tensor/torch.Tensor. When the network has multiple inputs and outputs, the type is vector/List. | Sorted in lexicographic order for trt<=9 |
+  | TASK_RESULT_KEY (Output) | The output type is the same as the input type, and the postprocessor can customize the output.                                                                  | Sorted in lexicographic order for trt<=9 |
 
  
 ### min()/max()
