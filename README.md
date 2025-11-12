@@ -23,7 +23,7 @@ Torchpipe is a multi-instance pipeline parallel library that acts as a bridge be
 
 
 
-这里是其文档站点
+这里是其v0版本文档站点。 新版（v1）文档位于 https://torchpipe.github.io/torchpipe/
 
 Here is its documentation site.
 
