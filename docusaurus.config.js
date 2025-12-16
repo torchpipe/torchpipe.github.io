@@ -58,11 +58,11 @@ const config = {
           editUrl: ({locale, versionDocsDirPath, docPath}) => {
                   // Link to Crowdin for French docs
                   if (locale == 'en') { 
-                    return `https://github.com/torchpipe/torchpipe.github.io/edit/main/docs/${docPath}`;
+                    return `https://github.com/torchpipe/torchpipe.github.io/edit/v0/docs/${docPath}`;
                   }
                   // Link to GitHub for English docs
 
-                  return `https://github.com/torchpipe/torchpipe.github.io/edit/main/i18n/zh/docusaurus-plugin-content-docs/current/${docPath}`;
+                  return `https://github.com/torchpipe/torchpipe.github.io/edit/v0/i18n/zh/docusaurus-plugin-content-docs/current/${docPath}`;
                 },
           sidebarCollapsed: true,
           showLastUpdateTime:true,
@@ -192,7 +192,7 @@ const config = {
           //   label: "Nrwl",
           // },
           {
-            href: "https://github.com/torchpipe/torchpipe/",
+            href: "https://github.com/torchpipe/torchpipe/tree/v0",
             className: "header-github-link",
             "aria-label": "Github repository",
             position: "right",

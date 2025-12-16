@@ -56,7 +56,7 @@ export default function FacePage(): JSX.Element {
         <div className="row">
           <div className="col col--12 margin-vert--xl">
             <a
-              href="https://github.com/torchpipe/torchpipe/tree/main"
+              href="https://github.com/torchpipe/torchpipe/tree/v0"
               target="_blank"
               rel="noreferrer"
               className={styles.callout}
@@ -160,7 +160,7 @@ export default function FacePage(): JSX.Element {
 //         <div className="row">
 //           <div className="col col--8 margin-vert--xl">
 //             <a
-//               href="https://github.com/torchpipe/torchpipe/tree/main"
+//               href="https://github.com/torchpipe/torchpipe/tree/v0"
 //               target="_blank"
 //               rel="noreferrer"
 //               className={styles.callout}

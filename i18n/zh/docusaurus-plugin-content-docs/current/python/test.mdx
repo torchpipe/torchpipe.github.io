@@ -389,7 +389,7 @@ def test_all_files(file_dir:str, num_clients=10, batch_size = 1,
 ```
 
 ### 不同batchsize的客户端
-在[此处例子](https://github.com/torchpipe/torchpipe/blob/main/examples/yolox/yolox_multithreads_test.py)中，我们使用十个客户端，客户端每次请求的数据量分别为1，2，3，...10。我们验证了在这种情况下结果的一致性。
+在[此处例子](https://github.com/torchpipe/torchpipe/blob/v0/examples/yolox/yolox_multithreads_test.py)中，我们使用十个客户端，客户端每次请求的数据量分别为1，2，3，...10。我们验证了在这种情况下结果的一致性。
 通常来讲，用户可遍历一个目录中的所有数据，并多次重复发送，以验证结果的稳定性和一致性。
 :::warning tensorrt模型推理结果不一致
 如果模型本身batchsize>1,tensorrt推理结果可能会有少量差异（输入数据的batchsize不同时，模型选取的优化方法可能不同）；如果batchsize==1，这种差异不应该存在，然而重新生成模型后，推理结果仍然有可能变化。
